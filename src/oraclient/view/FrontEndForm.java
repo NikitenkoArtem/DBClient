@@ -2,6 +2,9 @@
 package oraclient.view;
 
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 
@@ -11,8 +14,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import java.sql.Connection;
@@ -28,7 +33,6 @@ import java.util.ArrayList;
 
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -72,6 +76,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         connect = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         newFile = new javax.swing.JMenuItem();
+        openFile = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         saveFile = new javax.swing.JMenuItem();
         closeFile = new javax.swing.JMenuItem();
@@ -101,7 +106,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         console.setEditable(false);
         consoleOutput.setViewportView(console);
 
-        outputArea.addTab("Ð’Ñ‹Ð²Ð¾Ð´", consoleOutput);
+        outputArea.addTab("Âûâîä", consoleOutput);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -118,9 +123,9 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
 
         outputArea.addTab("tab2", jScrollPane1);
 
-        fileMenu.setText("Ð¤Ð°Ð¹Ð»");
+        fileMenu.setText("Ôàéë");
 
-        connect.setText("Ð¡Ð¾ÐµÐ´Ð¸Ð½Ð¸Ñ‚ÑŒÑÑ...");
+        connect.setText("Ñîåäèíèòüñÿ...");
         connect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectActionPerformed(evt);
@@ -130,17 +135,26 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         fileMenu.add(jSeparator1);
 
         newFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        newFile.setText("ÐÐ¾Ð²Ñ‹Ð¹...");
+        newFile.setText("Íîâûé...");
         newFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newFileActionPerformed(evt);
             }
         });
         fileMenu.add(newFile);
+
+        openFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openFile.setText("Îòêðûòü...");
+        openFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFileActionPerformed(evt);
+            }
+        });
+        fileMenu.add(openFile);
         fileMenu.add(jSeparator2);
 
         saveFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        saveFile.setText("Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ");
+        saveFile.setText("Ñîõðàíèòü");
         saveFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveFileActionPerformed(evt);
@@ -149,7 +163,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         fileMenu.add(saveFile);
 
         closeFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        closeFile.setText("Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ");
+        closeFile.setText("Çàêðûòü");
         closeFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeFileActionPerformed(evt);
@@ -159,7 +173,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         fileMenu.add(jSeparator4);
 
         exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
-        exit.setText("Ð’Ñ‹Ñ…Ð¾Ð´");
+        exit.setText("Âûõîä");
         exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitActionPerformed(evt);
@@ -169,10 +183,10 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
 
         MainMenu.add(fileMenu);
 
-        editMenu.setText("Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ");
+        editMenu.setText("Ðåäàêòèðîâàíèå");
 
         undo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-        undo.setText("ÐžÑ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ");
+        undo.setText("Îòìåíèòü");
         undo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 undoActionPerformed(evt);
@@ -181,7 +195,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         editMenu.add(undo);
 
         redo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
-        redo.setText("Ð’ÐµÑ€Ð½ÑƒÑ‚ÑŒ");
+        redo.setText("Âåðíóòü");
         redo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 redoActionPerformed(evt);
@@ -192,26 +206,26 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
 
         cut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         cut.setMnemonic(KeyEvent.VK_T);
-        cut.setText("Ð’Ñ‹Ñ€ÐµÐ·Ð°Ñ‚ÑŒ");
+        cut.setText("Âûðåçàòü");
         editMenu.add(cut);
 
         copy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         copy.setMnemonic(KeyEvent.VK_C);
-        copy.setText("ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ");
+        copy.setText("Êîïèðîâàòü");
         copy.setToolTipText("");
         editMenu.add(copy);
 
         paste.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
         paste.setMnemonic(KeyEvent.VK_P);
-        paste.setText("Ð’ÑÑ‚Ð°Ð²Ð¸Ñ‚ÑŒ");
+        paste.setText("Âñòàâèòü");
         editMenu.add(paste);
 
         MainMenu.add(editMenu);
 
-        runMenu.setText("Ð’Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ");
+        runMenu.setText("Âûïîëíèòü");
 
         runScript.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
-        runScript.setText("Ð’Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¹");
+        runScript.setText("Âûïîëíèòü ñöåíàðèé");
         runScript.setEnabled(false);
         runScript.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -222,7 +236,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
 
         MainMenu.add(runMenu);
 
-        jMenu1.setText("jMenu1");
+        jMenu1.setText("Ñåññèè");
         MainMenu.add(jMenu1);
 
         setJMenuBar(MainMenu);
@@ -232,7 +246,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sqlArea)
-            .addComponent(outputArea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+            .addComponent(outputArea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,29 +262,35 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
 
     
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        SqlFile file = new SqlFile();
-//        sqlArea.addTab(sqlFile.file.getName(), sqlFileIndex);
-        runScript.setEnabled(true);
+        SqlFileJDialog dialog = new SqlFileJDialog();
+        dialog.setVisible(true);
+        dialog.getCreateFile().addActionListener((ActionEvent e) -> {
+                SqlFile.newSqlFile(dialog, sqlArea);
+            });
+        if (dialog.getFileName().getText() != "") {
+            SqlFile.newSqlFile(dialog, sqlArea);
+            runScript.setEnabled(true);
+        }
     }//GEN-LAST:event_newFileActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
-//        if(!saved) {
-            saveFileActionPerformed(evt);
-//        }
+        //        if(!saved) {
+        saveFileActionPerformed(evt);
+        //        }
         closeStreams();
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-//        if(!saved) {
-//            save();
-//        }
+        //        if(!saved) {
+        //            save();
+        //        }
     }//GEN-LAST:event_saveFileActionPerformed
 
     private void closeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileActionPerformed
-//        if(!saved) {
-            saveFileActionPerformed(evt);
-//        }
+        //        if(!saved) {
+        saveFileActionPerformed(evt);
+        //        }
         closeStreams();
     }//GEN-LAST:event_closeFileActionPerformed
 
@@ -280,30 +300,34 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
     }//GEN-LAST:event_connectActionPerformed
 
     private void undoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoActionPerformed
-//        if(undoMgr.canUndo())
-//            undoMgr.undo();
+        //        if(undoMgr.canUndo())
+        //            undoMgr.undo();
     }//GEN-LAST:event_undoActionPerformed
 
     private void redoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoActionPerformed
-//        if(undoMgr.canRedo())
-//            undoMgr.redo();
+        //        if(undoMgr.canRedo())
+        //            undoMgr.redo();
     }//GEN-LAST:event_redoActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-//        if(!saved) {
-//            save();
-//        }
+        //        if(!saved) {
+        //            save();
+        //        }
         closeStreams();
         System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
     private void runScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runScriptActionPerformed
-//        if(!connected)
-            connectActionPerformed(evt);        
+        //        if(!connected)
+        connectActionPerformed(evt);        
     }//GEN-LAST:event_runScriptActionPerformed
+
+    private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_openFileActionPerformed
     
     private void closeStreams() {
-/*        try {            
+        /*        try {
         } finally {
             try {
                 if(sqlFile.writer != null)
@@ -332,7 +356,8 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
                 e.printStackTrace();
             }
         }
-*/    }
+*/
+    }
 
     /**
      * @param args the command line arguments
@@ -351,13 +376,17 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                                                                                 ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                                                                                 ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                                                                                 ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                                                                                 ex);
         }
         //</editor-fold>
 
@@ -369,8 +398,6 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
         });
     }
 
-    private SqlFileJDialog createSqlFle;
-    private JFileChooser chooser;
     private String sqlCtx;
     private ConnectionDialog connDialog;    
         
@@ -394,6 +421,7 @@ public class FrontEndForm extends javax.swing.JFrame implements Connections {
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JTable jTable1;
     private javax.swing.JMenuItem newFile;
+    private javax.swing.JMenuItem openFile;
     private javax.swing.JTabbedPane outputArea;
     private javax.swing.JMenuItem paste;
     private javax.swing.JMenuItem redo;

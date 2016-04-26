@@ -49,25 +49,25 @@ public class ConnectionDialog extends JDialog {
         setModal(true);
         setResizable(false);
 
-        connect.setText("РЎРѕРµРґРёРЅРµРЅРёРµ");
+        connect.setText("Соединение");
         connect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectActionPerformed(evt);
             }
         });
 
-        cancel.setText("РћС‚РјРµРЅР°");
+        cancel.setText("Отмена");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelActionPerformed(evt);
             }
         });
 
-        usernameLbl.setText("РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ");
+        usernameLbl.setText("Имя пользователя");
 
-        pwdLbl.setText("РџР°СЂРѕР»СЊ");
+        pwdLbl.setText("Пароль");
 
-        urlLbl.setText("URL СЃРѕРµРґРёРЅРµРЅРёСЏ");
+        urlLbl.setText("URL соединения");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

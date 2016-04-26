@@ -13,11 +13,7 @@ public class OracleDrivers {
             Class.forName("oracle.jdbc.OracleDriver").newInstance();
             Locale.setDefault(Locale.ENGLISH);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return;
         } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-            return;
         }
     }
 }

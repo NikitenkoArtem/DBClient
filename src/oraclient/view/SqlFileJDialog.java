@@ -2,6 +2,7 @@
 package oraclient.view;
 
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
@@ -26,7 +27,7 @@ public class SqlFileJDialog extends JDialog {
     private void initComponents() {//GEN-BEGIN:initComponents
 
         createFile = new javax.swing.JButton();
-        cancelCreate = new javax.swing.JButton();
+        cancel = new javax.swing.JButton();
         fileName = new javax.swing.JTextField();
         fileLocation = new javax.swing.JTextField();
         browseFs = new javax.swing.JButton();
@@ -34,7 +35,6 @@ public class SqlFileJDialog extends JDialog {
         fnLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Создать файл");
         setMinimumSize(new java.awt.Dimension(420, 150));
         setModal(true);
         setResizable(false);
@@ -46,35 +46,28 @@ public class SqlFileJDialog extends JDialog {
             }
         });
 
-        cancelCreate.setText("Отмена");
-        cancelCreate.addActionListener(new java.awt.event.ActionListener() {
+        cancel.setText("Cancel");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelCreateActionPerformed(evt);
+                cancelActionPerformed(evt);
             }
         });
 
         fileName.setText("Untitled.sql");
-        fileName.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                fileNameInputMethodTextChanged(evt);
-            }
-        });
 
         fileLocation.setEditable(false);
         fileLocation.setText(System.getProperty("java.io.tmpdir"));
 
-        browseFs.setText("Обзор");
+        browseFs.setText("browse...");
         browseFs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseFsActionPerformed(evt);
             }
         });
 
-        lcnLbl.setText("Расположение");
+        lcnLbl.setText("location");
 
-        fnLbl.setText("Имя файла");
+        fnLbl.setText("new file");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,23 +75,22 @@ public class SqlFileJDialog extends JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(createFile, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cancelCreate))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lcnLbl)
-                            .addComponent(fnLbl))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lcnLbl)
+                    .addComponent(fnLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fileName)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(fileLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                                .addGap(12, 12, 12)
-                                .addComponent(browseFs, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(fileName))))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(createFile, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(fileLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(browseFs, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                            .addComponent(cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,7 +107,7 @@ public class SqlFileJDialog extends JDialog {
                     .addComponent(lcnLbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelCreate)
+                    .addComponent(cancel)
                     .addComponent(createFile))
                 .addContainerGap())
         );
@@ -127,12 +119,11 @@ public class SqlFileJDialog extends JDialog {
     }//GEN-END:initComponents
 
     private void createFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createFileActionPerformed
-        status = true;
-        this.dispose();
+        this.setVisible(false);
     }//GEN-LAST:event_createFileActionPerformed
 
     private void browseFsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFsActionPerformed
-        chooser = new JFileChooser();
+        ClientJFileChooser chooser = new ClientJFileChooser("OK", "Новый");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int result = chooser.showOpenDialog(this);
         if(result == JFileChooser.APPROVE_OPTION) {
@@ -141,14 +132,13 @@ public class SqlFileJDialog extends JDialog {
         }
     }//GEN-LAST:event_browseFsActionPerformed
 
-    private void cancelCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelCreateActionPerformed
-        status = false;
-        this.dispose();
-    }//GEN-LAST:event_cancelCreateActionPerformed
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_cancelActionPerformed
 
-    private void fileNameInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_fileNameInputMethodTextChanged
-
-    }//GEN-LAST:event_fileNameInputMethodTextChanged
+    public JButton getCreateFile() {
+        return createFile;
+    }
 
     public JTextField getFileLocation() {
         return fileLocation;
@@ -158,20 +148,13 @@ public class SqlFileJDialog extends JDialog {
         return fileName;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-    private JFileChooser chooser;
-    private boolean status = false;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseFs;
-    private javax.swing.JButton cancelCreate;
+    private javax.swing.JButton cancel;
     private javax.swing.JButton createFile;
     private javax.swing.JTextField fileLocation;
     private javax.swing.JTextField fileName;
     private javax.swing.JLabel fnLbl;
     private javax.swing.JLabel lcnLbl;
     // End of variables declaration//GEN-END:variables
-
 }

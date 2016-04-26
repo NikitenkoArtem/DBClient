@@ -3,7 +3,6 @@
 <Form version="1.2" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" value="&#x421;&#x43e;&#x437;&#x434;&#x430;&#x442;&#x44c; &#x444;&#x430;&#x439;&#x43b;"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[420, 150]"/>
     </Property>
@@ -34,26 +33,25 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lcnLbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="fnLbl" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="fileName" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="createFile" min="-2" pref="72" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="cancelCreate" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lcnLbl" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="fnLbl" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="fileLocation" pref="213" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                              <Component id="browseFs" min="-2" pref="72" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="createFile" min="-2" pref="72" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="fileName" max="32767" attributes="0"/>
+                          <Component id="fileLocation" pref="249" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="browseFs" pref="72" max="32767" attributes="0"/>
+                          <Component id="cancel" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -77,7 +75,7 @@
               </Group>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cancelCreate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cancel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="createFile" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -94,21 +92,18 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="createFileActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="cancelCreate">
+    <Component class="javax.swing.JButton" name="cancel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43c;&#x435;&#x43d;&#x430;"/>
+        <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelCreateActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="fileName">
       <Properties>
         <Property name="text" type="java.lang.String" value="Untitled.sql"/>
       </Properties>
-      <Events>
-        <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="fileNameInputMethodTextChanged"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="fileLocation">
       <Properties>
@@ -120,7 +115,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="browseFs">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x437;&#x43e;&#x440;"/>
+        <Property name="text" type="java.lang.String" value="browse..."/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="browseFsActionPerformed"/>
@@ -128,12 +123,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lcnLbl">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x420;&#x430;&#x441;&#x43f;&#x43e;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
+        <Property name="text" type="java.lang.String" value="location"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="fnLbl">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&#x418;&#x43c;&#x44f; &#x444;&#x430;&#x439;&#x43b;&#x430;"/>
+        <Property name="text" type="java.lang.String" value="new file"/>
       </Properties>
     </Component>
   </SubComponents>
