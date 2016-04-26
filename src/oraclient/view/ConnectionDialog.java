@@ -1,5 +1,5 @@
 
-package dbclient.view;
+package oraclient.view;
 
 
 import java.sql.*;
@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 
 import oracle.jdbc.OracleDriver;
 
+import oraclient.sql.drivers.OracleDrivers;
+
 /**
  *
  * @author Price
@@ -25,7 +27,6 @@ public class ConnectionDialog extends JDialog {
     /** Creates new form FileDialog */
     public ConnectionDialog() {
         initComponents();
-        ConnectionDialog.loadDrivers();
     }
 
     /** This method is called from within the constructor to
@@ -126,21 +127,6 @@ public class ConnectionDialog extends JDialog {
         status = false;
         setVisible(false);
     }//GEN-LAST:event_cancelActionPerformed
-
-    @SuppressWarnings("oracle.jdeveloper.java.null-array-return")
-    public static void loadDrivers() {
-        try {
-            Class.forName("oracle.jdbc.OracleDriver").newInstance();
-            Locale.setDefault(Locale.ENGLISH);
-            System.out.println("Drivers is loaded");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return;
-        } catch (IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-            return;
-        }
-    }
 
     public JPasswordField getPwd() {
         return pwd;

@@ -1,5 +1,5 @@
 
-package dbclient.view;
+package oraclient.view;
 
 
 import java.awt.event.KeyEvent;
@@ -38,15 +38,18 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.tree.TreeModel;
 import javax.swing.undo.UndoManager;
 
+import oraclient.sql.conns.Connections;
+import oraclient.sql.file.SqlFile;
+
 
 /**
  *
  * @author Price
  */
-public class MainForm extends javax.swing.JFrame {
+public class FrontEndForm extends javax.swing.JFrame implements Connections {
 
     /** Creates new form Main */
-    public MainForm() {
+    public FrontEndForm() {
         initComponents();
     }
 
@@ -62,6 +65,8 @@ public class MainForm extends javax.swing.JFrame {
         outputArea = new javax.swing.JTabbedPane();
         consoleOutput = new javax.swing.JScrollPane();
         console = new javax.swing.JEditorPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         MainMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         connect = new javax.swing.JMenuItem();
@@ -81,6 +86,7 @@ public class MainForm extends javax.swing.JFrame {
         paste = new javax.swing.JMenuItem(new DefaultEditorKit.PasteAction());
         runMenu = new javax.swing.JMenu();
         runScript = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DBClient");
@@ -96,6 +102,21 @@ public class MainForm extends javax.swing.JFrame {
         consoleOutput.setViewportView(console);
 
         outputArea.addTab("Вывод", consoleOutput);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        outputArea.addTab("tab2", jScrollPane1);
 
         fileMenu.setText("Файл");
 
@@ -201,6 +222,9 @@ public class MainForm extends javax.swing.JFrame {
 
         MainMenu.add(runMenu);
 
+        jMenu1.setText("jMenu1");
+        MainMenu.add(jMenu1);
+
         setJMenuBar(MainMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -208,7 +232,7 @@ public class MainForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sqlArea)
-            .addComponent(outputArea, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(outputArea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,136 +246,68 @@ public class MainForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }//GEN-END:initComponents
 
-    private void initFile(String filePath) {
-        try {
-            file = new File(filePath);
-            writer = new PrintWriter(file);
-            sqlFile = new JTextArea();
-            sqlFileIndex = new JScrollPane();
-            undoMgr = new UndoManager();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-    }
-
+    
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        createSqlFle = new CreateSqlFile();
-        createSqlFle.setVisible(true);
-        String filePath = createSqlFle.getFileLocation().getText() + createSqlFle.getFileName().getText();
-        if(createSqlFle.isStatus()) {
-            if(file == null)
-                initFile(filePath);
-            sqlFile.getDocument().addUndoableEditListener(undoMgr);
-            sqlFileIndex.setViewportView(sqlFile);
-            sqlArea.addTab(file.getName(), sqlFileIndex);
-            runScript.setEnabled(true);
-        }
+        SqlFile file = new SqlFile();
+//        sqlArea.addTab(sqlFile.file.getName(), sqlFileIndex);
+        runScript.setEnabled(true);
     }//GEN-LAST:event_newFileActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
-        if(!saved) {
+//        if(!saved) {
             saveFileActionPerformed(evt);
-        }
+//        }
         closeStreams();
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-        if(!saved) {
-            save();
-        }
+//        if(!saved) {
+//            save();
+//        }
     }//GEN-LAST:event_saveFileActionPerformed
 
     private void closeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileActionPerformed
-        if(!saved) {
+//        if(!saved) {
             saveFileActionPerformed(evt);
-        }
-        sqlArea.remove(sqlFileIndex);
+//        }
         closeStreams();
-        file = null;
-        sqlFile = null;
-        sqlFileIndex = null;
-        undoMgr = null;
-        sqlArea.remove(sqlFile);
-        saved = false;
     }//GEN-LAST:event_closeFileActionPerformed
 
     private void connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectActionPerformed
         connDialog = new ConnectionDialog();
         connDialog.setVisible(true);
-        if(connDialog.isStatus()) {
-            try {
-                url = connDialog.getUrl().getText();
-                username = connDialog.getUsrname().getText();
-                password = connDialog.getPwd().getText();
-                conn = getConnection();
-                if(conn != null) {
-                    connected = true;
-                    this.setTitle(getTitle() + "   " + conn.getMetaData().getDatabaseProductName() + ":" +
-                                  conn.getMetaData().getUserName());
-                }
-                System.out.println("Connected");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, e);
-            }
-        }        
     }//GEN-LAST:event_connectActionPerformed
 
     private void undoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoActionPerformed
-        if(undoMgr.canUndo())
-            undoMgr.undo();
+//        if(undoMgr.canUndo())
+//            undoMgr.undo();
     }//GEN-LAST:event_undoActionPerformed
 
     private void redoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoActionPerformed
-        if(undoMgr.canRedo())
-            undoMgr.redo();
+//        if(undoMgr.canRedo())
+//            undoMgr.redo();
     }//GEN-LAST:event_redoActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if(!saved) {
-            save();
-        }
+//        if(!saved) {
+//            save();
+//        }
         closeStreams();
         System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
     private void runScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runScriptActionPerformed
-        if(!connected)
-            connectActionPerformed(evt);
-        try {
-            stmt = conn.createStatement();
-            stmt.execute(sqlFile.getText());
-            rs = stmt.getResultSet();
-            result = new ArrayList<String>();
-            while(rs.next()) {
-                result.add(rs.getNString(1));
-            }
-            console.setText(result.toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        if(!connected)
+            connectActionPerformed(evt);        
     }//GEN-LAST:event_runScriptActionPerformed
-
-    private void save() {
-        if(writer != null && sqlFile != null) {
-            writer.write(sqlFile.getText());
-            saved = true;
-        }
-    }
     
     private void closeStreams() {
-        try {            
+/*        try {            
         } finally {
             try {
-                if(writer != null)
-                    writer.close();
+                if(sqlFile.writer != null)
+                    sqlFile.writer.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -376,24 +332,7 @@ public class MainForm extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }
-    }
-    
-    public static Connection getConnection() throws SQLException {
-        conn = DriverManager.getConnection(url, username, password);
-        conn.setAutoCommit(false);
-        return conn;
-    }
-    
-    public JFileChooser chsrParams(JFileChooser chooser, String btnTxt, String dlgTitle) {
-        chooser = new JFileChooser();
-        chooser.setApproveButtonText(btnTxt);
-        chooser.setDialogTitle(dlgTitle);
-        chooser.removeChoosableFileFilter(chooser.getFileFilter());
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Все файлы (*.*)", "*"));
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("SQL-Script (*.sql)", "sql"));
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Текстовый файл (*.txt)", "txt"));
-        return chooser;
-    }
+*/    }
 
     /**
      * @param args the command line arguments
@@ -412,45 +351,29 @@ public class MainForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrontEndForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainForm().setVisible(true);
+                new FrontEndForm().setVisible(true);
             }
         });
     }
 
-    private JTextArea sqlFile;
-    private JScrollPane sqlFileIndex;
-    private CreateSqlFile createSqlFle;
-    private File file;
-    private FileInputStream fin;
-    private PrintWriter writer;
-    private String currentfile;
-    private boolean saved = false;
-    private boolean connected = false;
+    private SqlFileJDialog createSqlFle;
     private JFileChooser chooser;
     private String sqlCtx;
-    private ConnectionDialog connDialog;
-    private UndoManager undoMgr;
-    private static Connection conn = null;
-    private static Statement stmt = null;
-    private static ResultSet rs = null;
-    private static String url;
-    private static String username;
-    private static String password;
-    private ArrayList<String> result;
-    
+    private ConnectionDialog connDialog;    
+        
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MainMenu;
@@ -463,10 +386,13 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exit;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JTable jTable1;
     private javax.swing.JMenuItem newFile;
     private javax.swing.JTabbedPane outputArea;
     private javax.swing.JMenuItem paste;

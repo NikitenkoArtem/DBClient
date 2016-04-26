@@ -1,9 +1,6 @@
 package oraclient.sql.file;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -14,7 +11,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
 
+import oraclient.view.SqlFileJDialog;
+import oraclient.view.FrontEndForm;
+
 public class SqlFile extends File {
+    private static String fileLocation;
     private List<File> file;
     private List<OutputStream> os;
     private List<JTextArea> sqlFile;
@@ -23,13 +24,33 @@ public class SqlFile extends File {
     private String currentfile;
     private boolean saved = false;
     
-    public SqlFile(String pathname) {
-        // TODO Implement this method
-        super(pathname);
+    static {
+        SqlFileJDialog dialog = new SqlFileJDialog();
+        fileLocation = dialog.getFileLocation().getText();
+    }
+    
+    public SqlFile() {
+        super(fileLocation);
     }
 
-    public void addFile(List<File> file, String filePath) {
+    public void addFile(String filePath) {
         file.add(new File(filePath));
+    }
+
+    public void addOutputStream(List<OutputStream> os, String filePath) {
+//        os.add(new OutputStream(filePath));
+    }
+
+    public void addJTextArea() {
+        sqlFile.add(new JTextArea());
+    }
+
+    public void addJScrollPane() {
+        sqlFileIndex.add(new JScrollPane());
+    }
+
+    public void addUndoManager() {
+        undoMgr.add(new UndoManager());
     }
 
     private void save(OutputStream os, JTextArea sqlFile) {
@@ -43,12 +64,39 @@ public class SqlFile extends File {
         }
     }
     
-    private void initFile(String filePath) {
+    private void initFile() {
         file = new ArrayList<File>();
-//        sqlFile = new ArrayList<File>(filePath);
+        sqlFile = new ArrayList<JTextArea>();
         os = new ArrayList<OutputStream>();
         sqlFile = new ArrayList<JTextArea>();
         sqlFileIndex = new ArrayList<JScrollPane>();
         undoMgr = new ArrayList<UndoManager>();
+    }
+    
+    public void newSqlFile(FrontEndForm form) {
+        SqlFileJDialog createSqlFle = new SqlFileJDialog();
+        createSqlFle.setVisible(true);
+        String filePath = createSqlFle.getFileLocation().getText() + createSqlFle.getFileName().getText();
+        if(createSqlFle.isStatus()) {
+            if(sqlFile == null) {
+                initFile();
+            }
+//            sqlFile.getDocument().addUndoableEditListener(undoMgr);
+//            sqlFileIndex.setViewportView(sqlFile);
+            
+        }
+    }
+    
+    public void openSqlFile() {
+        
+    }
+        
+    public void close() {
+//        sqlArea.remove(sqlFileIndex);
+        sqlFile = null;
+        sqlFileIndex = null;
+        undoMgr = null;
+//        sqlArea.remove(sqlFile);
+//        saved = false;
     }
 }

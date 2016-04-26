@@ -1,5 +1,5 @@
 
-package dbclient.view;
+package oraclient.view;
 
 
 import javax.swing.JDialog;
@@ -10,10 +10,10 @@ import javax.swing.JTextField;
  *
  * @author Price
  */
-public class CreateSqlFile extends JDialog {
+public class SqlFileJDialog extends JDialog {
 
     /** Creates new form CreateSqlFile */
-    public CreateSqlFile() {
+    public SqlFileJDialog() {
         initComponents();
     }
 
