@@ -1,16 +1,35 @@
 package oraclient.sql.conns;
 
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
 import java.sql.Statement;
 
+import java.sql.Struct;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 
+import java.util.concurrent.Executor;
+
+import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 
 import javax.swing.JTextArea;
@@ -19,10 +38,9 @@ import oraclient.view.ConnectionDialog;
 import oraclient.view.FrontEndForm;
 
 
-public class OracleConnection implements Connections {
+public class OracleConnection {
     private static Connection conn;
     private static Statement stmt;
-    private static ResultSet rs;
     private static String url;
     private static String username;
     private static String password;
@@ -57,14 +75,18 @@ public class OracleConnection implements Connections {
         stmt.execute(sqlFile.getText());
     }
     
-    public void getResultSet() {
-        try {            
-            rs = stmt.getResultSet();
-            result = new TreeMap();
-            while (rs.next()) {
-//                result.put(rs);
+    public void getResultSet(Statement stat, JEditorPane console) {
+        try {
+            ResultSet rs = stat.getResultSet();
+            ResultSetMetaData meta = rs.getMetaData();
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
+                String label = meta.getColumnLabel(i);
+                console.setText(label);
+                while (rs.next()) {
+                    console.setText(rs.getString(i));
+                }
+                System.out.println();
             }
-//            console.setText(result.toString());
         } catch (SQLException e) {
         } catch (Exception e) {
         }
