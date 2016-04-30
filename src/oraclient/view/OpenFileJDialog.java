@@ -3,6 +3,8 @@ package oraclient.view;
 
 import javax.swing.JFileChooser;
 
+import oraclient.component.ClientJFileChooser;
+
 /**
  *
  * @author Price

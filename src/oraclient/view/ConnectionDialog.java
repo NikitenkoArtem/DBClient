@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 import oracle.jdbc.OracleDriver;
 
-import oraclient.sql.drivers.OracleDrivers;
+import oraclient.sql.drivers.LoadDrivers;
 
 /**
  *

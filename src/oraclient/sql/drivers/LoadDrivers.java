@@ -11,7 +11,7 @@ public class LoadDrivers {
     
     public LoadDrivers(String driver) {
         try {
-            Driver d = (Driver) Class.forName(driver).newInstance();            
+            Driver d = (Driver) Class.forName(driver).newInstance();
             drivers.add(d);
 //            Locale.setDefault(Locale.ENGLISH);
         } catch (ClassNotFoundException e) {
