@@ -1,25 +1,18 @@
 package oraclient.sql.drivers;
 
 import java.sql.Driver;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class LoadDrivers {
-    private static List<Driver> drivers = new ArrayList<>();
-    
     public LoadDrivers(String driver) {
         try {
-            Driver d = (Driver) Class.forName(driver).newInstance();
-            drivers.add(d);
+            Class d = Class.forName(driver);
+            DriverManager.registerDriver((Driver)d.newInstance());
 //            Locale.setDefault(Locale.ENGLISH);
         } catch (ClassNotFoundException e) {
         } catch (IllegalAccessException | InstantiationException e) {
+        } catch (SQLException e) {
         }
-    }
-
-    public static List<Driver> getDrivers() {
-        return drivers;
     }
 }
