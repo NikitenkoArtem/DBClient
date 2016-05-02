@@ -31,7 +31,7 @@ import oraclient.component.ClientUndoManager;
 
 import oraclient.sql.conns.DBConnection;
 import oraclient.sql.drivers.LoadDrivers;
-import oraclient.sql.file.NewFile;
+import oraclient.io.NewFile;
 
 
 /**
@@ -42,6 +42,7 @@ public class FrontEndForm extends javax.swing.JFrame {
 
     private ClientArea area;
     private DBConnection oracle;
+    private Connection conn;
 
     /** Creates new form Main */
     public FrontEndForm() {
@@ -305,13 +306,18 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         new LoadDrivers("oracle.jdbc.OracleDriver");
         oracle = new DBConnection();
-        try (Connection conn = DBConnection.getConnection()) {
-            oracle.getDBName(conn, this);
-            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            stmt.executeQuery("select * from departments");
-            oracle.getResultSet(stmt, console);
+        try {
+            conn = DBConnection.getConnection();
         } catch (SQLException e) {
         }
+        //        try (Connection conn = DBConnection.getConnection()) {
+//            oracle.getDBName(conn, this);
+//            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+////            stmt.executeQuery("select * from departments");
+//            stmt.execute(area.getTextAreas().iterator().next().getText());
+//            oracle.getResultSet(stmt, console, jTable1);
+//        } catch (SQLException e) {
+//        }
             
     }//GEN-LAST:event_connectActionPerformed
 
@@ -336,7 +342,31 @@ public class FrontEndForm extends javax.swing.JFrame {
     private void runScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runScriptActionPerformed
         //        if(!connected)
         //connectActionPerformed(evt);
-        //            oracle.exec(oracle.getConn(), area.getTextAreas().iterator().next());     
+        //            oracle.exec(oracle.getConn(), area.getTextAreas().iterator().next());
+        
+//        try (Connection conn = DBConnection.getConnection()) {
+//        Statement stmt = null;
+        try {
+            oracle.getDBName(conn, this);
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        //            stmt.executeQuery("select * from departments");
+            stmt.execute(area.getTextAreas().iterator().next().getText());
+            oracle.getResultSet(stmt, console, jTable1);
+        } catch (SQLException e) {
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+            }
+//            if(stmt != null) {
+//                try {
+//                    stmt.close();
+//                } catch (SQLException e) {
+//                }
+//            }
+        }
     }//GEN-LAST:event_runScriptActionPerformed
 
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
@@ -344,36 +374,36 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_openFileActionPerformed
     
     private void closeStreams() {
-        /*        try {
+        try {
         } finally {
-            try {
-                if(sqlFile.writer != null)
-                    sqlFile.writer.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
+//            try {
+//                if(sqlFile.writer != null)
+//                    sqlFile.writer.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+            
                 if(conn != null) {
-                    conn.close();
-                    connected = false;
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                    }
+//                    connected = false;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                if(stmt != null)
-                    stmt.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                if(rs != null)
-                    rs.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            
+//            try {
+//                if(stmt != null)
+//                    stmt.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                if(rs != null)
+//                    rs.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
-*/
     }
 
     /**
