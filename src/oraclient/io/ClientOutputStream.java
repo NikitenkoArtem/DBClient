@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.swing.JTextArea;
 
-import oraclient.sql.file.NewFile;
 
 public class ClientOutputStream extends OutputStream {
     private static List<OutputStream> out;

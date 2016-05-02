@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
 
 
-import oraclient.sql.file.NewFile;
+import oraclient.io.NewFile;
 
 public class ClientUndoManager {
     private List<UndoManager> undoMgrs;
