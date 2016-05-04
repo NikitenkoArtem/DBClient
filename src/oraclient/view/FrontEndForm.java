@@ -63,27 +63,37 @@ public class FrontEndForm extends javax.swing.JFrame {
         console = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTree2 = new javax.swing.JTree();
         MainMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        connect = new javax.swing.JMenuItem();
+        connectMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        newFile = new javax.swing.JMenuItem();
-        openFile = new javax.swing.JMenuItem();
+        newFileMenuItem = new javax.swing.JMenuItem();
+        openFileMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        saveFile = new javax.swing.JMenuItem();
-        closeFile = new javax.swing.JMenuItem();
+        closeFileMenuItem = new javax.swing.JMenuItem();
+        closeAllMenuItem = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        saveFileMenuItem = new javax.swing.JMenuItem();
+        saveAsMenuItem = new javax.swing.JMenuItem();
+        saveAllMenuItem = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
-        exit = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
-        undo = new javax.swing.JMenuItem();
-        redo = new javax.swing.JMenuItem();
+        undoMenuItem = new javax.swing.JMenuItem();
+        redoMenuItem = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        cut = new javax.swing.JMenuItem(new DefaultEditorKit.CutAction());
-        copy = new javax.swing.JMenuItem(new DefaultEditorKit.CopyAction());
-        paste = new javax.swing.JMenuItem(new DefaultEditorKit.PasteAction());
+        cutMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.CutAction());
+        copyMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.CopyAction());
+        pasteMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.PasteAction());
         runMenu = new javax.swing.JMenu();
-        runScript = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        runScriptMenuItem = new javax.swing.JMenuItem();
+        reportMenu = new javax.swing.JMenu();
+        sessionMenu = new javax.swing.JMenu();
+        getSessionsMenuItem = new javax.swing.JMenuItem();
+        closeSessionsMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DBClient");
@@ -94,6 +104,10 @@ public class FrontEndForm extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
+
+        tabPane.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        outputArea.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         console.setColumns(20);
         console.setRows(5);
@@ -116,121 +130,147 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         outputArea.addTab("tab2", jScrollPane1);
 
+        jTabbedPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+
+        jScrollPane4.setViewportView(jTree2);
+
+        jTabbedPane2.addTab("tab1", jScrollPane4);
+
         fileMenu.setText("Файл");
 
-        connect.setText("Соединиться...");
-        connect.addActionListener(new java.awt.event.ActionListener() {
+        connectMenuItem.setText("Соединиться...");
+        connectMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                connectActionPerformed(evt);
+                connectMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(connect);
+        fileMenu.add(connectMenuItem);
         fileMenu.add(jSeparator1);
 
-        newFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        newFile.setText("Новый...");
-        newFile.addActionListener(new java.awt.event.ActionListener() {
+        newFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        newFileMenuItem.setText("Новый...");
+        newFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newFileActionPerformed(evt);
+                newFileMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(newFile);
+        fileMenu.add(newFileMenuItem);
 
-        openFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        openFile.setText("Открыть...");
-        openFile.addActionListener(new java.awt.event.ActionListener() {
+        openFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openFileMenuItem.setText("Открыть...");
+        openFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openFileActionPerformed(evt);
+                openFileMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(openFile);
+        fileMenu.add(openFileMenuItem);
         fileMenu.add(jSeparator2);
 
-        saveFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        saveFile.setText("Сохранить");
-        saveFile.addActionListener(new java.awt.event.ActionListener() {
+        closeFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
+        closeFileMenuItem.setText("Закрыть");
+        closeFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveFileActionPerformed(evt);
+                closeFileMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(saveFile);
+        fileMenu.add(closeFileMenuItem);
 
-        closeFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        closeFile.setText("Закрыть");
-        closeFile.addActionListener(new java.awt.event.ActionListener() {
+        closeAllMenuItem.setText("Закрыть все");
+        fileMenu.add(closeAllMenuItem);
+        fileMenu.add(jSeparator3);
+
+        saveFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveFileMenuItem.setText("Сохранить");
+        saveFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeFileActionPerformed(evt);
+                saveFileMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(closeFile);
+        fileMenu.add(saveFileMenuItem);
+
+        saveAsMenuItem.setText("Сохранить как...");
+        fileMenu.add(saveAsMenuItem);
+
+        saveAllMenuItem.setText("Сохранить все");
+        fileMenu.add(saveAllMenuItem);
         fileMenu.add(jSeparator4);
 
-        exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
-        exit.setText("Выход");
-        exit.addActionListener(new java.awt.event.ActionListener() {
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        exitMenuItem.setText("Выход");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitActionPerformed(evt);
+                exitMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(exit);
+        fileMenu.add(exitMenuItem);
 
         MainMenu.add(fileMenu);
 
         editMenu.setText("Редактирование");
 
-        undo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-        undo.setText("Отменить");
-        undo.addActionListener(new java.awt.event.ActionListener() {
+        undoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        undoMenuItem.setText("Отменить");
+        undoMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                undoActionPerformed(evt);
+                undoMenuItemActionPerformed(evt);
             }
         });
-        editMenu.add(undo);
+        editMenu.add(undoMenuItem);
 
-        redo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
-        redo.setText("Вернуть");
-        redo.addActionListener(new java.awt.event.ActionListener() {
+        redoMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
+        redoMenuItem.setText("Вернуть");
+        redoMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                redoActionPerformed(evt);
+                redoMenuItemActionPerformed(evt);
             }
         });
-        editMenu.add(redo);
+        editMenu.add(redoMenuItem);
         editMenu.add(jSeparator6);
 
-        cut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
-        cut.setMnemonic(KeyEvent.VK_T);
-        cut.setText("Вырезать");
-        editMenu.add(cut);
+        cutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
+        cutMenuItem.setMnemonic(KeyEvent.VK_T);
+        cutMenuItem.setText("Вырезать");
+        editMenu.add(cutMenuItem);
 
-        copy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        copy.setMnemonic(KeyEvent.VK_C);
-        copy.setText("Копировать");
-        copy.setToolTipText("");
-        editMenu.add(copy);
+        copyMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
+        copyMenuItem.setMnemonic(KeyEvent.VK_C);
+        copyMenuItem.setText("Копировать");
+        copyMenuItem.setToolTipText("");
+        editMenu.add(copyMenuItem);
 
-        paste.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
-        paste.setMnemonic(KeyEvent.VK_P);
-        paste.setText("Вставить");
-        editMenu.add(paste);
+        pasteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
+        pasteMenuItem.setMnemonic(KeyEvent.VK_P);
+        pasteMenuItem.setText("Вставить");
+        editMenu.add(pasteMenuItem);
 
         MainMenu.add(editMenu);
 
         runMenu.setText("Выполнить");
 
-        runScript.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
-        runScript.setText("Выполнить сценарий");
-        runScript.setEnabled(false);
-        runScript.addActionListener(new java.awt.event.ActionListener() {
+        runScriptMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
+        runScriptMenuItem.setText("Выполнить сценарий");
+        runScriptMenuItem.setEnabled(false);
+        runScriptMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runScriptActionPerformed(evt);
+                runScriptMenuItemActionPerformed(evt);
             }
         });
-        runMenu.add(runScript);
+        runMenu.add(runScriptMenuItem);
 
         MainMenu.add(runMenu);
 
-        jMenu1.setText("Сессии");
-        MainMenu.add(jMenu1);
+        reportMenu.setText("Отчет");
+        MainMenu.add(reportMenu);
+
+        sessionMenu.setText("Сессии");
+
+        getSessionsMenuItem.setText("Список сессий");
+        sessionMenu.add(getSessionsMenuItem);
+
+        closeSessionsMenuItem.setText("Завершить все сессии");
+        sessionMenu.add(closeSessionsMenuItem);
+
+        MainMenu.add(sessionMenu);
 
         setJMenuBar(MainMenu);
 
@@ -238,15 +278,20 @@ public class FrontEndForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabPane)
-            .addComponent(outputArea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(outputArea, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                    .addComponent(tabPane)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tabPane, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .addComponent(tabPane)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(outputArea, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                .addComponent(outputArea, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
         );
 
         pack();
@@ -254,7 +299,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-END:initComponents
 
     
-    private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
+    private void newFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileMenuItemActionPerformed
         FileJDialog dialog = new FileJDialog();
         dialog.setVisible(true);
         String filePath = dialog.getFileLocation().getText() + dialog.getFileName().getText();
@@ -265,8 +310,8 @@ public class FrontEndForm extends javax.swing.JFrame {
         //            }
         //        });
         newFile(filePath);
-        runScript.setEnabled(true);
-    }//GEN-LAST:event_newFileActionPerformed
+        runScriptMenuItem.setEnabled(true);
+    }//GEN-LAST:event_newFileMenuItemActionPerformed
 
     private void newFile(String filePath) {
         NewFile file = new NewFile(filePath);
@@ -279,28 +324,28 @@ public class FrontEndForm extends javax.swing.JFrame {
                        pane.getScrollPanes().iterator().next().add(this.area.getTextAreas().iterator().next()));
     }
 
-    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         //        if(!saved) {
-        saveFileActionPerformed(evt);
+//        saveFileActionPerformed(evt);
         //        }
         closeStreams();
         System.exit(0);
-    }//GEN-LAST:event_exitActionPerformed
+    }//GEN-LAST:event_exitMenuItemActionPerformed
 
-    private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
+    private void saveFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileMenuItemActionPerformed
         //        if(!saved) {
         //            save();
         //        }
-    }//GEN-LAST:event_saveFileActionPerformed
+    }//GEN-LAST:event_saveFileMenuItemActionPerformed
 
-    private void closeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileActionPerformed
+    private void closeFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileMenuItemActionPerformed
         //        if(!saved) {
-        saveFileActionPerformed(evt);
+//        saveFileActionPerformed(evt);
         //        }
         closeStreams();
-    }//GEN-LAST:event_closeFileActionPerformed
+    }//GEN-LAST:event_closeFileMenuItemActionPerformed
 
-    private void connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectActionPerformed
+    private void connectMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectMenuItemActionPerformed
     //        connDialog = new ConnectionDialog();
     //        connDialog.setVisible(true);
 
@@ -319,17 +364,17 @@ public class FrontEndForm extends javax.swing.JFrame {
 //        } catch (SQLException e) {
 //        }
             
-    }//GEN-LAST:event_connectActionPerformed
+    }//GEN-LAST:event_connectMenuItemActionPerformed
 
-    private void undoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoActionPerformed
+    private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
         //        if(undoMgr.canUndo())
         //            undoMgr.undo();
-    }//GEN-LAST:event_undoActionPerformed
+    }//GEN-LAST:event_undoMenuItemActionPerformed
 
-    private void redoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoActionPerformed
+    private void redoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoMenuItemActionPerformed
         //        if(undoMgr.canRedo())
         //            undoMgr.redo();
-    }//GEN-LAST:event_redoActionPerformed
+    }//GEN-LAST:event_redoMenuItemActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         //        if(!saved) {
@@ -339,7 +384,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
-    private void runScriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runScriptActionPerformed
+    private void runScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runScriptMenuItemActionPerformed
         //        if(!connected)
         //connectActionPerformed(evt);
         //            oracle.exec(oracle.getConn(), area.getTextAreas().iterator().next());
@@ -367,11 +412,11 @@ public class FrontEndForm extends javax.swing.JFrame {
 //                }
 //            }
         }
-    }//GEN-LAST:event_runScriptActionPerformed
+    }//GEN-LAST:event_runScriptMenuItemActionPerformed
 
-    private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
+    private void openFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileMenuItemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_openFileActionPerformed
+    }//GEN-LAST:event_openFileMenuItemActionPerformed
     
     private void closeStreams() {
         try {
@@ -450,32 +495,42 @@ public class FrontEndForm extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MainMenu;
-    private javax.swing.JMenuItem closeFile;
-    private javax.swing.JMenuItem connect;
+    private javax.swing.JMenuItem closeAllMenuItem;
+    private javax.swing.JMenuItem closeFileMenuItem;
+    private javax.swing.JMenuItem closeSessionsMenuItem;
+    private javax.swing.JMenuItem connectMenuItem;
     private javax.swing.JTextArea console;
-    private javax.swing.JMenuItem copy;
-    private javax.swing.JMenuItem cut;
+    private javax.swing.JMenuItem copyMenuItem;
+    private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JMenu editMenu;
-    private javax.swing.JMenuItem exit;
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem getSessionsMenuItem;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JMenuItem newFile;
-    private javax.swing.JMenuItem openFile;
+    private javax.swing.JTree jTree2;
+    private javax.swing.JMenuItem newFileMenuItem;
+    private javax.swing.JMenuItem openFileMenuItem;
     private javax.swing.JTabbedPane outputArea;
-    private javax.swing.JMenuItem paste;
-    private javax.swing.JMenuItem redo;
+    private javax.swing.JMenuItem pasteMenuItem;
+    private javax.swing.JMenuItem redoMenuItem;
+    private javax.swing.JMenu reportMenu;
     private javax.swing.JMenu runMenu;
-    private javax.swing.JMenuItem runScript;
-    private javax.swing.JMenuItem saveFile;
+    private javax.swing.JMenuItem runScriptMenuItem;
+    private javax.swing.JMenuItem saveAllMenuItem;
+    private javax.swing.JMenuItem saveAsMenuItem;
+    private javax.swing.JMenuItem saveFileMenuItem;
+    private javax.swing.JMenu sessionMenu;
     private javax.swing.JTabbedPane tabPane;
-    private javax.swing.JMenuItem undo;
+    private javax.swing.JMenuItem undoMenuItem;
     // End of variables declaration//GEN-END:variables
 
 }
