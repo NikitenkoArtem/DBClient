@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JTextArea;
 
 
-public class ClientOutputStream extends OutputStream {
+public class ClientOutputStream {
     private static List<OutputStream> out;
 
     public ClientOutputStream() {
@@ -31,11 +31,12 @@ public class ClientOutputStream extends OutputStream {
         out.add(os);
     }
 
-    private void save(OutputStream os, JTextArea area) {
+    public void save(OutputStream os, JTextArea area) {
         if (os != null && area != null) {
             try {
                 os.write((area.getText()).getBytes());
             } catch (IOException e) {
+                e.printStackTrace();
             }
 //            sqlFile.saved = true;
         }
@@ -43,10 +44,5 @@ public class ClientOutputStream extends OutputStream {
     
     public void close() {
         out.clear();
-    }
-
-    @Override
-    public void write(int b) throws IOException {
-        // TODO Implement this method
     }
 }
