@@ -2,36 +2,30 @@
 package oraclient.view;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import java.sql.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultEditorKit;
-
 import javax.swing.undo.UndoManager;
 
-import oracle.jdbc.OracleDriver;
-
-import oraclient.component.ClientPane;
-
 import oraclient.component.ClientArea;
-
+import oraclient.component.ClientPane;
 import oraclient.component.ClientUndoManager;
+
+import oraclient.io.ClientOutputStream;
+import oraclient.io.NewFile;
 
 import oraclient.sql.conns.DBConnection;
 import oraclient.sql.drivers.LoadDrivers;
-import oraclient.io.NewFile;
 
 
 /**
@@ -43,6 +37,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private ClientArea area;
     private DBConnection oracle;
     private Connection conn;
+    private ClientOutputStream out;
 
     /** Creates new form Main */
     public FrontEndForm() {
@@ -62,7 +57,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         console = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTree2 = new javax.swing.JTree();
@@ -115,7 +110,7 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         outputArea.addTab("tab2", jScrollPane2);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -126,7 +121,7 @@ public class FrontEndForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         outputArea.addTab("tab2", jScrollPane1);
 
@@ -290,7 +285,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(tabPane)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(outputArea, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(outputArea, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
         );
 
@@ -315,54 +310,58 @@ public class FrontEndForm extends javax.swing.JFrame {
 
     private void newFile(String filePath) {
         NewFile file = new NewFile(filePath);
+        try {
+            out = new ClientOutputStream();
+            out.addOutputStream(new FileOutputStream(filePath));
+        } catch (FileNotFoundException ex) {
+        }
         ClientPane pane = new ClientPane();
         pane.addJScrollPane(new JScrollPane());
         area = new ClientArea();
-        this.area.addJTextArea(new JTextArea());
+//        this.area.addJTextArea(filePath, new JTextArea());
         new ClientUndoManager().addUndoManager(new UndoManager());
-        tabPane.addTab(file.getName(),
-                       pane.getScrollPanes().iterator().next().add(this.area.getTextAreas().iterator().next()));
+//        tabPane.addTab(file.getName(),
+//                       pane.getScrollPanes().iterator().next()
+////                       .add(this.area.getTextAreas().iterator().next()));
+//                        .add(this.area.getTextAreas().get(filePath)
+////                             getTextAreas().iterator().next()
+//                             )
+//                       );
     }
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         //        if(!saved) {
 //        saveFileActionPerformed(evt);
         //        }
-        closeStreams();
+        oracle.close();
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void saveFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileMenuItemActionPerformed
-        //        if(!saved) {
-        //            save();
-        //        }
+//        if(!saved) {
+//            out.save(out.getOut().get(tabPane.getSelectedIndex()), area.getTextAreas().
+//                     get(tabPane.getTitleAt(0)));
+//        }
     }//GEN-LAST:event_saveFileMenuItemActionPerformed
 
     private void closeFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileMenuItemActionPerformed
         //        if(!saved) {
 //        saveFileActionPerformed(evt);
         //        }
-        closeStreams();
+        oracle.close();
     }//GEN-LAST:event_closeFileMenuItemActionPerformed
 
     private void connectMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectMenuItemActionPerformed
-    //        connDialog = new ConnectionDialog();
-    //        connDialog.setVisible(true);
-
         new LoadDrivers("oracle.jdbc.OracleDriver");
         oracle = new DBConnection();
         try {
             conn = DBConnection.getConnection();
+            oracle.getDBName(conn, this);
+            Statement stmt = oracle.exec(conn, null);
+            oracle.getResultSet(stmt, console, table);
         } catch (SQLException e) {
+            e.printStackTrace();
         }
-        //        try (Connection conn = DBConnection.getConnection()) {
-//            oracle.getDBName(conn, this);
-//            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-////            stmt.executeQuery("select * from departments");
-//            stmt.execute(area.getTextAreas().iterator().next().getText());
-//            oracle.getResultSet(stmt, console, jTable1);
-//        } catch (SQLException e) {
-//        }
             
     }//GEN-LAST:event_connectMenuItemActionPerformed
 
@@ -380,7 +379,9 @@ public class FrontEndForm extends javax.swing.JFrame {
         //        if(!saved) {
         //            save();
         //        }
-        closeStreams();
+        if (oracle != null) {
+            oracle.close();
+        }
         System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
@@ -395,8 +396,8 @@ public class FrontEndForm extends javax.swing.JFrame {
             oracle.getDBName(conn, this);
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         //            stmt.executeQuery("select * from departments");
-            stmt.execute(area.getTextAreas().iterator().next().getText());
-            oracle.getResultSet(stmt, console, jTable1);
+//            stmt.execute(area.getTextAreas().iterator().next().getText());
+            oracle.getResultSet(stmt, console, table);
         } catch (SQLException e) {
         } finally {
             try {
@@ -417,40 +418,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private void openFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileMenuItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_openFileMenuItemActionPerformed
-    
-    private void closeStreams() {
-        try {
-        } finally {
-//            try {
-//                if(sqlFile.writer != null)
-//                    sqlFile.writer.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-            
-                if(conn != null) {
-                    try {
-                        conn.close();
-                    } catch (SQLException e) {
-                    }
-//                    connected = false;
-                }
-            
-//            try {
-//                if(stmt != null)
-//                    stmt.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                if(rs != null)
-//                    rs.close();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-        }
-    }
-
+  
     /**
      * @param args the command line arguments
      */
@@ -489,9 +457,6 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
     }
-
-    private ConnectionDialog connDialog;
-        
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar MainMenu;
@@ -515,7 +480,6 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTree jTree2;
     private javax.swing.JMenuItem newFileMenuItem;
     private javax.swing.JMenuItem openFileMenuItem;
@@ -530,6 +494,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveFileMenuItem;
     private javax.swing.JMenu sessionMenu;
     private javax.swing.JTabbedPane tabPane;
+    private javax.swing.JTable table;
     private javax.swing.JMenuItem undoMenuItem;
     // End of variables declaration//GEN-END:variables
 
