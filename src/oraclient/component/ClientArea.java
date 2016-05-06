@@ -14,8 +14,8 @@ import javax.swing.JTextArea;
 
 
 public class ClientArea {
-    private List<JTextArea> textAreas;
-//    private Map<String, JTextArea> textAreas;
+    //    private List<JTextArea> textAreas;
+    private Map<String, JTextArea> textAreas;
 
     public ClientArea() {
         if (textAreas == null) {
@@ -24,25 +24,35 @@ public class ClientArea {
     }
 
     private void init() {
-        textAreas = new ArrayList<>();
-//        textAreas = new HashMap<>();
+        //        textAreas = new ArrayList<>();
+        textAreas = new HashMap<>();
     }
 
-    public List<JTextArea> getTextAreas() {
+    //    public List<JTextArea> getTextAreas() {
+    //        return textAreas;
+    //    }
+    //
+    //    public void addJTextArea(JTextArea area) {
+    //        textAreas.add(area);
+    //    }
+
+    public Map<String, JTextArea> getTextAreas() {
         return textAreas;
     }
 
-    public void addJTextArea(JTextArea area) {
-        textAreas.add(area);
+    public void addJTextArea(String filePath, JTextArea area) {
+        textAreas.put(filePath, area);
     }
 
-//    public Map<String, JTextArea> getTextAreas() {
-//        return textAreas;
-//    }
-//
-//    public void addJTextArea(String filePath, JTextArea area) {
-//        textAreas.put(filePath, area);
-//    }
+    public JTextArea find(String key) {
+        System.out.println(key);
+        for (Map.Entry<String, JTextArea> entry : textAreas.entrySet()) {
+            if (key == entry.getKey()) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
 
     public void close() {
         textAreas.clear();
