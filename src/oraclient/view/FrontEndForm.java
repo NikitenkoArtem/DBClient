@@ -18,7 +18,6 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.undo.UndoManager;
 
 import oraclient.component.ClientArea;
-import oraclient.component.ClientPane;
 import oraclient.component.ClientUndoManager;
 
 import oraclient.io.ClientOutputStream;
@@ -37,7 +36,6 @@ public class FrontEndForm extends javax.swing.JFrame {
     private ClientArea area;
     private DBConnection oracle;
     private Connection conn;
-    private ClientOutputStream out;
 
     /** Creates new form Main */
     public FrontEndForm() {
@@ -310,16 +308,9 @@ public class FrontEndForm extends javax.swing.JFrame {
 
     private void newFile(String filePath) {
         NewFile file = new NewFile(filePath);
-        try {
-            out = new ClientOutputStream();
-            out.addOutputStream(new FileOutputStream(filePath));
-        } catch (FileNotFoundException ex) {
-        }
-        ClientPane pane = new ClientPane();
-        pane.addJScrollPane(new JScrollPane());
         area = new ClientArea();
 //        this.area.addJTextArea(filePath, new JTextArea());
-        new ClientUndoManager().addUndoManager(new UndoManager());
+//        new ClientUndoManager().addUndoManager(new UndoManager());
 //        tabPane.addTab(file.getName(),
 //                       pane.getScrollPanes().iterator().next()
 ////                       .add(this.area.getTextAreas().iterator().next()));
