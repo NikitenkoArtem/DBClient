@@ -15,7 +15,8 @@ import javax.swing.JTextArea;
 
 public class ClientArea {
     //    private List<JTextArea> textAreas;
-    private Map<String, JTextArea> textAreas;
+    //    private Map<String, JTextArea> textAreas;
+    private Map<JTextArea, File> textAreas;
 
     public ClientArea() {
         if (textAreas == null) {
@@ -36,21 +37,41 @@ public class ClientArea {
     //        textAreas.add(area);
     //    }
 
-    public Map<String, JTextArea> getTextAreas() {
+    //    public Map<String, JTextArea> getTextAreas() {
+    //        return textAreas;
+    //    }
+    //
+    //    public void addJTextArea(String filePath, JTextArea area) {
+    //        textAreas.put(filePath, area);
+    //    }
+
+    public Map<JTextArea, File> getTextAreas() {
         return textAreas;
     }
 
-    public void addJTextArea(String filePath, JTextArea area) {
-        textAreas.put(filePath, area);
+    public void addJTextArea(JTextArea area, File file) {
+        textAreas.put(area, file);
     }
 
-    public JTextArea find(String key) {
+    public JTextArea find(JTextArea key) {
         System.out.println(key);
-        for (Map.Entry<String, JTextArea> entry : textAreas.entrySet()) {
+        for (Map.Entry<JTextArea, File> entry : textAreas.entrySet()) {
             if (key == entry.getKey()) {
-                return entry.getValue();
+                return entry.getKey();
             }
         }
+        return null;
+    }
+
+    public JTextArea find(File value) {
+        System.out.println(value);
+//        if (textAreas.containsValue(value)) {
+            for (Map.Entry<JTextArea, File> entry : textAreas.entrySet()) {
+                if (value == entry.getValue()) {
+                    return entry.getKey();
+                }
+            }
+//        }
         return null;
     }
 
