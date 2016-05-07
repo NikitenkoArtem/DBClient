@@ -2,21 +2,9 @@
 package oraclient.view;
 
 
-import java.sql.*;
-
-import java.util.Enumeration;
-
-import java.util.Locale;
-
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
-
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
-import oracle.jdbc.OracleDriver;
-
-import oraclient.sql.drivers.LoadDrivers;
 
 /**
  *
