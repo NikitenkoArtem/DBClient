@@ -19,7 +19,7 @@ public class ClientInputStream extends InputStream {
         if (input == null) {
             init();
         }
-        openSqlFile();
+//        openSqlFile();
     }
     
     private void init() {
@@ -36,18 +36,7 @@ public class ClientInputStream extends InputStream {
     
     public void close() {
         input.clear();
-    }
-    
-    public void openSqlFile() {
-        FileJDialog dialog = new FileJDialog();
-        dialog.setVisible(true);
-        String location = dialog.getFileLocation().getText();        
-        try {
-            input.add(new FileInputStream(location));
-            //input.addInputStream(new FileInputStream(location));
-        } catch (FileNotFoundException e) {
-        }
-    }
+    }    
 
     @Override
     public int read() throws IOException {
