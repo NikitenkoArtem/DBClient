@@ -40,7 +40,7 @@ public class ClientUndoManager {
     }
 
     public UndoManager find(JTextArea key) {
-        System.out.println(key);
+        System.out.println("Key: ======================" + key);
         for (Map.Entry<JTextArea, UndoManager> entry : undoMgrs.entrySet()) {
             if (key == entry.getKey()) {
                 return entry.getValue();
