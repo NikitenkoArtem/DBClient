@@ -3,6 +3,8 @@ package oraclient.view;
 
 import javax.swing.JFileChooser;
 
+import javax.swing.JTextField;
+
 import oraclient.component.ClientJFileChooser;
 
 /**
@@ -31,22 +33,25 @@ public class OpenFileJDialog extends javax.swing.JDialog {
         browseFs = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Îòêðûòü ôàéë");
+        setModal(true);
+        setResizable(false);
 
-        createFile.setText("ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ");
+        createFile.setText("Îòêðûòü");
         createFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createFileActionPerformed(evt);
             }
         });
 
-        cancel.setText("ÐžÑ‚Ð¼ÐµÐ½Ð°");
+        cancel.setText("Îòìåíà");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelActionPerformed(evt);
             }
         });
 
-        browseFs.setText("ÐžÐ±Ð·Ð¾Ñ€...");
+        browseFs.setText("Îáçîð...");
         browseFs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseFsActionPerformed(evt);
@@ -60,10 +65,10 @@ public class OpenFileJDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(filePath, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 152, Short.MAX_VALUE)
-                        .addComponent(createFile, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(filePath))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(createFile, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -85,8 +90,12 @@ public class OpenFileJDialog extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }//GEN-END:initComponents
-
+    
+    public JTextField getFilePath() {
+        return filePath;
+    }
     private void createFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createFileActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_createFileActionPerformed
@@ -97,7 +106,7 @@ public class OpenFileJDialog extends javax.swing.JDialog {
 
     private void browseFsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFsActionPerformed
         ClientJFileChooser chooser = new ClientJFileChooser("ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ", "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ Ñ„Ð°Ð¹Ð»");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = chooser.showOpenDialog(this);
         if(result == JFileChooser.APPROVE_OPTION) {
             String directoryPath = chooser.getSelectedFile().getPath();
