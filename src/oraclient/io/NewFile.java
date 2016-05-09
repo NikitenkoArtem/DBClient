@@ -25,13 +25,19 @@ public class NewFile extends File {
         if (files == null) {
             init();
         }
-//        putFile(this, filePath);
-//        putSave(this, false);
     }
 
     private void init() {
         files = new HashMap<>();
         saved = new HashMap<>();
+    }
+
+    public Map<File, String> getFiles() {
+        return files;
+    }
+
+    public Map<File, Boolean> getSaved() {
+        return saved;
     }
 
     public void putFile(File file, String filePath) {
@@ -125,9 +131,5 @@ public class NewFile extends File {
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
         }
-    }
-
-    public void clear() {
-        files.clear();
     }
 }
