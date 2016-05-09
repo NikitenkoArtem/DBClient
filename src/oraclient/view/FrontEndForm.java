@@ -6,15 +6,18 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
+import java.io.IOException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.JScrollPane;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.undo.UndoManager;
@@ -22,11 +25,10 @@ import javax.swing.undo.UndoManager;
 import oraclient.component.ClientArea;
 import oraclient.component.ClientUndoManager;
 
-import oraclient.io.ClientOutputStream;
 import oraclient.io.NewFile;
 
 import oraclient.sql.conns.DBConnection;
-import oraclient.sql.drivers.LoadDrivers;
+import oraclient.sql.driver.LoadDriver;
 
 
 /**
@@ -40,8 +42,9 @@ public class FrontEndForm extends javax.swing.JFrame {
     private Connection conn;
     private NewFile file;
     private ClientUndoManager undoMgr;
+//    private UndoManager undo;
+    private Map<String, String> titles = new HashMap<>();
 
-    /** Creates new form Main */
     public FrontEndForm() {
         initComponents();
     }
@@ -309,7 +312,6 @@ public class FrontEndForm extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }//GEN-END:initComponents
-
     
     private void newFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileMenuItemActionPerformed
         String filePath = fileLocation();
@@ -338,8 +340,10 @@ public class FrontEndForm extends javax.swing.JFrame {
         JTextArea textArea = new JTextArea();
         area.addJTextArea(textArea, f);
         undoMgr = new ClientUndoManager();
-        undoMgr.addUndoManager(textArea, new UndoManager());
-        tabPane.addTab(f.getAbsolutePath(), add(area.find(f)));
+        undoMgr.putUndoManager(textArea, new UndoManager());
+//        undo = new UndoManager();
+        titles.put(f.getName(), f.getAbsolutePath());
+        tabPane.addTab(f.getName(), add(area.find(f)));
     }
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -347,11 +351,22 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void saveFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileMenuItemActionPerformed
-        String title = tabPane.getTitleAt(tabPane.getSelectedIndex());
-        if (!file.isSaved(file.find(title))) {
-            file.save(file.find(title), area.find(file.find(title)));
+        int index = tabPane.getSelectedIndex();
+        String titleAt = tabPane.getTitleAt(index);
+        String tabTitle = find(titles, titleAt);
+        if (!file.isSaved(file.find(tabTitle))) {
+            file.save(file.find(tabTitle), area.find(file.find(tabTitle)));
         }
     }//GEN-LAST:event_saveFileMenuItemActionPerformed
+    
+    private String find(Map<String, String> map, String title) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {                
+            if (title.equals(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
 
     private void closeFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileMenuItemActionPerformed
         saveFileMenuItemActionPerformed(evt);
@@ -359,7 +374,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_closeFileMenuItemActionPerformed
 
     private void connectMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectMenuItemActionPerformed
-        new LoadDrivers("oracle.jdbc.OracleDriver");
+        new LoadDriver("oracle.jdbc.OracleDriver");
         oracle = new DBConnection();
         try {
             conn = DBConnection.getConnection();
@@ -373,18 +388,10 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_connectMenuItemActionPerformed
 
     private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
-        Component component = tabPane.getComponentAt(tabPane.getSelectedIndex());
-        //        Component component = tabPane.getTabComponentAt(tabPane.getSelectedIndex());
-        System.out.println(component);
-        System.out.println(undoMgr.getUndoMgrs().toString());
-        //        if(undoMgr.find((JTextArea) component).canUndo()) {
-        undoMgr.find((JTextArea) component).undo();
-        //        }
-
-        //        UndoManager undo = undoMgr.find((JTextArea) component);
-        //        if(undo.canUndo()) {
-        //            undo.undo();
-        //        }
+        UndoManager undo = undoMgr.find((JTextArea) tabPane.getComponentAt(tabPane.getSelectedIndex()));
+        if(undo.canUndo()) {
+            undo.undo();
+        }
     }//GEN-LAST:event_undoMenuItemActionPerformed
 
     private void redoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoMenuItemActionPerformed
@@ -447,13 +454,15 @@ public class FrontEndForm extends javax.swing.JFrame {
     private void closeAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeAllMenuItemActionPerformed
         saveAllMenuItemActionPerformed(evt);
         tabPane.removeAll();
+        area.getTextAreas().clear();
+        file.getFiles().clear();
+        file.getSaved().clear();
     }//GEN-LAST:event_closeAllMenuItemActionPerformed
 
     private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
         String title = tabPane.getTitleAt(tabPane.getSelectedIndex());
         String filePath = fileLocation();
-        File f = new File(filePath);
-        file.saveAs(f, area.find(file.find(title)));
+        file.saveAs(new File(filePath), area.find(file.find(title)));
         tabPane.setTitleAt(tabPane.getSelectedIndex(), filePath);
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
