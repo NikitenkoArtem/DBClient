@@ -58,7 +58,7 @@ public class FileJDialog extends JDialog {
         fileName.setText("Untitled.sql");
 
         fileLocation.setEditable(false);
-        fileLocation.setText(System.getProperty("java.io.tmpdir"));
+        fileLocation.setText(System.getProperty("user.home"));
 
         browseFs.setText("Îבחמנ...");
         browseFs.addActionListener(new java.awt.event.ActionListener() {
@@ -88,9 +88,7 @@ public class FileJDialog extends JDialog {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(fileLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 1, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(0, 0, 0)
-                                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(okButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(browseFs, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
