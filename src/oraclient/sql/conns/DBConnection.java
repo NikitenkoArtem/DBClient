@@ -44,7 +44,7 @@ public class DBConnection {
         //                dialog.setVisible(true);
         //                url = dialog.getUrl().getText();
         //                username = dialog.getUsrname().getText();
-        //                password = dialog.getPwd().getText();
+//                        password = dialog.getPwd().getPassword().toString();
         //            JOptionPane.showMessageDialog(getClass(), e);
         //        DriverManager.registerDriver(new OracleDriver());
         connection = DriverManager.getConnection(url, username, password);
