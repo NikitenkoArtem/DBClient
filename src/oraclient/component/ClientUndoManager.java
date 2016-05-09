@@ -18,7 +18,6 @@ import oraclient.io.NewFile;
 
 public class ClientUndoManager {
     private Map<JTextArea, UndoManager> undoMgrs;
-//    private List<UndoManager> undoMgrs;
 
     public ClientUndoManager() {
         if (undoMgrs == null) {
@@ -28,35 +27,24 @@ public class ClientUndoManager {
 
     private void init() {
         undoMgrs = new HashMap<>();
-//        undoMgrs = new ArrayList<>();
     }
 
     public Map<JTextArea, UndoManager> getUndoMgrs() {
         return undoMgrs;
     }
 
-    public void addUndoManager(JTextArea area, UndoManager mgr) {
+    public void putUndoManager(JTextArea area, UndoManager mgr) {
         undoMgrs.put(area, mgr);
     }
 
     public UndoManager find(JTextArea key) {
-        System.out.println("Key: ======================" + key);
         for (Map.Entry<JTextArea, UndoManager> entry : undoMgrs.entrySet()) {
-            if (key == entry.getKey()) {
+            if (key.equals(entry.getKey())) {
                 return entry.getValue();
             }
         }
         return null;
     }
-    
-//    public List<UndoManager> getUndoMgrs() {
-//        return undoMgrs;
-//    }
-//
-//    public void addUndoManager(UndoManager mgr) {
-//        undoMgrs.add(mgr);
-//    }
-    
     public void close() {
         undoMgrs.clear();
     }
