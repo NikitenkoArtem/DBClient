@@ -1,5 +1,7 @@
 package oraclient.sql.conns;
 
+import java.io.File;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -23,11 +25,13 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
+import oraclient.component.ClientArea;
+
 import oraclient.view.ConnectionDialog;
 import oraclient.view.FrontEndForm;
 
-
 public class DBConnection {
+    private static Map<Integer, Connection> connections;
     private static Connection connection;
 //    private static Statement stmt;
     private static String url = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -37,8 +41,41 @@ public class DBConnection {
     //    private static String username;
     //    private static String password;
     private Map<Object, Object> result = new HashMap<>();
-    private boolean connected = false;
 
+    public DBConnection() {
+        if (connections == null) {
+            init();
+        }
+    }
+
+    private void init() {
+        connections = new HashMap<>();
+    }
+
+    public void putConnection(int id, Connection conn) {
+        connections.put(id, conn);
+    }
+
+    public Connection find(int key) {
+        for (Map.Entry<Integer, Connection> entry : connections.entrySet()) {
+            if (key == entry.getKey()) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    public int find(Connection value) {
+//        if (textAreas.containsValue(value)) {
+            for (Map.Entry<Integer, Connection> entry : connections.entrySet()) {
+                if (value == entry.getValue()) {
+                    return entry.getKey();
+                }
+            }
+//        }
+        return -1;
+    }
+    
     public static Connection getConnection() throws SQLException {
         //                ConnectionDialog dialog = new ConnectionDialog();
         //                dialog.setVisible(true);
@@ -48,8 +85,13 @@ public class DBConnection {
         //            JOptionPane.showMessageDialog(getClass(), e);
         //        DriverManager.registerDriver(new OracleDriver());
         connection = DriverManager.getConnection(url, username, password);
+        connections.put(0, connection);
         //        conn.setAutoCommit(false);
         return connection;
+    }
+
+    public static Map<Integer, Connection> getConnections() {
+        return connections;
     }
 
     public void getDBName(Connection conn, FrontEndForm form) throws SQLException {
