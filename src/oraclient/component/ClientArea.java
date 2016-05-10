@@ -14,7 +14,6 @@ import javax.swing.JTextArea;
 
 
 public class ClientArea {
-    //    private Map<String, JTextArea> textAreas;
     private Map<JTextArea, File> textAreas;
     
 
