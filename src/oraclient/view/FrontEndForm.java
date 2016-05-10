@@ -3,6 +3,8 @@ package oraclient.view;
 
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import java.io.File;
@@ -26,6 +28,8 @@ import oraclient.component.ClientArea;
 import oraclient.component.ClientUndoManager;
 
 import oraclient.io.NewFile;
+
+import oraclient.report.Report;
 
 import oraclient.sql.conns.DBConnection;
 import oraclient.sql.driver.LoadDriver;
@@ -91,6 +95,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         runMenu = new javax.swing.JMenu();
         runScriptMenuItem = new javax.swing.JMenuItem();
         reportMenu = new javax.swing.JMenu();
+        getReportMenuItem = new javax.swing.JMenuItem();
         sessionMenu = new javax.swing.JMenu();
         getSessionsMenuItem = new javax.swing.JMenuItem();
         closeSessionsMenuItem = new javax.swing.JMenuItem();
@@ -275,14 +280,33 @@ public class FrontEndForm extends javax.swing.JFrame {
         MainMenu.add(runMenu);
 
         reportMenu.setText("Отчет");
+
+        getReportMenuItem.setText("Получить отчет");
+        getReportMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getReportMenuItemActionPerformed(evt);
+            }
+        });
+        reportMenu.add(getReportMenuItem);
+
         MainMenu.add(reportMenu);
 
         sessionMenu.setText("Сессии");
 
         getSessionsMenuItem.setText("Список сессий");
+        getSessionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getSessionsMenuItemActionPerformed(evt);
+            }
+        });
         sessionMenu.add(getSessionsMenuItem);
 
         closeSessionsMenuItem.setText("Завершить все сессии");
+        closeSessionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeSessionsMenuItemActionPerformed(evt);
+            }
+        });
         sessionMenu.add(closeSessionsMenuItem);
 
         MainMenu.add(sessionMenu);
@@ -314,22 +338,21 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-END:initComponents
     
     private void newFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileMenuItemActionPerformed
-        String filePath = fileLocation();
+        FileJDialog dialog = new FileJDialog();
+        String filePath = fileLocation(dialog);
         file = new NewFile(filePath);
         file.putFile(file, filePath);
         file.putSave(file, false);
-        //        dialog.getOkButton().addActionListener(new ActionListener(){
-        //            @Override
-        //            public void actionPerformed(ActionEvent e) {
-        //                newFile(filePath);
-        //            }
-        //        });
+//        dialog.getOkButton().addActionListener(new ActionListener(){
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//            }
+//        });
         initFile(file);
         runScriptMenuItem.setEnabled(true);
     }//GEN-LAST:event_newFileMenuItemActionPerformed
 
-    private String fileLocation() {
-        FileJDialog dialog = new FileJDialog();
+    private String fileLocation(FileJDialog dialog) {
         dialog.setVisible(true);
         String filePath = dialog.getFileLocation().getText() + dialog.getFileName().getText();
         return filePath;
@@ -340,8 +363,9 @@ public class FrontEndForm extends javax.swing.JFrame {
         JTextArea textArea = new JTextArea();
         area.addJTextArea(textArea, f);
         undoMgr = new ClientUndoManager();
-        undoMgr.putUndoManager(textArea, new UndoManager());
-//        undo = new UndoManager();
+        UndoManager undo = new UndoManager();
+        undoMgr.putUndoManager(textArea, undo);
+        textArea.getDocument().addUndoableEditListener(undo);
         titles.put(f.getName(), f.getAbsolutePath());
         tabPane.addTab(f.getName(), add(area.find(f)));
     }
@@ -461,7 +485,7 @@ public class FrontEndForm extends javax.swing.JFrame {
 
     private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
         String title = tabPane.getTitleAt(tabPane.getSelectedIndex());
-        String filePath = fileLocation();
+        String filePath = fileLocation(new FileJDialog());
         file.saveAs(new File(filePath), area.find(file.find(title)));
         tabPane.setTitleAt(tabPane.getSelectedIndex(), filePath);
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
@@ -473,6 +497,25 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_saveAllMenuItemActionPerformed
+
+    private void getReportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getReportMenuItemActionPerformed
+        Report report = new Report(console);
+    }//GEN-LAST:event_getReportMenuItemActionPerformed
+
+    private void getSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getSessionsMenuItemActionPerformed
+        SessionJDialog dialog = new SessionJDialog(this, true, oracle);
+        dialog.setVisible(true);
+        dialog.getTerminateButton().addActionListener((ActionEvent e) -> {
+            try {
+                conn.close();
+            } catch (SQLException f) {
+            }
+        });
+    }//GEN-LAST:event_getSessionsMenuItemActionPerformed
+
+    private void closeSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeSessionsMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_closeSessionsMenuItemActionPerformed
   
     /**
      * @param args the command line arguments
@@ -525,6 +568,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem getReportMenuItem;
     private javax.swing.JMenuItem getSessionsMenuItem;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
