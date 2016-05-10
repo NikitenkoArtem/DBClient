@@ -125,10 +125,6 @@ public class FileJDialog extends JDialog {
         setLocationRelativeTo(null);
     }//GEN-END:initComponents
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        this.setVisible(false);
-    }//GEN-LAST:event_okButtonActionPerformed
-
     private void browseFsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFsActionPerformed
         ClientJFileChooser chooser = new ClientJFileChooser("OK", "Новый");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -142,6 +138,10 @@ public class FileJDialog extends JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_okButtonActionPerformed
 
     public JButton getOkButton() {
         return okButton;
