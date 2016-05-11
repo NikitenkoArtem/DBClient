@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.undo.UndoManager;
@@ -63,9 +64,9 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         tabPane = new javax.swing.JTabbedPane();
         outputArea = new javax.swing.JTabbedPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        consoleScrollPane = new javax.swing.JScrollPane();
         console = new javax.swing.JTextArea();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        tableScrollPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -116,24 +117,27 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         console.setColumns(20);
         console.setRows(5);
-        jScrollPane2.setViewportView(console);
+        consoleScrollPane.setViewportView(console);
 
-        outputArea.addTab("tab2", jScrollPane2);
+        outputArea.addTab("Консоль", consoleScrollPane);
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(table);
+        tableScrollPane.setViewportView(table);
+        if (table.getColumnModel().getColumnCount() > 0) {
+            table.getColumnModel().getColumn(0).setHeaderValue("Title 1");
+            table.getColumnModel().getColumn(1).setHeaderValue("Title 2");
+            table.getColumnModel().getColumn(2).setHeaderValue("Title 3");
+            table.getColumnModel().getColumn(3).setHeaderValue("Title 4");
+        }
 
-        outputArea.addTab("tab2", jScrollPane1);
+        outputArea.addTab("Таблица", tableScrollPane);
 
         jTabbedPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
@@ -354,7 +358,7 @@ public class FrontEndForm extends javax.swing.JFrame {
 
     private String fileLocation(FileJDialog dialog) {
         dialog.setVisible(true);
-        String filePath = dialog.getFileLocation().getText() + dialog.getFileName().getText();
+        String filePath = dialog.getFilePath().getText() + dialog.getFileName().getText();
         return filePath;
     }
 
@@ -368,6 +372,14 @@ public class FrontEndForm extends javax.swing.JFrame {
         textArea.getDocument().addUndoableEditListener(undo);
         titles.put(f.getName(), f.getAbsolutePath());
         tabPane.addTab(f.getName(), add(area.find(f)));
+    }
+
+    public JTextArea getConsole() {
+        return console;
+    }
+
+    public JTable getTable() {
+        return table;
     }
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -408,7 +420,6 @@ public class FrontEndForm extends javax.swing.JFrame {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-            
     }//GEN-LAST:event_connectMenuItemActionPerformed
 
     private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
@@ -499,7 +510,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_saveAllMenuItemActionPerformed
 
     private void getReportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getReportMenuItemActionPerformed
-        Report report = new Report(console);
+        new ReportJDialog(this, true).setVisible(true);
     }//GEN-LAST:event_getReportMenuItemActionPerformed
 
     private void getSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getSessionsMenuItemActionPerformed
@@ -563,6 +574,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem closeSessionsMenuItem;
     private javax.swing.JMenuItem connectMenuItem;
     private javax.swing.JTextArea console;
+    private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JMenu editMenu;
@@ -570,8 +582,6 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem getReportMenuItem;
     private javax.swing.JMenuItem getSessionsMenuItem;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
@@ -594,6 +604,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenu sessionMenu;
     private javax.swing.JTabbedPane tabPane;
     private javax.swing.JTable table;
+    private javax.swing.JScrollPane tableScrollPane;
     private javax.swing.JMenuItem undoMenuItem;
     // End of variables declaration//GEN-END:variables
 }
