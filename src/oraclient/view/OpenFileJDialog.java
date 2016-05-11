@@ -27,34 +27,34 @@ public class OpenFileJDialog extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     private void initComponents() {//GEN-BEGIN:initComponents
 
-        createFile = new javax.swing.JButton();
-        cancel = new javax.swing.JButton();
-        filePath = new javax.swing.JTextField();
-        browseFs = new javax.swing.JButton();
+        openFileBtn = new javax.swing.JButton();
+        cancelBtn = new javax.swing.JButton();
+        filePathTxtField = new javax.swing.JTextField();
+        browseFSBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Îòêðûòü ôàéë");
         setModal(true);
         setResizable(false);
 
-        createFile.setText("Îòêðûòü");
-        createFile.addActionListener(new java.awt.event.ActionListener() {
+        openFileBtn.setText("Îòêðûòü");
+        openFileBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createFileActionPerformed(evt);
+                openFileBtnActionPerformed(evt);
             }
         });
 
-        cancel.setText("Îòìåíà");
-        cancel.addActionListener(new java.awt.event.ActionListener() {
+        cancelBtn.setText("Îòìåíà");
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelActionPerformed(evt);
+                cancelBtnActionPerformed(evt);
             }
         });
 
-        browseFs.setText("Îáçîð...");
-        browseFs.addActionListener(new java.awt.event.ActionListener() {
+        browseFSBtn.setText("Îáçîð...");
+        browseFSBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseFsActionPerformed(evt);
+                browseFSBtnActionPerformed(evt);
             }
         });
 
@@ -67,12 +67,12 @@ public class OpenFileJDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 151, Short.MAX_VALUE)
-                        .addComponent(createFile, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(filePath))
+                        .addComponent(openFileBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(filePathTxtField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(browseFs, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
+                    .addComponent(cancelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(browseFSBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -80,12 +80,12 @@ public class OpenFileJDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(filePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(browseFs))
+                    .addComponent(filePathTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(browseFSBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancel)
-                    .addComponent(createFile))
+                    .addComponent(cancelBtn)
+                    .addComponent(openFileBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -94,31 +94,31 @@ public class OpenFileJDialog extends javax.swing.JDialog {
     }//GEN-END:initComponents
     
     public JTextField getFilePath() {
-        return filePath;
+        return filePathTxtField;
     }
-    private void createFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createFileActionPerformed
+    private void openFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileBtnActionPerformed
         this.setVisible(false);
-    }//GEN-LAST:event_createFileActionPerformed
+    }//GEN-LAST:event_openFileBtnActionPerformed
 
-    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+    private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         this.setVisible(false);
-    }//GEN-LAST:event_cancelActionPerformed
+    }//GEN-LAST:event_cancelBtnActionPerformed
 
-    private void browseFsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFsActionPerformed
+    private void browseFSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFSBtnActionPerformed
         ClientJFileChooser chooser = new ClientJFileChooser("ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ", "ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ Ñ„Ð°Ð¹Ð»");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = chooser.showOpenDialog(this);
         if(result == JFileChooser.APPROVE_OPTION) {
             String directoryPath = chooser.getSelectedFile().getPath();
-            filePath.setText(directoryPath + System.getProperty("file.separator"));
+            filePathTxtField.setText(directoryPath + System.getProperty("file.separator"));
         }
-    }//GEN-LAST:event_browseFsActionPerformed
+    }//GEN-LAST:event_browseFSBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton browseFs;
-    private javax.swing.JButton cancel;
-    private javax.swing.JButton createFile;
-    private javax.swing.JTextField filePath;
+    private javax.swing.JButton browseFSBtn;
+    private javax.swing.JButton cancelBtn;
+    private javax.swing.JTextField filePathTxtField;
+    private javax.swing.JButton openFileBtn;
     // End of variables declaration//GEN-END:variables
 
 }

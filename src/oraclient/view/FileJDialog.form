@@ -35,30 +35,30 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="fnLbl" min="-2" max="-2" attributes="0"/>
+                              <Component id="fileNameLbl" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="12" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="fileLocation" min="-2" pref="227" max="-2" attributes="0"/>
+                                      <Component id="filePathTxtField" min="-2" pref="227" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="1" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="okButton" alignment="1" min="-2" pref="72" max="-2" attributes="0"/>
+                                  <Component id="okBtn" alignment="1" min="-2" pref="72" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="browseFs" pref="72" max="32767" attributes="0"/>
-                          <Component id="cancelButton" max="32767" attributes="0"/>
+                          <Component id="browseFSBtn" pref="72" max="32767" attributes="0"/>
+                          <Component id="cancelBtn" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="lcnLbl" min="-2" max="-2" attributes="0"/>
+                      <Component id="locationLbl" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="fileName" max="32767" attributes="0"/>
+                  <Component id="fileNameTxtField" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -68,20 +68,20 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="fnLbl" min="-2" max="-2" attributes="0"/>
+              <Component id="fileNameLbl" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="fileName" min="-2" max="-2" attributes="0"/>
+              <Component id="fileNameTxtField" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lcnLbl" min="-2" max="-2" attributes="0"/>
+              <Component id="locationLbl" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="fileLocation" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="browseFs" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="filePathTxtField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="browseFSBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="okButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cancelBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="okBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -89,28 +89,28 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="okButton">
+    <Component class="javax.swing.JButton" name="okBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="okBtnActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="cancelButton">
+    <Component class="javax.swing.JButton" name="cancelBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x41e;&#x442;&#x43c;&#x435;&#x43d;&#x430;"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelBtnActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="fileName">
+    <Component class="javax.swing.JTextField" name="fileNameTxtField">
       <Properties>
         <Property name="text" type="java.lang.String" value="Untitled.sql"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="fileLocation">
+    <Component class="javax.swing.JTextField" name="filePathTxtField">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -118,20 +118,20 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="browseFs">
+    <Component class="javax.swing.JButton" name="browseFSBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x437;&#x43e;&#x440;..."/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="browseFsActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="browseFSBtnActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="lcnLbl">
+    <Component class="javax.swing.JLabel" name="locationLbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x420;&#x430;&#x441;&#x43f;&#x43e;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435;"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="fnLbl">
+    <Component class="javax.swing.JLabel" name="fileNameLbl">
       <Properties>
         <Property name="text" type="java.lang.String" value="&#x418;&#x43c;&#x44f; &#x444;&#x430;&#x439;&#x43b;&#x430;"/>
       </Properties>

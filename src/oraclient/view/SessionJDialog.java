@@ -43,7 +43,7 @@ public class SessionJDialog extends javax.swing.JDialog {
     }
 
     public JButton getTerminateButton() {
-        return terminateButton;
+        return terminateBtn;
     }
 
     /** This method is called from within the constructor to
@@ -54,9 +54,9 @@ public class SessionJDialog extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     private void initComponents() {//GEN-BEGIN:initComponents
 
-        jScrollPane = new javax.swing.JScrollPane();
+        sessionScrollPane = new javax.swing.JScrollPane();
         sessionTable = new javax.swing.JTable();
-        terminateButton = new javax.swing.JButton();
+        terminateBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Сессии");
@@ -71,12 +71,12 @@ public class SessionJDialog extends javax.swing.JDialog {
 
             }
         ));
-        jScrollPane.setViewportView(sessionTable);
+        sessionScrollPane.setViewportView(sessionTable);
 
-        terminateButton.setText("Завершить все сессии");
-        terminateButton.addActionListener(new java.awt.event.ActionListener() {
+        terminateBtn.setText("Завершить все сессии");
+        terminateBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                terminateButtonActionPerformed(evt);
+                terminateBtnActionPerformed(evt);
             }
         });
 
@@ -87,19 +87,19 @@ public class SessionJDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(sessionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 241, Short.MAX_VALUE)
-                        .addComponent(terminateButton)))
+                        .addComponent(terminateBtn)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sessionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(terminateButton)
+                .addComponent(terminateBtn)
                 .addContainerGap())
         );
 
@@ -107,14 +107,14 @@ public class SessionJDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }//GEN-END:initComponents
 
-    private void terminateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminateButtonActionPerformed
+    private void terminateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminateBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_terminateButtonActionPerformed
+    }//GEN-LAST:event_terminateBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JScrollPane sessionScrollPane;
     private javax.swing.JTable sessionTable;
-    private javax.swing.JButton terminateButton;
+    private javax.swing.JButton terminateBtn;
     // End of variables declaration//GEN-END:variables
 
 }
