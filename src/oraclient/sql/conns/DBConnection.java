@@ -103,11 +103,11 @@ public class DBConnection {
 //        stmt = conn.createStatement();
 //        stmt.execute(sqlFile.getText());
         Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        //            stmt.executeQuery("select * from departments");
-        stmt.executeUpdate("drop table test");
-        stmt.execute("create table test(id int, name varchar2(5), price int)");
-        stmt.executeUpdate("insert into test values(1, 'hello', 12345)");
-        stmt.executeQuery("select * from test");
+        stmt.executeQuery("select * from departments");
+//        stmt.executeUpdate("drop table test");
+//        stmt.execute("create table test(id int, name varchar2(5), price int)");
+//        stmt.executeUpdate("insert into test values(1, 'hello', 12345)");
+//        stmt.executeQuery("select * from test");
         //            stmt.execute(area.getTextAreas().iterator().next().getText());
         return stmt;
     }
