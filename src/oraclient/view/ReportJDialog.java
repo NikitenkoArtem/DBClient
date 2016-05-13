@@ -2,6 +2,9 @@
 package oraclient.view;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.JFileChooser;
 
 import javax.swing.JFrame;
@@ -11,7 +14,7 @@ import javax.swing.JTextArea;
 
 import javax.swing.JTextField;
 
-import oraclient.component.ClientJFileChooser;
+import oraclient.component.DBFileChooser;
 
 import oraclient.report.Report;
 
@@ -37,15 +40,18 @@ public class ReportJDialog extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     private void initComponents() {//GEN-BEGIN:initComponents
 
-        optionsPanel = new javax.swing.JPanel();
-        pdfCheckBox = new javax.swing.JCheckBox();
-        xlsxCheckBox = new javax.swing.JCheckBox();
-        docxCheckBox = new javax.swing.JCheckBox();
         createReportBtn = new javax.swing.JButton();
         filePathPanel = new javax.swing.JPanel();
         filePathLbl = new javax.swing.JLabel();
-        outputFolderTxtField = new javax.swing.JTextField();
-        browseFSBtn = new javax.swing.JButton();
+        pdfOutputTxtField = new javax.swing.JTextField();
+        pdfBrowseFSBtn = new javax.swing.JButton();
+        xlsxOutputTxtField = new javax.swing.JTextField();
+        xlsxBrowseFSBtn = new javax.swing.JButton();
+        docxOutputTxtField = new javax.swing.JTextField();
+        docxBrowseFSBtn = new javax.swing.JButton();
+        pdfCheckBox = new javax.swing.JCheckBox();
+        xlsxCheckBox = new javax.swing.JCheckBox();
+        docxCheckBox = new javax.swing.JCheckBox();
         fontPanel = new javax.swing.JPanel();
         fontSizeSpinner = new javax.swing.JSpinner();
         fontComboBox = new javax.swing.JComboBox();
@@ -60,38 +66,6 @@ public class ReportJDialog extends javax.swing.JDialog {
         setModal(true);
         setResizable(false);
 
-        optionsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        pdfCheckBox.setText("pdf");
-
-        xlsxCheckBox.setText("xlsx");
-
-        docxCheckBox.setText("docx");
-
-        javax.swing.GroupLayout optionsPanelLayout = new javax.swing.GroupLayout(optionsPanel);
-        optionsPanel.setLayout(optionsPanelLayout);
-        optionsPanelLayout.setHorizontalGroup(
-            optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(optionsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(docxCheckBox)
-                    .addComponent(xlsxCheckBox)
-                    .addComponent(pdfCheckBox))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        optionsPanelLayout.setVerticalGroup(
-            optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(optionsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pdfCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(xlsxCheckBox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(docxCheckBox)
-                .addContainerGap(66, Short.MAX_VALUE))
-        );
-
         createReportBtn.setText("Создать");
         createReportBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,13 +77,54 @@ public class ReportJDialog extends javax.swing.JDialog {
 
         filePathLbl.setText("Расположение файла");
 
-        outputFolderTxtField.setEditable(false);
-        outputFolderTxtField.setText(System.getProperty("user.home"));
+        pdfOutputTxtField.setEnabled(false);
 
-        browseFSBtn.setText("Обзор...");
-        browseFSBtn.addActionListener(new java.awt.event.ActionListener() {
+        pdfBrowseFSBtn.setText("Обзор...");
+        pdfBrowseFSBtn.setEnabled(false);
+        pdfBrowseFSBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseFSBtnActionPerformed(evt);
+                pdfBrowseFSBtnActionPerformed(evt);
+            }
+        });
+
+        xlsxOutputTxtField.setEnabled(false);
+
+        xlsxBrowseFSBtn.setText("Обзор...");
+        xlsxBrowseFSBtn.setEnabled(false);
+        xlsxBrowseFSBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xlsxBrowseFSBtnActionPerformed(evt);
+            }
+        });
+
+        docxOutputTxtField.setEnabled(false);
+
+        docxBrowseFSBtn.setText("Обзор...");
+        docxBrowseFSBtn.setEnabled(false);
+        docxBrowseFSBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                docxBrowseFSBtnActionPerformed(evt);
+            }
+        });
+
+        pdfCheckBox.setText("pdf");
+        pdfCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pdfCheckBoxActionPerformed(evt);
+            }
+        });
+
+        xlsxCheckBox.setText("xlsx");
+        xlsxCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                xlsxCheckBoxActionPerformed(evt);
+            }
+        });
+
+        docxCheckBox.setText("docx");
+        docxCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                docxCheckBoxActionPerformed(evt);
             }
         });
 
@@ -118,13 +133,30 @@ public class ReportJDialog extends javax.swing.JDialog {
         filePathPanelLayout.setHorizontalGroup(
             filePathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filePathPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(filePathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(filePathPanelLayout.createSequentialGroup()
-                        .addComponent(outputFolderTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(browseFSBtn))
-                    .addComponent(filePathLbl))
+                        .addContainerGap()
+                        .addGroup(filePathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(docxCheckBox)
+                            .addComponent(xlsxCheckBox)
+                            .addComponent(pdfCheckBox))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(filePathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(filePathPanelLayout.createSequentialGroup()
+                                .addComponent(pdfOutputTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(pdfBrowseFSBtn))
+                            .addGroup(filePathPanelLayout.createSequentialGroup()
+                                .addComponent(xlsxOutputTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(xlsxBrowseFSBtn))
+                            .addGroup(filePathPanelLayout.createSequentialGroup()
+                                .addComponent(docxOutputTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(docxBrowseFSBtn))))
+                    .addGroup(filePathPanelLayout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addComponent(filePathLbl)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         filePathPanelLayout.setVerticalGroup(
@@ -134,14 +166,23 @@ public class ReportJDialog extends javax.swing.JDialog {
                 .addComponent(filePathLbl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(filePathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(outputFolderTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(browseFSBtn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pdfOutputTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pdfBrowseFSBtn)
+                    .addComponent(pdfCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(filePathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(xlsxOutputTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(xlsxBrowseFSBtn)
+                    .addComponent(xlsxCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(filePathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(docxOutputTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(docxBrowseFSBtn)
+                    .addComponent(docxCheckBox))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         fontPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        fontComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         fontLbl.setText("Шрифт");
 
@@ -215,77 +256,127 @@ public class ReportJDialog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(filePathPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(reportContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fontPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(createReportBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(filePathPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(reportContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                                .addComponent(fontPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(createReportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(filePathPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(reportContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(fontPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(filePathPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reportContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fontPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(createReportBtn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
     }//GEN-END:initComponents
 
-    private void browseFSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFSBtnActionPerformed
-        ClientJFileChooser chooser = new ClientJFileChooser("OK", "Новый");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int result = chooser.showOpenDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION) {
-            String directoryPath = chooser.getSelectedFile().getPath();
-            outputFolderTxtField.setText(directoryPath + System.getProperty("file.separator"));
-        }
-    }//GEN-LAST:event_browseFSBtnActionPerformed
+    private void pdfBrowseFSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdfBrowseFSBtnActionPerformed
+        Map<String, String> filter = new HashMap<>();
+        filter.put("PDF файлы (*.pdf)", "pdf");
+        browseFS(pdfOutputTxtField, filter);
+    }//GEN-LAST:event_pdfBrowseFSBtnActionPerformed
 
     private void createReportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createReportBtnActionPerformed
         JTextArea area = ((FrontEndForm) parent).getConsole();
         JTable table = ((FrontEndForm) parent).getTable();
         Report report = new Report();
-        report.setFilePath(outputFolderTxtField.getText());
-        report.setFontSize((short) 16);
+//        report.setFilePath(pdfOutputTxtField.getText());
+//        report.setFontSize((short) 16);
         if (pdfCheckBox.isSelected()) {
-            report.pdfReport(area);
+//            report.pdfReport(area, pdfOutputTxtField.getText());
+//            report.pdfReport(area, "D:/helloworld.pdf");
         }
         if (xlsxCheckBox.isSelected()) {
-            report.excelReport(table, "new");
+            report.excelReport(table, xlsxOutputTxtField.getText());
+//            report.excelReport(table, "D:/hello.xlsx");
         }
         if (docxCheckBox.isSelected()) {
-            report.wordReport(table);
+            report.wordReport(table, docxOutputTxtField.getText());
+//            report.wordReport(table, "D:/hello.docx");
         }
         this.setVisible(false);
     }//GEN-LAST:event_createReportBtnActionPerformed
+
+    private void xlsxBrowseFSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xlsxBrowseFSBtnActionPerformed
+        Map<String, String> filter = new HashMap<>();
+        filter.put("Файлы Excel (*.xlsx)", "xlsx");
+        browseFS(xlsxOutputTxtField, filter);
+    }//GEN-LAST:event_xlsxBrowseFSBtnActionPerformed
+
+    private void docxBrowseFSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docxBrowseFSBtnActionPerformed
+        Map<String, String> filter = new HashMap<>();
+        filter.put("Документы Word (*.docx)", "docx");
+        browseFS(docxOutputTxtField, filter);
+    }//GEN-LAST:event_docxBrowseFSBtnActionPerformed
+
+    private void pdfCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pdfCheckBoxActionPerformed
+        if (pdfCheckBox.isSelected()) {
+            pdfOutputTxtField.setEnabled(true);
+            pdfBrowseFSBtn.setEnabled(true);
+        } else {
+            pdfOutputTxtField.setEnabled(false);
+            pdfBrowseFSBtn.setEnabled(false);
+        }
+    }//GEN-LAST:event_pdfCheckBoxActionPerformed
+
+    private void xlsxCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_xlsxCheckBoxActionPerformed
+            if (xlsxCheckBox.isSelected()) {
+            xlsxOutputTxtField.setEnabled(true);
+            xlsxBrowseFSBtn.setEnabled(true);
+        } else {
+            xlsxOutputTxtField.setEnabled(false);
+            xlsxBrowseFSBtn.setEnabled(false);
+        }
+    }//GEN-LAST:event_xlsxCheckBoxActionPerformed
+
+    private void docxCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docxCheckBoxActionPerformed
+            if (docxCheckBox.isSelected()) {
+            docxOutputTxtField.setEnabled(true);
+            docxBrowseFSBtn.setEnabled(true);
+        } else {
+            docxOutputTxtField.setEnabled(false);
+            docxBrowseFSBtn.setEnabled(false);
+        }
+    }//GEN-LAST:event_docxCheckBoxActionPerformed
     
-    public JTextField getOutputFolderTxtField() {
-        return outputFolderTxtField;
+    public JTextField getPDFOutputTxtField() {
+        return pdfOutputTxtField;
+    }
+    
+    private void browseFS(JTextField txtField, Map<String, String> filter) {
+        JFileChooser chooser = new DBFileChooser("OK", "Новый", filter);
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            String filePath = chooser.getSelectedFile().getPath();
+            txtField.setText(filePath);
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton browseFSBtn;
     private javax.swing.JLabel contentLbl;
     private javax.swing.JButton createReportBtn;
+    private javax.swing.JButton docxBrowseFSBtn;
     private javax.swing.JCheckBox docxCheckBox;
+    private javax.swing.JTextField docxOutputTxtField;
     private javax.swing.JLabel filePathLbl;
     private javax.swing.JPanel filePathPanel;
     private javax.swing.JComboBox fontComboBox;
@@ -293,12 +384,13 @@ public class ReportJDialog extends javax.swing.JDialog {
     private javax.swing.JPanel fontPanel;
     private javax.swing.JSpinner fontSizeSpinner;
     private javax.swing.JCheckBox logCheckBox;
-    private javax.swing.JPanel optionsPanel;
-    private javax.swing.JTextField outputFolderTxtField;
+    private javax.swing.JButton pdfBrowseFSBtn;
     private javax.swing.JCheckBox pdfCheckBox;
+    private javax.swing.JTextField pdfOutputTxtField;
     private javax.swing.JPanel reportContentPanel;
     private javax.swing.JCheckBox tableCheckBox;
+    private javax.swing.JButton xlsxBrowseFSBtn;
     private javax.swing.JCheckBox xlsxCheckBox;
+    private javax.swing.JTextField xlsxOutputTxtField;
     // End of variables declaration//GEN-END:variables
-
 }
