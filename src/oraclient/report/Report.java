@@ -4,15 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import java.util.Arrays;
-import java.util.Enumeration;
-
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-
-import javax.swing.table.TableColumn;
-
-import javax.swing.table.TableModel;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -21,46 +14,41 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRelation;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 public class Report {
-    private String filePath;
-    private final String fileName = "report";
-    private String fontName;
-    private short fontSize = 8;
-    
+    private final String FONTNAME = "Times New Roman";
+    private final short FONTSIZE = 14;
+    private String sheetName = "report";
+
     public Report() {
-//        excelReport(area, table);
-//        wordReport(area, table);
-//        pdfReport(area);
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+//    public void setFontSize(short fontSize) {
+//        this.fontSize = fontSize;
+//    }
+//
+//    public int getFontSize() {
+//        return fontSize;
+//    }
+
+    public void setSheetName(String sheetName) {
+        this.sheetName = sheetName;
     }
 
-    public void setFontSize(short fontSize) {
-        this.fontSize = fontSize;
+    public String getSheetName() {
+        return sheetName;
     }
 
-    public int getFontSize() {
-        return fontSize;
-    }
-    
     private void makeReport(POIXMLDocument doc, String filePath) {
-//        try (FileOutputStream out = new FileOutputStream(new File(filePath + fileName + ".docx"))) {
         try (FileOutputStream out = new FileOutputStream(new File(filePath))) {
             doc.write(out);
         } catch (IOException e) {
@@ -68,21 +56,23 @@ public class Report {
         }
     }
 
-    public void wordReport(JTextArea area) {
+    public void wordReport(JTextArea area, String filePath) {
         XWPFDocument doc = new XWPFDocument();
         XWPFParagraph paragraph = doc.createParagraph();
         XWPFRun run = paragraph.createRun();
-        run.setFontFamily(fontName);
-        run.setFontSize(fontSize);
+        run.setFontFamily(FONTNAME);
+        run.setFontSize(FONTSIZE);
         run.setText(area.getText());
+        filePath = addExtension(filePath, ".docx");
+        makeReport(doc, filePath);
     }
 
-    public void wordReport(JTable table) {
+    public void wordReport(JTable table, String filePath) {
         XWPFDocument doc = new XWPFDocument();
         XWPFParagraph paragraph = doc.createParagraph();
         XWPFRun run = paragraph.createRun();
-        run.setFontFamily(fontName);
-        run.setFontSize(fontSize);
+        run.setFontFamily(FONTNAME);
+        run.setFontSize(FONTSIZE);
         XWPFTable wordTable = doc.createTable();        
         int columnCount = table.getColumnCount();
         int rowCount = table.getRowCount();
@@ -105,23 +95,26 @@ public class Report {
                 }
             }
         }
-        makeReport(doc, "D:/hello.docx");
+        filePath = addExtension(filePath, ".docx");
+        makeReport(doc, filePath);
     }
     
-    public void excelReport(JTextArea area, String sheetName) {
-        Workbook wb = new XSSFWorkbook();
-        Sheet sheet = wb.createSheet(sheetName);
-    }
-    
-    public void excelReport(JTable table, String sheetName) {
+    public void excelReport(JTextArea area, String filePath) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(sheetName);
-        CellStyle style = workbook.createCellStyle();
-        Font font = workbook.createFont();
-//        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-        font.setFontName(fontName);
-        font.setFontHeight(fontSize);
-        style.setFont(font);
+        filePath = addExtension(filePath, ".xlsx");
+        makeReport((POIXMLDocument) workbook, filePath);
+    }
+    
+    public void excelReport(JTable table, String filePath) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet(sheetName);
+//        CellStyle style = workbook.createCellStyle();
+//        Font font = workbook.createFont();
+////        font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+//        font.setFontName(FONTNAME);
+//        font.setFontHeight(FONTSIZE);
+//        style.setFont(font);
         int columnCount = table.getColumnCount();
         int rowCount = table.getRowCount();
         Row tableHeader = sheet.createRow(0);
@@ -140,27 +133,90 @@ public class Report {
                 }
             }
         }
-        makeReport((POIXMLDocument) workbook, "D:/hello.xlsx");
+        filePath = addExtension(filePath, ".xlsx");
+        makeReport((POIXMLDocument) workbook, filePath);
     }
 
-    public void pdfReport(JTextArea area) {
+    public void pdfReport(JTextArea area, String filePath) {
         try (PDDocument pdf = new PDDocument()) {
             PDPage page = new PDPage();
-            pdf.addPage(page);
+            pdf.addPage(page);            
             PDFont font = PDType1Font.TIMES_ROMAN;
-            PDPageContentStream ctn = new PDPageContentStream(pdf, page);
-            ctn.beginText();
-            ctn.setFont(font, fontSize);
-            ctn.drawString(area.getText());
+            PDPageContentStream content = new PDPageContentStream(pdf, page);
+            content.beginText();
+            content.setFont(font, FONTSIZE);
+            content.showText(area.getText());
             //            ctn.drawString("Hello, world!");
-            ctn.endText();
-            ctn.close();
-            pdf.save("D:/helloworld.pdf");
+            content.endText();
+            content.close();
+            pdf.save(filePath);            
         } catch (IOException e) {
         }
     }
     
-    public void pdfReport(JTable table) {
-        
+    public void pdfReport(JTable table, String filePath) {
+        try (PDDocument pdf = new PDDocument()) {
+            PDPage page = new PDPage();
+            pdf.addPage(page);            
+            PDFont font = PDType1Font.TIMES_ROMAN;
+            PDPageContentStream content = new PDPageContentStream(pdf, page);
+            content.beginText();
+            content.setFont(font, FONTSIZE);
+//        final int rows = table.getRowCount();
+//        final int cols = table.getColumnCount();
+//        final float rowHeight = 20f;
+//        final float tableWidth = page.getCropBox().getWidth() - margin - margin;
+//        final float tableHeight = rowHeight * rows;
+//        final float colWidth = tableWidth/(float)cols;
+//        final float cellMargin=5f;
+
+        //draw the rows
+//        float nexty = y ;
+        for (int i = 0; i < table.getRowCount(); i++) {
+            for (int j = 0; j < table.getColumnCount(); j++) {
+                content.moveTo(0, 0);
+                content.lineTo(0, 0);
+                content.stroke();
+            }
+//            content.drawLine(margin, nexty, margin+tableWidth, nexty);
+//            nexty-= rowHeight;
+        }
+
+        //draw the columns
+//        float nextx = margin;
+//        for (int i = 0; i < table.getColumnCount(); i++) {
+            
+//            content.drawLine(nextx, y, nextx, y-tableHeight);
+//            nextx += colWidth;
+//        }
+
+        //now add the text
+        content.setFont( PDType1Font.HELVETICA_BOLD , 12 );
+
+//        float textx = margin+cellMargin;
+//        float texty = y-15;
+//        for(int i = 0; i < content.length; i++){
+//            for(int j = 0 ; j < content[i].length; j++){
+        for(int i = 0; i < table.getRowCount(); i++){
+            for(int j = 0; j < table.getColumnCount(); j++){
+//                String text = content[i][j];
+                content.beginText();
+//                content.moveTextPositionByAmount(textx,texty);
+//                content.drawString(text);
+                content.endText();
+//                textx += colWidth;
+            }
+//            texty-=rowHeight;
+//            textx = margin+cellMargin;
+        }
+        } catch (IOException e) {
+        }
+    }
+
+    private String addExtension(String filePath, final String extension) {
+        if (!filePath.endsWith(extension)) {
+            filePath = filePath + extension;
+        }
+        return filePath;
     }
 }
