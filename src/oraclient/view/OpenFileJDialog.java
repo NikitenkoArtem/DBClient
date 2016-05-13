@@ -5,7 +5,7 @@ import javax.swing.JFileChooser;
 
 import javax.swing.JTextField;
 
-import oraclient.component.ClientJFileChooser;
+import oraclient.component.DBFileChooser;
 
 /**
  *
@@ -105,7 +105,7 @@ public class OpenFileJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void browseFSBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFSBtnActionPerformed
-        ClientJFileChooser chooser = new ClientJFileChooser("РћС‚РєСЂС‹С‚СЊ", "РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»");
+        DBFileChooser chooser = new DBFileChooser("Открыть", "Открыть файл", null);
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = chooser.showOpenDialog(this);
         if(result == JFileChooser.APPROVE_OPTION) {
