@@ -71,6 +71,14 @@ public class FrontEndForm extends javax.swing.JFrame {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTree2 = new javax.swing.JTree();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        dbUsersComboBox = new javax.swing.JComboBox();
         MainMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         connectMenuItem = new javax.swing.JMenuItem();
@@ -116,6 +124,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         outputArea.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         console.setColumns(20);
+        console.setLineWrap(true);
         console.setRows(5);
         consoleScrollPane.setViewportView(console);
 
@@ -143,7 +152,68 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         jScrollPane4.setViewportView(jTree2);
 
-        jTabbedPane2.addTab("tab1", jScrollPane4);
+        jTabbedPane2.addTab("Соединения", jScrollPane4);
+
+        jToolBar1.setRollover(true);
+
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\open.png")); // NOI18N
+        jButton1.setToolTipText("Открыть... (Ctrl+O)");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton1);
+
+        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save.png")); // NOI18N
+        jButton2.setToolTipText("Сохранить (Ctrl+S)");
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton2);
+
+        jButton3.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save all.png")); // NOI18N
+        jButton3.setToolTipText("Сохранить все");
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton3);
+
+        jButton4.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\run.jpeg")); // NOI18N
+        jButton4.setToolTipText("Выполнить (F5)");
+        jButton4.setFocusable(false);
+        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton4);
+
+        jButton5.setIcon(new javax.swing.JLabel() {
+            public javax.swing.Icon getIcon() {
+                try {
+                    return new javax.swing.ImageIcon(
+                        new java.net.URL("file:/C:/Oracle/jdev/mywork/OraClient/OraClient/resources/commit.png")
+                    );
+                } catch (java.net.MalformedURLException e) {
+                }
+                return null;
+            }
+        }.getIcon());
+        jButton5.setToolTipText("Commit");
+        jButton5.setEnabled(false);
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton5);
+
+        jButton6.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\rollback.png")); // NOI18N
+        jButton6.setToolTipText("Rollback");
+        jButton6.setEnabled(false);
+        jButton6.setFocusable(false);
+        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton6);
+
+        dbUsersComboBox.setEnabled(false);
+        dbUsersComboBox.setMaximumSize(new java.awt.Dimension(100, 100));
+        dbUsersComboBox.setMinimumSize(new java.awt.Dimension(50, 50));
+        jToolBar1.add(dbUsersComboBox);
 
         fileMenu.setText("Файл");
 
@@ -322,19 +392,24 @@ public class FrontEndForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(outputArea, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                    .addComponent(outputArea, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
                     .addComponent(tabPane)))
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tabPane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(outputArea, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tabPane)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(outputArea, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)))
         );
 
         pack();
@@ -414,6 +489,8 @@ public class FrontEndForm extends javax.swing.JFrame {
         oracle = new DBConnection();
         try {
             conn = DBConnection.getConnection();
+            dbUsersComboBox.addItem(conn.getSchema());
+            dbUsersComboBox.setEnabled(true);
             oracle.getDBName(conn, this);
             Statement stmt = oracle.exec(conn, null);
             oracle.getResultSet(stmt, console, table);
@@ -577,11 +654,18 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
+    private javax.swing.JComboBox dbUsersComboBox;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem getReportMenuItem;
     private javax.swing.JMenuItem getSessionsMenuItem;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
@@ -589,6 +673,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTree2;
     private javax.swing.JMenuItem newFileMenuItem;
     private javax.swing.JMenuItem openFileMenuItem;
