@@ -1,5 +1,7 @@
 package oraclient.sql.conns;
 
+import com.sun.org.apache.xml.internal.utils.ObjectPool;
+
 import java.io.File;
 
 import java.sql.Connection;
@@ -30,6 +32,8 @@ import oraclient.component.ClientArea;
 import oraclient.view.ConnectionDialog;
 import oraclient.view.FrontEndForm;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
 public class DBConnection {
     private static Map<Integer, Connection> connections;
     private static Connection connection;
@@ -41,6 +45,8 @@ public class DBConnection {
     //    private static String username;
     //    private static String password;
     private Map<Object, Object> result = new HashMap<>();
+    private final String lineSeparator = System.getProperty("line.separator");
+//    private final static BasicDataSource basicDataSource = new BasicDataSource();
 
     public DBConnection() {
         if (connections == null) {
@@ -76,6 +82,14 @@ public class DBConnection {
         return -1;
     }
     
+    private void createConnectionPool() {
+//        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
+//        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+////        ObjectPool objectPool = new GenericObjectPool(poolableConnectionFactory);
+//        ObjectPool objectPool = new GenericObjectPool();
+//        PoolingDataSource dataSource = new PoolingDataSource(objectPool);
+    }
+    
     public static Connection getConnection() throws SQLException {
         //                ConnectionDialog dialog = new ConnectionDialog();
         //                dialog.setVisible(true);
@@ -84,6 +98,9 @@ public class DBConnection {
 //                        password = dialog.getPwd().getPassword().toString();
         //            JOptionPane.showMessageDialog(getClass(), e);
         //        DriverManager.registerDriver(new OracleDriver());
+//        basicDataSource.setUsername(username);
+//        basicDataSource.setPassword(password);
+//        basicDataSource.setUrl(url);
         connection = DriverManager.getConnection(url, username, password);
         connections.put(0, connection);
         //        conn.setAutoCommit(false);
@@ -114,7 +131,7 @@ public class DBConnection {
 
     public void getResultSet(Statement stmt, JComponent console, JComponent table) {
         try {
-            //            getDBMetaData();
+            getDBMetaData();
             ResultSet rs = stmt.getResultSet();
             ResultSetMetaData meta = rs.getMetaData();
             DefaultTableModel tableModel = new DefaultTableModel(0, 0);
@@ -131,8 +148,9 @@ public class DBConnection {
             }
             ((JTable) table).setModel(tableModel);
             showWarnings(console, stmt);
-            ((JTextArea) console).append("\n");
-        } catch (SQLException e) {            
+            ((JTextArea) console).append(lineSeparator);
+        } catch (SQLException e) {
+            e.printStackTrace();
             showExceptions(console, e);
         }
     }
@@ -153,17 +171,17 @@ public class DBConnection {
             ((JTextArea) console).append(meta.getColumnLabel(i) + "  ");
         }
         //        ((JTextArea) console).append(Arrays.toString(result.keySet().toArray()));
-        ((JTextArea) console).append("\n");
+        ((JTextArea) console).append(lineSeparator);
     }
 
     private void println(JComponent console) {
-        ((JTextArea) console).append(Arrays.toString(result.values().toArray()) + "\n");
+        ((JTextArea) console).append(Arrays.toString(result.values().toArray()) + lineSeparator);
     }
 
     private void showWarnings(JComponent console, Statement stat) throws SQLException {
         SQLWarning warning = stat.getWarnings();
         while (warning != null) {
-            ((JTextArea) console).append(warning.getCause() + "\n");
+            ((JTextArea) console).append(warning.getCause() + lineSeparator);
             warning.getNextWarning();
         }
     }
@@ -171,13 +189,27 @@ public class DBConnection {
     private void showExceptions(JComponent console, SQLException ex) {
         Iterator<Throwable> it = ex.iterator();
         while (it.hasNext()) {
-            ((JTextArea) console).append(ex.getSQLState() + "\n");
-            ((JTextArea) console).append(ex.getErrorCode() + "\n");
+            ((JTextArea) console).append(ex.getSQLState() + lineSeparator);
+            ((JTextArea) console).append(ex.getErrorCode() + lineSeparator);
         }
     }
 
     private void getDBMetaData() throws SQLException {
-        DatabaseMetaData dbMeta = connection.getMetaData();
+        DatabaseMetaData dbMeta = connection.getMetaData();        
+        ResultSet catalogs = dbMeta.getCatalogs();
+//        String functions = dbMeta.getSystemFunctions();
+//        ResultSet rs = dbMeta.getSchemas();
+//        ResultSetMetaData meta = rs.getMetaData();
+        //        dbMeta.getSchemas(catalogs, schemaPattern)
+//        System.out.println(catalogs);
+//        System.out.println(functions);
+        System.out.println(catalogs.toString());
+        while (catalogs.next()) {
+//            for (int i = 1; i <= meta.getColumnCount(); i++) {
+            System.out.println("TABLE_CAT = " + catalogs.getString("TABLE_CAT"));
+//            System.out.println(catalogs.getString(2));
+//            }
+        }
     }
     
     public void close() {
