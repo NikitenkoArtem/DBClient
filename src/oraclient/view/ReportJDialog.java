@@ -301,16 +301,19 @@ public class ReportJDialog extends javax.swing.JDialog {
 //        report.setFilePath(pdfOutputTxtField.getText());
 //        report.setFontSize((short) 16);
         if (pdfCheckBox.isSelected()) {
+//            report.pdfReport(table, pdfOutputTxtField.getText());
+//            report.pdfReport(table, "D:/hello.pdf");
 //            report.pdfReport(area, pdfOutputTxtField.getText());
-//            report.pdfReport(area, "D:/helloworld.pdf");
+            report.pdfReport(area, "D:/helloworld.pdf");
         }
         if (xlsxCheckBox.isSelected()) {
             report.excelReport(table, xlsxOutputTxtField.getText());
 //            report.excelReport(table, "D:/hello.xlsx");
         }
         if (docxCheckBox.isSelected()) {
-            report.wordReport(table, docxOutputTxtField.getText());
-//            report.wordReport(table, "D:/hello.docx");
+//            report.wordReport(table, docxOutputTxtField.getText());
+            report.wordReport(table, "D:/hello.docx");
+            report.wordReport(area, "D:/helloworld.docx");
         }
         this.setVisible(false);
     }//GEN-LAST:event_createReportBtnActionPerformed
