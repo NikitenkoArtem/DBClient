@@ -22,7 +22,11 @@ import java.util.Map;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import javax.swing.undo.UndoManager;
 
 import oraclient.component.ClientArea;
@@ -68,16 +72,16 @@ public class FrontEndForm extends javax.swing.JFrame {
         console = new javax.swing.JTextArea();
         tableScrollPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTree2 = new javax.swing.JTree();
+        connectionsTabbedPane = new javax.swing.JTabbedPane();
+        connectionScrollPane = new javax.swing.JScrollPane();
+        connectionsTree = new javax.swing.JTree();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        openFileButton = new javax.swing.JButton();
+        saveFileButton = new javax.swing.JButton();
+        saveAllButton = new javax.swing.JButton();
+        sqlRunButton = new javax.swing.JButton();
+        dbCommitButton = new javax.swing.JButton();
+        dbRollbackButton = new javax.swing.JButton();
         dbUsersComboBox = new javax.swing.JComboBox();
         MainMenu = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -148,67 +152,89 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         outputArea.addTab("Таблица", tableScrollPane);
 
-        jTabbedPane2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        connectionsTabbedPane.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jScrollPane4.setViewportView(jTree2);
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Соединения");
+        connectionsTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        connectionScrollPane.setViewportView(connectionsTree);
 
-        jTabbedPane2.addTab("Соединения", jScrollPane4);
+        connectionsTabbedPane.addTab("Соединения", connectionScrollPane);
 
         jToolBar1.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\open.png")); // NOI18N
-        jButton1.setToolTipText("Открыть... (Ctrl+O)");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
-
-        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save.png")); // NOI18N
-        jButton2.setToolTipText("Сохранить (Ctrl+S)");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
-
-        jButton3.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save all.png")); // NOI18N
-        jButton3.setToolTipText("Сохранить все");
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton3);
-
-        jButton4.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\run.jpeg")); // NOI18N
-        jButton4.setToolTipText("Выполнить (F5)");
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
-
-        jButton5.setIcon(new javax.swing.JLabel() {
-            public javax.swing.Icon getIcon() {
-                try {
-                    return new javax.swing.ImageIcon(
-                        new java.net.URL("file:/C:/Oracle/jdev/mywork/OraClient/OraClient/resources/commit.png")
-                    );
-                } catch (java.net.MalformedURLException e) {
-                }
-                return null;
+        openFileButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\open.png")); // NOI18N
+        openFileButton.setToolTipText("Открыть... (Ctrl+O)");
+        openFileButton.setFocusable(false);
+        openFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        openFileButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        openFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFileButtonActionPerformed(evt);
             }
-        }.getIcon());
-        jButton5.setToolTipText("Commit");
-        jButton5.setEnabled(false);
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton5);
+        });
+        jToolBar1.add(openFileButton);
 
-        jButton6.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\rollback.png")); // NOI18N
-        jButton6.setToolTipText("Rollback");
-        jButton6.setEnabled(false);
-        jButton6.setFocusable(false);
-        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton6);
+        saveFileButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save.png")); // NOI18N
+        saveFileButton.setToolTipText("Сохранить (Ctrl+S)");
+        saveFileButton.setFocusable(false);
+        saveFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        saveFileButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        saveFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFileButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(saveFileButton);
+
+        saveAllButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save all.png")); // NOI18N
+        saveAllButton.setToolTipText("Сохранить все");
+        saveAllButton.setFocusable(false);
+        saveAllButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        saveAllButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        saveAllButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAllButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(saveAllButton);
+
+        sqlRunButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\run.jpeg")); // NOI18N
+        sqlRunButton.setToolTipText("Выполнить (F5)");
+        sqlRunButton.setFocusable(false);
+        sqlRunButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        sqlRunButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        sqlRunButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sqlRunButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(sqlRunButton);
+
+        dbCommitButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\commit.png")); // NOI18N
+        dbCommitButton.setToolTipText("Commit");
+        dbCommitButton.setEnabled(false);
+        dbCommitButton.setFocusable(false);
+        dbCommitButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        dbCommitButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        dbCommitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dbCommitButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(dbCommitButton);
+
+        dbRollbackButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\rollback.png")); // NOI18N
+        dbRollbackButton.setToolTipText("Rollback");
+        dbRollbackButton.setEnabled(false);
+        dbRollbackButton.setFocusable(false);
+        dbRollbackButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        dbRollbackButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        dbRollbackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dbRollbackButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(dbRollbackButton);
 
         dbUsersComboBox.setEnabled(false);
         dbUsersComboBox.setMaximumSize(new java.awt.Dimension(100, 100));
@@ -392,7 +418,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                .addComponent(connectionsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(outputArea, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
@@ -409,7 +435,7 @@ public class FrontEndForm extends javax.swing.JFrame {
                         .addComponent(tabPane)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(outputArea, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)))
+                    .addComponent(connectionsTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)))
         );
 
         pack();
@@ -418,21 +444,24 @@ public class FrontEndForm extends javax.swing.JFrame {
     
     private void newFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileMenuItemActionPerformed
         FileJDialog dialog = new FileJDialog();
-        String filePath = fileLocation(dialog);
-        file = new NewFile(filePath);
-        file.putFile(file, filePath);
-        file.putSave(file, false);
-//        dialog.getOkButton().addActionListener(new ActionListener(){
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//            }
-//        });
-        initFile(file);
+        dialog.setVisible(true);
+        dialog.getOkButton().addChangeListener((e) -> {
+            String filePath = fileLocation(dialog);
+            file = new NewFile(filePath);
+            file.putFile(file, filePath);
+            file.putSave(file, false);
+            initFile(file);
+        });
+//        String filePath = fileLocation(dialog);
+//        file = new NewFile(filePath);
+//        file.putFile(file, filePath);
+//        file.putSave(file, false);
+//        initFile(file);
         runScriptMenuItem.setEnabled(true);
     }//GEN-LAST:event_newFileMenuItemActionPerformed
 
     private String fileLocation(FileJDialog dialog) {
-        dialog.setVisible(true);
+//        dialog.setVisible(true);
         String filePath = dialog.getFilePath().getText() + dialog.getFileName().getText();
         return filePath;
     }
@@ -488,12 +517,23 @@ public class FrontEndForm extends javax.swing.JFrame {
         new LoadDriver("oracle.jdbc.OracleDriver");
         oracle = new DBConnection();
         try {
-            conn = DBConnection.getConnection();
+            ConnectionDialog dialog = new ConnectionDialog();
+            dialog.setVisible(true);
+            String url = dialog.getUrl().getText();
+            String user = dialog.getUsrname().getText();
+            String password = String.valueOf(dialog.getPwd().getPassword());
+            conn = DBConnection.getConnection(url, user, password);
             dbUsersComboBox.addItem(conn.getSchema());
             dbUsersComboBox.setEnabled(true);
-            oracle.getDBName(conn, this);
+            String connectionName = dialog.getConnectionName().getText();
+            DefaultMutableTreeNode root = new DefaultMutableTreeNode(connectionName);
+            Object connectionsRoot = connectionsTree.getModel().getRoot();
+            ((DefaultMutableTreeNode)connectionsRoot).add(root);
+            oracle.getDatabaseStructure(connectionsTree, root);
+            connectionsTree.setModel(new DefaultTreeModel((DefaultMutableTreeNode)connectionsRoot));
             Statement stmt = oracle.exec(conn, null);
             oracle.getResultSet(stmt, console, table);
+            runScriptMenuItem.setEnabled(true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -529,9 +569,10 @@ public class FrontEndForm extends javax.swing.JFrame {
         //        try (Connection conn = DBConnection.getConnection()) {
         //        Statement stmt = null;
         try {
-            oracle.getDBName(conn, this);
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             //            stmt.execute(area.getTextAreas().iterator().next().getText());
+            dbUsersComboBox.getSelectedItem().toString();
+            oracle.getConnections();
             oracle.getResultSet(stmt, console, table);
         } catch (SQLException e) {
         } finally {
@@ -591,7 +632,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_getReportMenuItemActionPerformed
 
     private void getSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getSessionsMenuItemActionPerformed
-        SessionJDialog dialog = new SessionJDialog(this, true, oracle);
+        SessionJDialog dialog = new SessionJDialog(this, true);
         dialog.setVisible(true);
         dialog.getTerminateButton().addActionListener((ActionEvent e) -> {
             try {
@@ -604,6 +645,30 @@ public class FrontEndForm extends javax.swing.JFrame {
     private void closeSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeSessionsMenuItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_closeSessionsMenuItemActionPerformed
+
+    private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileButtonActionPerformed
+        openFileMenuItemActionPerformed(evt);
+    }//GEN-LAST:event_openFileButtonActionPerformed
+
+    private void saveFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileButtonActionPerformed
+        saveFileMenuItemActionPerformed(evt);
+    }//GEN-LAST:event_saveFileButtonActionPerformed
+
+    private void saveAllButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAllButtonActionPerformed
+        saveAllMenuItemActionPerformed(evt);
+    }//GEN-LAST:event_saveAllButtonActionPerformed
+
+    private void sqlRunButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sqlRunButtonActionPerformed
+        runScriptMenuItemActionPerformed(evt);
+    }//GEN-LAST:event_sqlRunButtonActionPerformed
+
+    private void dbCommitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbCommitButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dbCommitButtonActionPerformed
+
+    private void dbRollbackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbRollbackButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dbRollbackButtonActionPerformed
   
     /**
      * @param args the command line arguments
@@ -650,32 +715,29 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem closeFileMenuItem;
     private javax.swing.JMenuItem closeSessionsMenuItem;
     private javax.swing.JMenuItem connectMenuItem;
+    private javax.swing.JScrollPane connectionScrollPane;
+    private javax.swing.JTabbedPane connectionsTabbedPane;
+    private javax.swing.JTree connectionsTree;
     private javax.swing.JTextArea console;
     private javax.swing.JScrollPane consoleScrollPane;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
+    private javax.swing.JButton dbCommitButton;
+    private javax.swing.JButton dbRollbackButton;
     private javax.swing.JComboBox dbUsersComboBox;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem getReportMenuItem;
     private javax.swing.JMenuItem getSessionsMenuItem;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JTree jTree2;
     private javax.swing.JMenuItem newFileMenuItem;
+    private javax.swing.JButton openFileButton;
     private javax.swing.JMenuItem openFileMenuItem;
     private javax.swing.JTabbedPane outputArea;
     private javax.swing.JMenuItem pasteMenuItem;
@@ -683,10 +745,13 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenu reportMenu;
     private javax.swing.JMenu runMenu;
     private javax.swing.JMenuItem runScriptMenuItem;
+    private javax.swing.JButton saveAllButton;
     private javax.swing.JMenuItem saveAllMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
+    private javax.swing.JButton saveFileButton;
     private javax.swing.JMenuItem saveFileMenuItem;
     private javax.swing.JMenu sessionMenu;
+    private javax.swing.JButton sqlRunButton;
     private javax.swing.JTabbedPane tabPane;
     private javax.swing.JTable table;
     private javax.swing.JScrollPane tableScrollPane;
