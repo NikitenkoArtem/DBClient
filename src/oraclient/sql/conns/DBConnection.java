@@ -23,9 +23,16 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 import oraclient.component.ClientArea;
 
@@ -35,17 +42,21 @@ import oraclient.view.FrontEndForm;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 public class DBConnection {
-    private static Map<Integer, Connection> connections;
+    private static Map<Connection, Boolean> connections;
     private static Connection connection;
 //    private static Statement stmt;
-    private static String url = "jdbc:oracle:thin:@localhost:1521:xe";
-    private static String username = "hr";
-    private static String password = "hr";
+//    private static String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//    private static String username = "hr";
+//    private static String password = "hr";
+//    private static String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//    private static String username = "sys as sysdba";
+//    private static String password = "root";
     //    private static String url;
     //    private static String username;
     //    private static String password;
     private Map<Object, Object> result = new HashMap<>();
     private final String lineSeparator = System.getProperty("line.separator");
+    private int connectionCount;
 //    private final static BasicDataSource basicDataSource = new BasicDataSource();
 
     public DBConnection() {
@@ -58,28 +69,28 @@ public class DBConnection {
         connections = new HashMap<>();
     }
 
-    public void putConnection(int id, Connection conn) {
-        connections.put(id, conn);
+    public void putConnection(Connection conn, boolean connected) {
+        connections.put(conn, connected);
     }
 
-    public Connection find(int key) {
-        for (Map.Entry<Integer, Connection> entry : connections.entrySet()) {
+    public Connection find(Connection key) {
+        for (Map.Entry<Connection, Boolean> entry : connections.entrySet()) {
             if (key == entry.getKey()) {
-                return entry.getValue();
+                return entry.getKey();
             }
         }
         return null;
     }
 
-    public int find(Connection value) {
+    public Connection find(boolean value) {
 //        if (textAreas.containsValue(value)) {
-            for (Map.Entry<Integer, Connection> entry : connections.entrySet()) {
+            for (Map.Entry<Connection, Boolean> entry : connections.entrySet()) {
                 if (value == entry.getValue()) {
                     return entry.getKey();
                 }
             }
 //        }
-        return -1;
+        return null;
     }
     
     private void createConnectionPool() {
@@ -90,30 +101,21 @@ public class DBConnection {
 //        PoolingDataSource dataSource = new PoolingDataSource(objectPool);
     }
     
-    public static Connection getConnection() throws SQLException {
-        //                ConnectionDialog dialog = new ConnectionDialog();
-        //                dialog.setVisible(true);
-        //                url = dialog.getUrl().getText();
-        //                username = dialog.getUsrname().getText();
-//                        password = dialog.getPwd().getPassword().toString();
+    public static Connection getConnection(String url, String user, String password) throws SQLException {
         //            JOptionPane.showMessageDialog(getClass(), e);
         //        DriverManager.registerDriver(new OracleDriver());
 //        basicDataSource.setUsername(username);
 //        basicDataSource.setPassword(password);
 //        basicDataSource.setUrl(url);
-        connection = DriverManager.getConnection(url, username, password);
-        connections.put(0, connection);
+        connection = DriverManager.getConnection(url, user, password);
+//        connection = DriverManager.getConnection(DBConnection.url, DBConnection.username, DBConnection.password);
+        connections.put(connection, true);
         //        conn.setAutoCommit(false);
         return connection;
     }
 
-    public static Map<Integer, Connection> getConnections() {
+    public static Map<Connection, Boolean> getConnections() {
         return connections;
-    }
-
-    public void getDBName(Connection conn, FrontEndForm form) throws SQLException {
-        form.setTitle(form.getTitle() + "   " + conn.getMetaData().getDatabaseProductName() + ":" +
-                      conn.getMetaData().getUserName());
     }
 
     public Statement exec(Connection conn, JComponent text) throws SQLException {
@@ -131,7 +133,6 @@ public class DBConnection {
 
     public void getResultSet(Statement stmt, JComponent console, JComponent table) {
         try {
-            getDBMetaData();
             ResultSet rs = stmt.getResultSet();
             ResultSetMetaData meta = rs.getMetaData();
             DefaultTableModel tableModel = new DefaultTableModel(0, 0);
@@ -187,28 +188,42 @@ public class DBConnection {
     }
 
     private void showExceptions(JComponent console, SQLException ex) {
-        Iterator<Throwable> it = ex.iterator();
-        while (it.hasNext()) {
-            ((JTextArea) console).append(ex.getSQLState() + lineSeparator);
-            ((JTextArea) console).append(ex.getErrorCode() + lineSeparator);
+        ((JTextArea) console).append("Код ошибки: " + ex.getErrorCode() + lineSeparator);
+        ((JTextArea) console).append("Сообщение: " + ex.getMessage() + lineSeparator);
+        ((JTextArea) console).append("Причина: " + ex.getCause() + lineSeparator);
+    }
+    
+    private void getDBUsers(Connection conn, DefaultMutableTreeNode treeNode) throws SQLException {        
+        ResultSet rs = conn.getMetaData().getSchemas();
+        while (rs.next()) {
+            treeNode.add(new DefaultMutableTreeNode(rs.getString(1)));
         }
     }
-
-    private void getDBMetaData() throws SQLException {
-        DatabaseMetaData dbMeta = connection.getMetaData();        
-        ResultSet catalogs = dbMeta.getCatalogs();
-//        String functions = dbMeta.getSystemFunctions();
-//        ResultSet rs = dbMeta.getSchemas();
-//        ResultSetMetaData meta = rs.getMetaData();
-        //        dbMeta.getSchemas(catalogs, schemaPattern)
-//        System.out.println(catalogs);
-//        System.out.println(functions);
-        System.out.println(catalogs.toString());
-        while (catalogs.next()) {
-//            for (int i = 1; i <= meta.getColumnCount(); i++) {
-            System.out.println("TABLE_CAT = " + catalogs.getString("TABLE_CAT"));
-//            System.out.println(catalogs.getString(2));
-//            }
+    
+    private void getDBProcedures(Connection conn, DefaultMutableTreeNode treeNode) throws SQLException {
+        DatabaseMetaData dbMeta = conn.getMetaData();
+        String username = dbMeta.getUserName();
+        ResultSet rs = dbMeta.getProcedures(null, username, null);
+        while (rs.next()) {
+            treeNode.add(new DefaultMutableTreeNode(rs.getString(3)));
+        }
+    }
+    
+    private void getDBFunctions(Connection conn, DefaultMutableTreeNode treeNode) throws SQLException {
+        DatabaseMetaData dbMeta = conn.getMetaData();
+        String username = dbMeta.getUserName();
+        ResultSet rs = dbMeta.getFunctions(null, username, null);
+        while (rs.next()) {
+            treeNode.add(new DefaultMutableTreeNode(rs.getString(3)));
+        }
+    }
+    
+    private void getDBEntities(Connection conn, DefaultMutableTreeNode treeNode, String type) throws SQLException {
+        DatabaseMetaData dbMeta = conn.getMetaData();
+        String username = dbMeta.getUserName();
+        ResultSet rs = dbMeta.getTables(null, username, null, new String[] { type });
+        while (rs.next()) {
+            treeNode.add(new DefaultMutableTreeNode(rs.getString(3)));
         }
     }
     
@@ -236,5 +251,27 @@ public class DBConnection {
     //                e.printStackTrace();
     //            }
         }
+    }
+
+    public void getDatabaseStructure(JTree dbStructure, final DefaultMutableTreeNode treeNode) throws SQLException {
+        DefaultMutableTreeNode tables = new DefaultMutableTreeNode("Таблицы");
+        getDBEntities(connection, tables, "TABLE");
+        treeNode.add(tables);
+        DefaultMutableTreeNode views = new DefaultMutableTreeNode("Представления");
+        getDBEntities(connection, views, "VIEW");
+        treeNode.add(views);
+        DefaultMutableTreeNode procedures = new DefaultMutableTreeNode("Процедуры");
+        getDBProcedures(connection, procedures);
+        treeNode.add(procedures);
+        DefaultMutableTreeNode functions = new DefaultMutableTreeNode("Функции");
+        getDBFunctions(connection, functions);
+        treeNode.add(functions);
+        DefaultMutableTreeNode triggers = new DefaultMutableTreeNode("Триггеры");
+        getDBEntities(connection, triggers, "TRIGGER");
+        treeNode.add(triggers);
+        DefaultMutableTreeNode users = new DefaultMutableTreeNode("Пользователи");
+        getDBUsers(connection, users);
+        treeNode.add(users);
+//        dbStructure.setModel(new DefaultTreeModel(treeNode));
     }
 }
