@@ -21,17 +21,17 @@ import oraclient.sql.conns.DBConnection;
 public class SessionJDialog extends javax.swing.JDialog {
 
     /** Creates new form SessionJDialog */
-    public SessionJDialog(java.awt.Frame parent, boolean modal, DBConnection conn) {
+    public SessionJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        if (conn != null) {
-            Map<Integer, Connection> conns = conn.getConnections();
+        Map<Connection, Boolean> conns = DBConnection.getConnections();
+        if (conns != null) {
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("База данных");
             model.addColumn("Пользователь");
-            for (Map.Entry<Integer, Connection> entry : conns.entrySet()) {
+            for (Map.Entry<Connection, Boolean> entry : conns.entrySet()) {
                 try {
-                    DatabaseMetaData meta = entry.getValue().getMetaData();
+                    DatabaseMetaData meta = entry.getKey().getMetaData();
                     String dbName = meta.getDatabaseProductName();
                     String userName = meta.getUserName();
                     model.addRow(new Object[] {dbName, userName});
