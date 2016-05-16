@@ -107,7 +107,8 @@ public class NewFile extends File {
 
     public File find(String value) {
         for (Map.Entry<File, String> entry : files.entrySet()) {
-            if (value == entry.getValue()) {
+//            if (value == entry.getValue()) {
+            if (value.equals(entry.getValue())) {
                 return entry.getKey();
             }
         }
