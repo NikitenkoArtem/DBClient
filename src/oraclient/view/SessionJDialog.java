@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -24,12 +25,12 @@ public class SessionJDialog extends javax.swing.JDialog {
     public SessionJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        Map<Connection, Boolean> conns = DBConnection.getConnections();
+        Map<Connection, String> conns = DBConnection.getConnections();
         if (conns != null) {
             DefaultTableModel model = new DefaultTableModel();
             model.addColumn("База данных");
             model.addColumn("Пользователь");
-            for (Map.Entry<Connection, Boolean> entry : conns.entrySet()) {
+            for (Map.Entry<Connection, String> entry : conns.entrySet()) {
                 try {
                     DatabaseMetaData meta = entry.getKey().getMetaData();
                     String dbName = meta.getDatabaseProductName();
@@ -42,10 +43,6 @@ public class SessionJDialog extends javax.swing.JDialog {
         }
     }
 
-    public JButton getTerminateButton() {
-        return terminateBtn;
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -56,7 +53,6 @@ public class SessionJDialog extends javax.swing.JDialog {
 
         sessionScrollPane = new javax.swing.JScrollPane();
         sessionTable = new javax.swing.JTable();
-        terminateBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Сессии");
@@ -73,24 +69,13 @@ public class SessionJDialog extends javax.swing.JDialog {
         ));
         sessionScrollPane.setViewportView(sessionTable);
 
-        terminateBtn.setText("Завершить все сессии");
-        terminateBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                terminateBtnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sessionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 241, Short.MAX_VALUE)
-                        .addComponent(terminateBtn)))
+                .addComponent(sessionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -98,8 +83,6 @@ public class SessionJDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(sessionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(terminateBtn)
                 .addContainerGap())
         );
 
@@ -107,14 +90,9 @@ public class SessionJDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }//GEN-END:initComponents
 
-    private void terminateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminateBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_terminateBtnActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane sessionScrollPane;
     private javax.swing.JTable sessionTable;
-    private javax.swing.JButton terminateBtn;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -28,13 +28,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="sessionScrollPane" alignment="1" pref="0" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="241" max="32767" attributes="0"/>
-                      <Component id="terminateBtn" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
+              <Component id="sessionScrollPane" pref="367" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -44,8 +38,6 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
               <Component id="sessionScrollPane" min="-2" pref="71" max="-2" attributes="0"/>
-              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-              <Component id="terminateBtn" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -71,13 +63,5 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="terminateBtn">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="&#x417;&#x430;&#x432;&#x435;&#x440;&#x448;&#x438;&#x442;&#x44c; &#x432;&#x441;&#x435; &#x441;&#x435;&#x441;&#x441;&#x438;&#x438;"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="terminateBtnActionPerformed"/>
-      </Events>
-    </Component>
   </SubComponents>
 </Form>
