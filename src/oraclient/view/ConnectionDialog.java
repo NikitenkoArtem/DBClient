@@ -2,6 +2,7 @@
 package oraclient.view;
 
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -25,12 +26,12 @@ public class ConnectionDialog extends JDialog {
     @SuppressWarnings("unchecked")
     private void initComponents() {//GEN-BEGIN:initComponents
 
-        connect = new javax.swing.JButton();
-        cancel = new javax.swing.JButton();
-        usrname = new javax.swing.JTextField();
+        connectButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
+        userName = new javax.swing.JTextField();
         usernameLbl = new javax.swing.JLabel();
         pwdLbl = new javax.swing.JLabel();
-        pwd = new javax.swing.JPasswordField();
+        password = new javax.swing.JPasswordField();
         urlLbl = new javax.swing.JLabel();
         url = new javax.swing.JTextField();
         connectionNameLbl = new javax.swing.JLabel();
@@ -39,17 +40,17 @@ public class ConnectionDialog extends JDialog {
         setModal(true);
         setResizable(false);
 
-        connect.setText("Соединение");
-        connect.addActionListener(new java.awt.event.ActionListener() {
+        connectButton.setText("Соединение");
+        connectButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                connectActionPerformed(evt);
+                connectButtonActionPerformed(evt);
             }
         });
 
-        cancel.setText("Отмена");
-        cancel.addActionListener(new java.awt.event.ActionListener() {
+        cancelButton.setText("Отмена");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelActionPerformed(evt);
+                cancelButtonActionPerformed(evt);
             }
         });
 
@@ -69,9 +70,9 @@ public class ConnectionDialog extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(connect)
+                        .addComponent(connectButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -87,8 +88,8 @@ public class ConnectionDialog extends JDialog {
                                 .addComponent(connectionNameLbl)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(usrname, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                            .addComponent(pwd)
+                            .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                            .addComponent(password)
                             .addComponent(url)
                             .addComponent(connectionName))))
                 .addContainerGap())
@@ -102,20 +103,20 @@ public class ConnectionDialog extends JDialog {
                     .addComponent(connectionName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(usrname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(usernameLbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pwdLbl)
-                    .addComponent(pwd))
+                    .addComponent(password))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(urlLbl)
                     .addComponent(url))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(connect)
-                    .addComponent(cancel))
+                    .addComponent(connectButton)
+                    .addComponent(cancelButton))
                 .addContainerGap())
         );
 
@@ -123,48 +124,45 @@ public class ConnectionDialog extends JDialog {
         setLocationRelativeTo(null);
     }//GEN-END:initComponents
 
-    private void connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectActionPerformed
-        status = true;
+    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         setVisible(false);
-    }//GEN-LAST:event_connectActionPerformed
+    }//GEN-LAST:event_connectButtonActionPerformed
 
-    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        status = false;
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         setVisible(false);
-    }//GEN-LAST:event_cancelActionPerformed
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
-    public JPasswordField getPwd() {
-        return pwd;
+    public JPasswordField getPassword() {
+        return password;
     }
 
     public JTextField getUrl() {
         return url;
     }
 
-    public JTextField getUsrname() {
-        return usrname;
+    public JTextField getUserName() {
+        return userName;
     }
 
     public JTextField getConnectionName() {
         return connectionName;
     }
+
+    public JButton getConnectButton() {
+        return connectButton;
+    }
     
-    public boolean isStatus() { 
-            return status; 
-    } 
-    
-    private boolean status = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cancel;
-    private javax.swing.JButton connect;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton connectButton;
     private javax.swing.JTextField connectionName;
     private javax.swing.JLabel connectionNameLbl;
-    private javax.swing.JPasswordField pwd;
+    private javax.swing.JPasswordField password;
     private javax.swing.JLabel pwdLbl;
     private javax.swing.JTextField url;
     private javax.swing.JLabel urlLbl;
+    private javax.swing.JTextField userName;
     private javax.swing.JLabel usernameLbl;
-    private javax.swing.JTextField usrname;
     // End of variables declaration//GEN-END:variables
 
 }
