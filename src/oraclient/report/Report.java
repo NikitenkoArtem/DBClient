@@ -186,7 +186,7 @@ public class Report {
             }
             content.endText();
             content.close();
-            
+            filePath = addExtension(filePath, ".pdf");
             pdf.save(filePath);            
         } catch (IOException e) {
         }
@@ -195,7 +195,7 @@ public class Report {
     public void pdfReport(JTable table, String filePath) {
         try (PDDocument pdf = new PDDocument()) {
             PDPage page = new PDPage();
-            pdf.addPage(page);            
+            pdf.addPage(page);
             PDFont font = PDType1Font.TIMES_ROMAN;
             PDPageContentStream content = new PDPageContentStream(pdf, page);
 //            content.beginText();
@@ -253,7 +253,7 @@ public class Report {
             textx = margin+cellMargin;
         }
             content.close();
-            addExtension(filePath, ".pdf");
+            filePath = addExtension(filePath, ".pdf");
             pdf.save(filePath);
         } catch (IOException e) {
         }
