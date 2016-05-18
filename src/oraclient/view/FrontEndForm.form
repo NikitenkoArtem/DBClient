@@ -332,14 +332,19 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="openFileButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="saveFileButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="saveAllButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="sqlRunButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="dbCommitButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Component id="dbRollbackButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="dbUsersComboBox" min="-2" pref="130" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="186" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="91" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -364,7 +369,7 @@
         <Component class="javax.swing.JButton" name="dbRollbackButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Oracle\jdev\mywork\OraClient\OraClient\resources\rollback.png"/>
+              <Image iconType="3" name="/images/rollback.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Rollback"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -379,7 +384,7 @@
         <Component class="javax.swing.JButton" name="dbCommitButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Oracle\jdev\mywork\OraClient\OraClient\resources\commit.png"/>
+              <Image iconType="3" name="/images/commit.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Commit"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -394,7 +399,7 @@
         <Component class="javax.swing.JButton" name="sqlRunButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Oracle\jdev\mywork\OraClient\OraClient\resources\run.jpeg"/>
+              <Image iconType="3" name="/images/run.jpeg"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x44c; (F5)"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -409,7 +414,7 @@
         <Component class="javax.swing.JButton" name="saveAllButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Oracle\jdev\mywork\OraClient\OraClient\resources\save all.png"/>
+              <Image iconType="3" name="/images/save all.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; &#x432;&#x441;&#x435;"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -424,7 +429,7 @@
         <Component class="javax.swing.JButton" name="saveFileButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Oracle\jdev\mywork\OraClient\OraClient\resources\save.png"/>
+              <Image iconType="3" name="/images/save.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; (Ctrl+S)"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -439,7 +444,7 @@
         <Component class="javax.swing.JButton" name="openFileButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Oracle\jdev\mywork\OraClient\OraClient\resources\open.png"/>
+              <Image iconType="3" name="/images/open.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x41e;&#x442;&#x43a;&#x440;&#x44b;&#x442;&#x44c;... (Ctrl+O)"/>
             <Property name="focusable" type="boolean" value="false"/>

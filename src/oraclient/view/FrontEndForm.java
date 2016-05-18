@@ -19,6 +19,9 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -56,6 +59,8 @@ public class FrontEndForm extends javax.swing.JFrame {
     private ClientUndoManager undoMgr;
 //    private UndoManager undo;
     private Map<String, String> titles = new HashMap<>();
+    private final String lineSeparator = System.getProperty("line.separator");
+
 
     public FrontEndForm() {
         initComponents();
@@ -135,7 +140,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        dbRollbackButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\rollback.png")); // NOI18N
+        dbRollbackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rollback.png"))); // NOI18N
         dbRollbackButton.setToolTipText("Rollback");
         dbRollbackButton.setEnabled(false);
         dbRollbackButton.setFocusable(false);
@@ -147,7 +152,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        dbCommitButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\commit.png")); // NOI18N
+        dbCommitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/commit.png"))); // NOI18N
         dbCommitButton.setToolTipText("Commit");
         dbCommitButton.setEnabled(false);
         dbCommitButton.setFocusable(false);
@@ -159,7 +164,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        sqlRunButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\run.jpeg")); // NOI18N
+        sqlRunButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/run.jpeg"))); // NOI18N
         sqlRunButton.setToolTipText("Выполнить (F5)");
         sqlRunButton.setEnabled(false);
         sqlRunButton.setFocusable(false);
@@ -171,7 +176,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        saveAllButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save all.png")); // NOI18N
+        saveAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save all.png"))); // NOI18N
         saveAllButton.setToolTipText("Сохранить все");
         saveAllButton.setEnabled(false);
         saveAllButton.setFocusable(false);
@@ -183,7 +188,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        saveFileButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\save.png")); // NOI18N
+        saveFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
         saveFileButton.setToolTipText("Сохранить (Ctrl+S)");
         saveFileButton.setEnabled(false);
         saveFileButton.setFocusable(false);
@@ -195,7 +200,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        openFileButton.setIcon(new javax.swing.ImageIcon("C:\\Oracle\\jdev\\mywork\\OraClient\\OraClient\\resources\\open.png")); // NOI18N
+        openFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/open.png"))); // NOI18N
         openFileButton.setToolTipText("Открыть... (Ctrl+O)");
         openFileButton.setFocusable(false);
         openFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -221,14 +226,19 @@ public class FrontEndForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(openFileButton)
+                .addGap(0, 0, 0)
                 .addComponent(saveFileButton)
+                .addGap(0, 0, 0)
                 .addComponent(saveAllButton)
+                .addGap(0, 0, 0)
                 .addComponent(sqlRunButton)
+                .addGap(0, 0, 0)
                 .addComponent(dbCommitButton)
+                .addGap(0, 0, 0)
                 .addComponent(dbRollbackButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dbUsersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 186, Short.MAX_VALUE))
+                .addGap(0, 91, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -645,18 +655,18 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_closeFileMenuItemActionPerformed
 
     private void connectMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectMenuItemActionPerformed
-        ConnectionDialog dialog = new ConnectionDialog();
-        dialog.setVisible(true);
-        dialog.getConnectButton().addChangeListener((e) -> {
-            oracle = new DBConnection();
+//        ConnectionDialog dialog = new ConnectionDialog();
+//        dialog.setVisible(true);
+//        dialog.getConnectButton().addChangeListener((e) -> {
             try {
-                String url = dialog.getUrl().getText();
-                String user = dialog.getUserName().getText();
-                String password = String.valueOf(dialog.getPassword().getPassword());
-//                    String connName = "hr";
-//                    String url = "jdbc:oracle:thin:@localhost:1521:xe";
-//                    String user = "hr";
-//                    String password = "hr";
+                oracle = new DBConnection();
+//                String url = dialog.getUrl().getText();
+//                String user = dialog.getUserName().getText();
+//                String password = String.valueOf(dialog.getPassword().getPassword());
+                    String connName = "hr";
+                    String url = "jdbc:oracle:thin:@localhost:1521:xe";
+                    String user = "hr";
+                    String password = "hr";
 //                String connName = "sys";
 //                String url = "jdbc:oracle:thin:@localhost:1521:xe";
 //                String user = "sys as sysdba";
@@ -666,20 +676,19 @@ public class FrontEndForm extends javax.swing.JFrame {
                 dbUsersComboBox.addItem(userName);
         //            dbUsersComboBox.setSelectedItem(userName);
                 
-                String connectionName = dialog.getConnectionName().getText();
-//                    String connectionName = connName;
+//                String connectionName = dialog.getConnectionName().getText();
+                    String connectionName = connName;
                 DefaultMutableTreeNode root = new DefaultMutableTreeNode(connectionName);
                 Object connectionsRoot = connectionsTree.getModel().getRoot();
                 ((DefaultMutableTreeNode)connectionsRoot).add(root);
                 oracle.getDatabaseStructure(conn, root);
                 connectionsTree.setModel(new DefaultTreeModel((DefaultMutableTreeNode)connectionsRoot));
-//                    Statement stmt = oracle.exec(conn, null);
-//                    oracle.getResultSet(stmt, console, table);
                 sqlRunEnabled(true);
             } catch (SQLException sqle) {
                 sqle.printStackTrace();
+                console.append("Ошибка: " + sqle.toString());
             }
-        });
+//        });
     }//GEN-LAST:event_connectMenuItemActionPerformed
 
     private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
@@ -703,18 +712,32 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void runScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runScriptMenuItemActionPerformed
-        try {
-            int index = tabPane.getSelectedIndex();
-            String titleAt = tabPane.getTitleAt(index);
-            String tabTitle = find(titles, titleAt);
-            JTextArea textArea = area.find(file.find(tabTitle));
-            Statement stmt = oracle.exec(connect, textArea);
+//        try {
+//            int index = tabPane.getSelectedIndex();
+//            String titleAt = tabPane.getTitleAt(index);
+//            String tabTitle = find(titles, titleAt);
+//            JTextArea textArea = area.find(file.find(tabTitle));
+//            Statement stmt = oracle.exec(connect, textArea);
+            try (Statement stmt = oracle.exec(connect, null)) {
             console.append("=========================================================\n\n");
-            oracle.getResultSet(stmt, console, table);
+            oracle.getResultSet(stmt, table);
+            int columnCount = table.getModel().getColumnCount();
+            int rowCount = table.getModel().getRowCount();
+            for (int i = 0; i < columnCount; i++) {
+                console.append(table.getColumnName(i) + "\t");
+            }
+            console.append("\n");
+            for (int j = 0; j < rowCount; j++) {
+                for (int i = 0; i < columnCount; i++) {
+                    Object tableValue = table.getValueAt(j, i);
+                    String value = String.format("%s\t\t", tableValue);
+                    console.append(value);
+                }
+                console.append("\n");
+            }
             console.append("=========================================================\n\n");
         } catch (SQLException e) {
-            console.append("Ошибка: " + e.getMessage());
-            console.append("Error: " + e.toString());
+            console.append("Ошибка: " + e.toString());
             table.setModel(null);
         }
     }//GEN-LAST:event_runScriptMenuItemActionPerformed
