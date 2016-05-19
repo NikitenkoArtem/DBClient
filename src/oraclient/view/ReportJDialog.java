@@ -311,9 +311,9 @@ public class ReportJDialog extends javax.swing.JDialog {
 //            report.excelReport(table, "D:/hello.xlsx");
         }
         if (docxCheckBox.isSelected()) {
-            report.wordReport(table, docxOutputTxtField.getText());
+//            report.wordReport(table, docxOutputTxtField.getText());
 //            report.wordReport(table, "D:/hello.docx");
-//            report.wordReport(area, "D:/helloworld.docx");
+            report.wordReport(area, "D:/helloworld.docx");
         }
         this.setVisible(false);
     }//GEN-LAST:event_createReportBtnActionPerformed
