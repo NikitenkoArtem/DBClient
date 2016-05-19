@@ -125,6 +125,8 @@ public class FrontEndForm extends javax.swing.JFrame {
         getSessionsMenuItem = new javax.swing.JMenuItem();
         closeSessionMenuItem = new javax.swing.JMenuItem();
         closeSessionsMenuItem = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
@@ -516,6 +518,18 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         MainMenu.add(sessionMenu);
 
+        jMenu1.setText("jMenu1");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        MainMenu.add(jMenu1);
+
         setJMenuBar(MainMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -830,6 +844,10 @@ public class FrontEndForm extends javax.swing.JFrame {
             oracle.close(connect);
         }
     }//GEN-LAST:event_closeSessionMenuItemActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new DBPropertiesJDialog(this, true, connect).setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
   
     /**
      * @param args the command line arguments
@@ -892,6 +910,8 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem getReportMenuItem;
     private javax.swing.JMenuItem getSessionsMenuItem;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
