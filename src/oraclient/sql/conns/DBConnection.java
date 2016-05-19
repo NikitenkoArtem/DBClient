@@ -19,12 +19,19 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import oraclient.sql.driver.LoadDriver;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp2.ConnectionFactory;
+import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp2.PoolableConnectionFactory;
+import org.apache.commons.dbcp2.PoolingDataSource;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+
 public class DBConnection {
     private static Map<Connection, String> connections;
     private static Connection connection;
     //    private static Statement stmt;
     private int connectionCount;
-    //    private final static BasicDataSource basicDataSource = new BasicDataSource();
+    private static BasicDataSource basicDataSource;
 
     public DBConnection() {
         if (connections == null) {
@@ -35,6 +42,7 @@ public class DBConnection {
 
     private void init() {
         connections = new HashMap<>();
+//        basicDataSource = new BasicDataSource();
     }
 
     //    public void putConnection(Connection conn, boolean connected) {
@@ -51,11 +59,10 @@ public class DBConnection {
     }
 
     private void createConnectionPool() {
-        //        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
-        //        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-        ////        ObjectPool objectPool = new GenericObjectPool(poolableConnectionFactory);
-        //        ObjectPool objectPool = new GenericObjectPool();
-        //        PoolingDataSource dataSource = new PoolingDataSource(objectPool);
+        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
+        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
     }
 
     public static Connection getConnection(String url, String user, String password) throws SQLException {
@@ -92,7 +99,11 @@ public class DBConnection {
             Map<Object, Object> resultSet = new HashMap<>();
             while (rs.next()) {
                 for (int i = 1; i <= meta.getColumnCount(); i++) {
-                    resultSet.put(meta.getColumnLabel(i), rs.getObject(i));
+                    Object object = rs.getObject(i);
+                    if (object != null) {
+                        object = object.getClass().cast(object);
+                    }
+                    resultSet.put(meta.getColumnLabel(i), object);
                 }
                 if (tableModel.getColumnCount() == 0) {
                     addTableColumn(tableModel, resultSet);
@@ -146,6 +157,67 @@ public class DBConnection {
         ResultSet rs = dbMeta.getTables(null, username, null, new String[] { type });
         while (rs.next()) {
             treeNode.add(new DefaultMutableTreeNode(rs.getString(3)));
+        }
+    }
+
+    public static void getDBProperties(final Connection conn, JComponent table) {
+        try {
+            DatabaseMetaData meta = conn.getMetaData();
+            
+            DefaultTableModel model = new DefaultTableModel(
+                new Object[][] {
+                    { "databaseMinorVersion", meta.getDatabaseMinorVersion() },
+                    { "databaseMajorVersion", meta.getDatabaseMajorVersion() },
+                    { "", meta.getDatabaseProductName() },
+                    { "", meta.getDatabaseProductVersion() },
+                    { "", meta.getDefaultTransactionIsolation() },
+                    { "", meta.getDriverMajorVersion() },
+                    { "", meta.getDriverMinorVersion() },
+                    { "", meta.getDriverName() },
+                    { "", meta.getDriverVersion() },
+                    { "", meta.getJDBCMajorVersion() },
+                    { "", meta.getJDBCMinorVersion() },
+                    { "", meta.getMaxBinaryLiteralLength() },
+                    { "", meta.getMaxCatalogNameLength() },
+                    { "", meta.getMaxCharLiteralLength() },
+                    { "", meta.getMaxColumnNameLength() },
+                    { "", meta.getMaxColumnsInGroupBy() },
+                    { "", meta.getMaxColumnsInIndex() },
+                    { "", meta.getMaxColumnsInOrderBy() },
+                    { "", meta.getMaxColumnsInSelect() },
+                    { "", meta.getMaxColumnsInTable() },
+                    { "", meta.getMaxColumnsInTable() },
+                    { "", meta.getMaxConnections() },
+                    { "", meta.getMaxCursorNameLength() },
+                    { "", meta.getMaxIndexLength() },
+                    { "", meta.getMaxLogicalLobSize() },
+                    { "", meta.getMaxProcedureNameLength() },
+                    { "", meta.getMaxRowSize() },
+                    { "", meta.getMaxSchemaNameLength() },
+                    { "", meta.getMaxStatementLength() },
+                    { "", meta.getMaxStatements() },
+                    { "", meta.getMaxTableNameLength() },
+                    { "", meta.getMaxTablesInSelect() },
+                    { "", meta.getMaxUserNameLength() },
+                    { "", meta.getNumericFunctions() },
+                    { "", meta.getProcedureTerm() },
+                    { "", meta.getResultSetHoldability() },
+                    { "", meta.getSQLKeywords() },
+                    { "", meta.getSQLStateType() },
+                    { "", meta.getSchemaTerm() },
+                    { "", meta.getSearchStringEscape() },
+                    { "", meta.getStringFunctions() },
+                    { "", meta.getSystemFunctions() },
+                    { "", meta.getTimeDateFunctions() },
+                    { "", meta.getURL() },
+                    { "", meta.supportsGetGeneratedKeys() },
+                },
+                new String[] { 
+                    "Свойство", "Значение"
+                }
+            );
+            ((JTable) table).setModel(model);
+        } catch (SQLException e) {
         }
     }
 
