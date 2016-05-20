@@ -59,8 +59,6 @@ public class FrontEndForm extends javax.swing.JFrame {
     private ClientUndoManager undoMgr;
 //    private UndoManager undo;
     private Map<String, String> titles = new HashMap<>();
-    private final String lineSeparator = System.getProperty("line.separator");
-
 
     public FrontEndForm() {
         initComponents();
@@ -274,8 +272,11 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         consoleScrollPane.setDoubleBuffered(true);
 
+        console.setEditable(false);
         console.setColumns(20);
+        console.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
         console.setRows(5);
+        console.setDoubleBuffered(true);
         consoleScrollPane.setViewportView(console);
 
         outputArea.addTab("Консоль", consoleScrollPane);
@@ -477,7 +478,6 @@ public class FrontEndForm extends javax.swing.JFrame {
         reportMenu.setText("Отчет");
 
         getReportMenuItem.setText("Получить отчет");
-        getReportMenuItem.setEnabled(false);
         getReportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 getReportMenuItemActionPerformed(evt);
@@ -732,24 +732,27 @@ public class FrontEndForm extends javax.swing.JFrame {
 //            String tabTitle = find(titles, titleAt);
 //            JTextArea textArea = area.find(file.find(tabTitle));
 //            Statement stmt = oracle.exec(connect, textArea);
+            final String ln = System.getProperty("line.separator");
             try (Statement stmt = oracle.exec(connect, null)) {
-            console.append("=========================================================\n\n");
+            console.append("=========================================================" + ln + ln);
             oracle.getResultSet(stmt, table);
             int columnCount = table.getModel().getColumnCount();
             int rowCount = table.getModel().getRowCount();
             for (int i = 0; i < columnCount; i++) {
                 console.append(table.getColumnName(i) + "\t");
+//                console.append(table.getColumnName(i) + "    ");
             }
-            console.append("\n");
+            console.append(ln);
             for (int j = 0; j < rowCount; j++) {
                 for (int i = 0; i < columnCount; i++) {
                     Object tableValue = table.getValueAt(j, i);
+//                    String value = String.format("%s        ", tableValue);
                     String value = String.format("%s\t\t", tableValue);
                     console.append(value);
                 }
-                console.append("\n");
+                console.append(ln);
             }
-            console.append("=========================================================\n\n");
+            console.append("=========================================================" + ln + ln);
         } catch (SQLException e) {
             console.append("Ошибка: " + e.toString());
             table.setModel(null);
