@@ -46,13 +46,13 @@ public class Report {
     public Report() {
     }
 
-//    public void setFontSize(short fontSize) {
-//        this.fontSize = fontSize;
-//    }
-//
-//    public int getFontSize() {
-//        return fontSize;
-//    }
+    //    public void setFontSize(short fontSize) {
+    //        this.fontSize = fontSize;
+    //    }
+    //
+    //    public int getFontSize() {
+    //        return fontSize;
+    //    }
 
     public void setSheetName(String sheetName) {
         this.sheetName = sheetName;
@@ -112,21 +112,21 @@ public class Report {
         filePath = addExtension(filePath, ".docx");
         makeReport(doc, filePath);
     }
-    
+
     public void excelReport(JTable table, String filePath) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(sheetName);
         int columnCount = table.getColumnCount();
         int rowCount = table.getRowCount();
         Row tableHeader = sheet.createRow(0);
-        for (int i = 0; i < columnCount; i++) {            
+        for (int i = 0; i < columnCount; i++) {
             Cell cell = tableHeader.createCell(i);
             cell.setCellValue(table.getColumnName(i));
         }
         int firstRow = sheet.getFirstRowNum();
-        for (int i = 0; i < rowCount; i++) {            
+        for (int i = 0; i < rowCount; i++) {
             Row row = sheet.createRow(firstRow + i + 1);
-            for (int j = 0; j < columnCount; j++) {                
+            for (int j = 0; j < columnCount; j++) {
                 Cell cell = row.createCell(j);
                 Object value = table.getValueAt(i, j);
                 if (value != null) {
@@ -139,152 +139,140 @@ public class Report {
     }
 
     public void pdfReport(JTextArea textArea, String filePath) {
-//        char[] area = textArea.getText().toCharArray();
-//        StringBuilder text = new StringBuilder();
-//        Encoding encode = Encoding.getInstance(COSName.WIN_ANSI_ENCODING);
-//        for (int i = 0; i < area.length; i++) {
-//            Character c = area[i];
-//            int code = 0;
-//            if(Character.isWhitespace(c)){
-//                code = encode.getCode("space");
-//            }else{
-//                code = encode.getCode(encode.getNameFromCharacter(c));
-//            }               
-//            text.appendCodePoint(code);
-//        }
-//        contentStream.drawString( text.toString() );
-//        String[] lines = textArea.getText().split("\\n");
-//        for(int i = 0 ; i< lines.length; i++)
-//                    printwriter.println( lines[i]);
+        //        char[] area = textArea.getText().toCharArray();
+        //        StringBuilder text = new StringBuilder();
+        //        Encoding encode = Encoding.getInstance(COSName.WIN_ANSI_ENCODING);
+        //        for (int i = 0; i < area.length; i++) {
+        //            Character c = area[i];
+        //            int code = 0;
+        //            if(Character.isWhitespace(c)){
+        //                code = encode.getCode("space");
+        //            }else{
+        //                code = encode.getCode(encode.getNameFromCharacter(c));
+        //            }
+        //            text.appendCodePoint(code);
+        //        }
+        //        contentStream.drawString( text.toString() );
+        //        String[] lines = textArea.getText().split("\\n");
+        //        for(int i = 0 ; i< lines.length; i++)
+        //                    printwriter.println( lines[i]);
         try (PDDocument pdf = new PDDocument()) {
             PDPage page = new PDPage();
             pdf.addPage(page);
-//            PDFont font = PDType1Font.TIMES_ROMAN;
+            //            PDFont font = PDType1Font.TIMES_ROMAN;
             String text = textArea.getText();
             try (PDPageContentStream content = new PDPageContentStream(pdf, page)) {
                 content.beginText();
                 content.setFont(PDType1Font.TIMES_ROMAN, FONTSIZE);
-//                content.moveTextPositionByAmount(100, 700);
+                //                content.moveTextPositionByAmount(100, 700);
                 content.showText(text);
                 content.newLine();
                 content.endText();
             }
             filePath = addExtension(filePath, ".pdf");
-            pdf.save(filePath);            
+            pdf.save(filePath);
         } catch (IOException e) {
         }
     }
-    
+
     public void pdfReport(JTable table, String filePath) {
         try (PDDocument pdf = new PDDocument()) {
             PDPage page = new PDPage();
             pdf.addPage(page);
             PDFont font = PDType1Font.TIMES_ROMAN;
             PDPageContentStream content = new PDPageContentStream(pdf, page);
-//            content.beginText();
             content.setFont(font, FONTSIZE);
-//        int y = 2;
-//        final int margin = 5;
-//        final int rows = table.getRowCount();
-//        final int cols = table.getColumnCount();
-//        final float rowHeight = 20f;
-//        final float tableWidth = page.getCropBox().getWidth() - margin - margin;
-//        final float tableHeight = rowHeight * rows;
-//        final float colWidth = tableWidth/(float)cols;
-//        final float cellMargin=5f;
-//
-//        //draw the rows
-//        float nexty = y ;
-//        
-//        for (int i = 0; i < table.getRowCount(); i++) {
-//            for (int j = 0; j < table.getColumnCount(); j++) {
-//                content.moveTo(100, 700);
-//                content.lineTo(50, 40);
-//                content.stroke();
-//                content.beginText();
-//                content.showText("hello world");
-//                content.endText();
-//            }
-//            content.drawLine(margin, nexty, margin+tableWidth, nexty);
-//            nexty-= rowHeight;
-//        }
-//
-//        //draw the columns
-//        float nextx = margin;
-//        for (int i = 0; i < table.getColumnCount(); i++) {
-//            
-//            content.drawLine(nextx, y, nextx, y-tableHeight);
-//            nextx += colWidth;
-//        }
-//
-//        //now add the text
-//        content.setFont( PDType1Font.HELVETICA_BOLD , 12 );
-//
-//        float textx = margin+cellMargin;
-//        float texty = y-15;
-//            int count = 10;
-            int x = 100;
-            int y = 700;
-            int linex = 1;
-            int liney = 45;
-//        for(int i = 0; i < table.getRowCount(); i++){
-//            content.moveTo(x, y);
-            content.lineTo(linex, liney);
-            content.beginText();
-//            content.moveTextPositionByAmount(x, y);
-            content.showText("hello 1");
-            content.newLine();
-            content.endText();
+            int rowCount = table.getRowCount();
+            int columnCount = table.getColumnCount();
+            short length = 0;
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < columnCount; j++) {
+                    Object value = table.getValueAt(i, j);
+                    Object column = table.getColumnName(i);
+                    if (column != null) {
+                        int len = column.toString().length();
+                        if (length < len) {
+                            length = (short) len;
+                        }
+                    }
+                    if (value != null) {
+                        short len = (short) value.toString().length();
+                        if (length < len) {
+                            length = len;
+                        }
+                    }
+                }
+            }
 
-//            content.moveTo(x + 30, y - 20);
-//////            content.lineTo(linex++, liney++);
-//            content.beginText();
-////            content.moveTextPositionByAmount(x + 30, y - 20);
-//            content.showText("hello 2");
-//            content.newLine();
-//            content.endText();
-//            
-//            content.moveTo(x + 10, y + 5);
-//            content.lineTo(linex++, liney++);
-//            content.beginText();
-//            content.showText("hello 3");
-//            content.newLine();
-//            content.endText();
-//            for(int j = 0; j < table.getColumnCount(); j++){
-////                String text = content[i][j];
-////                String text = "hello";
-//                content.beginText();
-////                content.moveTextPositionByAmount(textx,texty);
-////                content.moveTextPositionByAmount(100 + count, 700 + count);                
-////                content.drawString(text);
-////                if (i == 0) {
-//////                    content.moveTextPositionByAmount(x, y);
-////                    content.moveTo(x, y);                    
-////                } else {
-//////                content.moveTextPositionByAmount(x * i * j,  y);
-////                    content.moveTo(x * i * j,  y);
-////                }
-//                
-//                Object value = table.getValueAt(i, j);
-//                if (value != null) {
-//                    content.showText(value.toString());
-//                }
-//                content.newLine();
-//                content.endText();
-////                textx += colWidth;
+            final float x = 100;
+            final float y = 700;
+            final float cellMargin = 10;
+            float tableX = x;
+            float tableY = y;
+            float nextX = x;
+//            float nextX = columnCount;
+//            float nextY = y - rowCount * length;
+            float nextY = y - rowCount * FONTSIZE;
+            for (int i = 0; i <= columnCount; i++) {
+                content.moveTo(tableX, tableY);
+                content.lineTo(nextX, nextY);
+                content.stroke();
+                tableX += x + length;// + cellMargin / 2;
+                nextX = tableX;
+            }
+//            tableX = x;
+//            tableY = y;
+////            nextX = x;
+//            nextX = x * columnCount;// * length // + cellMargin;
+//            nextY = y;
+//            for (int i = 0; i <= rowCount; i++) {
+//                content.moveTo(tableX, tableY);
+//                content.lineTo(nextX, nextY);
+//                content.stroke();
+//                tableY -= FONTSIZE;// + cellMargin;
+//                nextY = tableY;
 //            }
-//            y -= 100 * i;
-//            x = 200 + i;
-////            texty-=rowHeight;
-////            textx = margin+cellMargin;
-//        }
+            
+            tableX = x;
+            tableY = y;
+            nextX = x;
+            nextY = y - 10;
+            for (int i = 0; i < columnCount; i++) {
+                content.beginText();
+                content.newLineAtOffset(nextX, nextY);
+                Object value = table.getColumnName(i);
+                if (value != null) {
+                    content.showText(value.toString());
+                }
+                nextX += x + length + cellMargin;
+                content.endText();
+            }
+            tableX = x;
+            tableY = y;
+            nextX = x;
+            nextY = y - 10;
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < columnCount; j++) {
+                    content.beginText();
+                    content.newLineAtOffset(nextX, nextY);
+                    Object value = table.getValueAt(i, j);
+                    if (value != null) {
+                        content.showText(value.toString());
+                    }
+                    nextX += x + length + cellMargin;
+//                    content.newLine();
+                    content.endText();
+                }
+                nextY -= FONTSIZE;
+                nextX = x;
+            }
             content.close();
             filePath = addExtension(filePath, ".pdf");
             pdf.save(filePath);
         } catch (IOException e) {
         }
     }
-    
+
     private String addExtension(String filePath, final String extension) {
         if (!filePath.endsWith(extension)) {
             filePath = filePath + extension;
