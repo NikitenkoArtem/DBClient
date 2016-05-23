@@ -43,7 +43,7 @@ import oraclient.io.NewFile;
 import oraclient.report.Report;
 
 import oraclient.sql.conns.DBConnection;
-import oraclient.sql.driver.LoadDriver;
+import oraclient.io.LoadDriver;
 
 
 /**
@@ -699,8 +699,9 @@ public class FrontEndForm extends javax.swing.JFrame {
                 connectionsTree.setModel(new DefaultTreeModel((DefaultMutableTreeNode)connectionsRoot));
                 sqlRunEnabled(true);
             } catch (SQLException sqle) {
+//                throw new RuntimeException("Failed");
                 sqle.printStackTrace();
-                console.append("Ошибка: " + sqle.toString());
+//                console.append("Ошибка: " + sqle.toString());
             }
 //        });
     }//GEN-LAST:event_connectMenuItemActionPerformed

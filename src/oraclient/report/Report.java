@@ -231,8 +231,7 @@ public class Report {
 //                content.stroke();
 //                tableY -= FONTSIZE;// + cellMargin;
 //                nextY = tableY;
-//            }
-            
+//            }            
             tableX = x;
             tableY = y;
             nextX = x;

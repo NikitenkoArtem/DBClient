@@ -1,5 +1,7 @@
 package oraclient.sql.conns;
 
+import java.io.File;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -17,25 +19,26 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import oraclient.sql.driver.LoadDriver;
+import oraclient.io.LoadClass;
+import oraclient.io.LoadDriver;
 
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.dbcp2.ConnectionFactory;
-import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp2.PoolableConnectionFactory;
-import org.apache.commons.dbcp2.PoolingDataSource;
-import org.apache.commons.pool2.impl.GenericObjectPool;
+//import org.apache.commons.dbcp2.BasicDataSource;
+//import org.apache.commons.dbcp2.ConnectionFactory;
+//import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
+//import org.apache.commons.dbcp2.PoolableConnectionFactory;
+//import org.apache.commons.dbcp2.PoolingDataSource;
+//import org.apache.commons.pool2.impl.GenericObjectPool;
 
 public class DBConnection {
     private static Map<Connection, String> connections;
     private static Connection connection;
     //    private static Statement stmt;
     private int connectionCount;
-    private static BasicDataSource basicDataSource;
+//    private static BasicDataSource basicDataSource;
 
     public DBConnection() {
         if (connections == null) {
-            new LoadDriver("oracle.jdbc.OracleDriver");
+            new LoadDriver("lib/ojdbc7.jar", "oracle.jdbc.OracleDriver");            
             init();
         }
     }
@@ -59,10 +62,10 @@ public class DBConnection {
     }
 
     private void createConnectionPool() {
-        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
-        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
+//        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
+//        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
+//        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+//        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
     }
 
     public static Connection getConnection(String url, String user, String password) throws SQLException {
