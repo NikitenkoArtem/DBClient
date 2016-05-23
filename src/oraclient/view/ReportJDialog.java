@@ -2,6 +2,8 @@
 package oraclient.view;
 
 
+import java.io.File;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +17,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import oraclient.component.DBFileChooser;
+
+import oraclient.io.LoadClass;
 
 import oraclient.report.Report;
 
@@ -297,6 +301,18 @@ public class ReportJDialog extends javax.swing.JDialog {
     private void createReportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createReportBtnActionPerformed
         JTextArea area = ((FrontEndForm) parent).getConsole();
         JTable table = ((FrontEndForm) parent).getTable();
+        LoadClass load = new LoadClass();
+        LoadClass load2 = new LoadClass();
+        LoadClass load3 = new LoadClass();
+        LoadClass load4 = new LoadClass();
+        LoadClass load5 = new LoadClass();
+        String filePath = load.jarFilePath("lib/pdfbox-2.0.1/pdfbox-app-2.0.1.jar");
+        System.out.println(filePath);
+        load.addClass(new File(filePath));
+        load2.addClass(new File(load.jarFilePath("lib/poi-3.14/poi-3.14-20160307.jar")));
+        load3.addClass(new File(load.jarFilePath("lib/poi-3.14/poi-ooxml-3.14-20160307.jar")));
+        load4.addClass(new File(load.jarFilePath("lib/poi-3.14/poi-ooxml-schemas-3.14-20160307.jar")));
+        load5.addClass(new File(load.jarFilePath("lib/poi-3.14/ooxml-lib/xmlbeans-2.6.0.jar")));
         Report report = new Report();
 //        report.setFilePath(pdfOutputTxtField.getText());
 //        report.setFontSize((short) 16);
