@@ -2,13 +2,6 @@ package oraclient.io;
 
 import java.io.File;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
