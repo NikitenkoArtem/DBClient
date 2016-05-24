@@ -2,37 +2,23 @@
 package oraclient.view;
 
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import java.io.File;
 
-import java.io.IOException;
-
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTree;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
 import javax.swing.undo.UndoManager;
 
 import oraclient.component.ClientArea;
@@ -40,10 +26,7 @@ import oraclient.component.ClientUndoManager;
 
 import oraclient.io.NewFile;
 
-import oraclient.report.Report;
-
 import oraclient.sql.conns.DBConnection;
-import oraclient.io.LoadDriver;
 
 
 /**
@@ -732,28 +715,31 @@ public class FrontEndForm extends javax.swing.JFrame {
 //            String titleAt = tabPane.getTitleAt(index);
 //            String tabTitle = find(titles, titleAt);
 //            JTextArea textArea = area.find(file.find(tabTitle));
-//            Statement stmt = oracle.exec(connect, textArea);
-            final String ln = System.getProperty("line.separator");
+//            try (Statement stmt = oracle.exec(connect, textArea)) {
             try (Statement stmt = oracle.exec(connect, null)) {
-            console.append("=========================================================" + ln + ln);
-            oracle.getResultSet(stmt, table);
-            int columnCount = table.getModel().getColumnCount();
-            int rowCount = table.getModel().getRowCount();
-            for (int i = 0; i < columnCount; i++) {
-                console.append(table.getColumnName(i) + "\t");
-//                console.append(table.getColumnName(i) + "    ");
-            }
-            console.append(ln);
-            for (int j = 0; j < rowCount; j++) {
+                final String ln = System.getProperty("line.separator");
+                console.append("=========================================================" + ln + ln);
+                oracle.getResultSet(stmt, table);
+                int columnCount = table.getModel().getColumnCount();
+                int rowCount = table.getModel().getRowCount();
                 for (int i = 0; i < columnCount; i++) {
-                    Object tableValue = table.getValueAt(j, i);
-//                    String value = String.format("%s        ", tableValue);
-                    String value = String.format("%s\t\t", tableValue);
+                    String value = String.format("%s\t", table.getColumnName(i));
                     console.append(value);
-                }
+                }            
                 console.append(ln);
-            }
-            console.append("=========================================================" + ln + ln);
+                for (int i = 0; i < rowCount; i++) {
+                    for (int j = 0; j < columnCount; j++) {
+                        Object tableValue = table.getValueAt(i, j);
+                        if (tableValue != null) {
+                            String value = String.format("%s\t", tableValue);
+                            console.append(value);
+                        } else {
+                            console.append("NULL\t");
+                        }
+                    }
+                    console.append(ln);
+                }
+                console.append("=========================================================" + ln + ln);
         } catch (SQLException e) {
             console.append("Îøèáêà: " + e.toString());
             table.setModel(null);
