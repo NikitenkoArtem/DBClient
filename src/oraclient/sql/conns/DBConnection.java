@@ -22,30 +22,32 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import oraclient.io.LoadClass;
 import oraclient.io.LoadDriver;
 
-//import org.apache.commons.dbcp2.BasicDataSource;
-//import org.apache.commons.dbcp2.ConnectionFactory;
-//import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
-//import org.apache.commons.dbcp2.PoolableConnectionFactory;
-//import org.apache.commons.dbcp2.PoolingDataSource;
-//import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp2.ConnectionFactory;
+import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp2.PoolableConnectionFactory;
+import org.apache.commons.dbcp2.PoolingDataSource;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 
 public class DBConnection {
     private static Map<Connection, String> connections;
     private static Connection connection;
-    //    private static Statement stmt;
     private int connectionCount;
-//    private static BasicDataSource basicDataSource;
+    private static BasicDataSource basicDataSource;
 
     public DBConnection() {
         if (connections == null) {
-            new LoadDriver("lib/ojdbc7.jar", "oracle.jdbc.OracleDriver");            
+            new LoadDriver("lib/ojdbc7.jar", "oracle.jdbc.OracleDriver");
+            LoadClass load = new LoadClass();
+            load.addClass(new File(load.jarFilePath("lib/commons-dbcp2-2.1.1.jar")));
+            load.addClass(new File(load.jarFilePath("lib/commons-pool2-2.4.2.jar")));
             init();
         }
     }
 
     private void init() {
         connections = new HashMap<>();
-//        basicDataSource = new BasicDataSource();
+        basicDataSource = new BasicDataSource();
     }
 
     //    public void putConnection(Connection conn, boolean connected) {
@@ -62,16 +64,17 @@ public class DBConnection {
     }
 
     private void createConnectionPool() {
-//        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
-//        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
-//        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-//        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
+        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
+        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
     }
 
     public static Connection getConnection(String url, String user, String password) throws SQLException {
         //        basicDataSource.setUsername(username);
         //        basicDataSource.setPassword(password);
         //        basicDataSource.setUrl(url);
+        basicDataSource.getConnection();
         connection = DriverManager.getConnection(url, user, password);
         connections.put(connection, connection.getMetaData().getUserName());
         //        conn.setAutoCommit(false);
@@ -87,7 +90,7 @@ public class DBConnection {
         Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         //        stmt.execute(((JTextArea) text).getText());
         stmt.executeQuery("select * from departments");
-        //        stmt.executeQuery("select * from dba_users");
+//                stmt.executeQuery("select * from dba_users");
         //        stmt.executeUpdate("drop table test");
         //        stmt.execute("create table test(id int, name varchar2(5), price int)");
         //        stmt.executeUpdate("insert into test values(1, 'hello', 12345)");
