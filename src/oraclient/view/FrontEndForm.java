@@ -2,6 +2,7 @@
 package oraclient.view;
 
 
+import java.awt.ScrollPane;
 import java.awt.event.KeyEvent;
 
 import java.io.File;
@@ -10,12 +11,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.table.TableModel;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -27,6 +34,7 @@ import oraclient.component.ClientUndoManager;
 import oraclient.io.NewFile;
 
 import oraclient.sql.conns.DBConnection;
+import oraclient.sql.session.Session;
 
 
 /**
@@ -40,7 +48,9 @@ public class FrontEndForm extends javax.swing.JFrame {
     private Connection connect;
     private NewFile file;
     private ClientUndoManager undoMgr;
-//    private UndoManager undo;
+    private DefaultComboBoxModel model;
+    private List<String> connsName;
+    //    private UndoManager undo;
     private Map<String, String> titles = new HashMap<>();
 
     public FrontEndForm() {
@@ -57,7 +67,7 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
-        jPanel1 = new javax.swing.JPanel();
+        toolsPanel = new javax.swing.JPanel();
         dbRollbackButton = new javax.swing.JButton();
         dbCommitButton = new javax.swing.JButton();
         sqlRunButton = new javax.swing.JButton();
@@ -65,8 +75,8 @@ public class FrontEndForm extends javax.swing.JFrame {
         saveFileButton = new javax.swing.JButton();
         openFileButton = new javax.swing.JButton();
         dbUsersComboBox = new javax.swing.JComboBox();
-        jSplitPane3 = new javax.swing.JSplitPane();
-        jSplitPane4 = new javax.swing.JSplitPane();
+        mainSplitPane = new javax.swing.JSplitPane();
+        workSplitPane = new javax.swing.JSplitPane();
         tabPane = new javax.swing.JTabbedPane();
         outputArea = new javax.swing.JTabbedPane();
         consoleScrollPane = new javax.swing.JScrollPane();
@@ -106,8 +116,8 @@ public class FrontEndForm extends javax.swing.JFrame {
         getSessionsMenuItem = new javax.swing.JMenuItem();
         closeSessionMenuItem = new javax.swing.JMenuItem();
         closeSessionsMenuItem = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        dbPropertiesMenu = new javax.swing.JMenu();
+        getPropertiesMenuItem = new javax.swing.JMenuItem();
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
@@ -123,7 +133,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        dbRollbackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rollback.png"))); // NOI18N
+        dbRollbackButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/rollback.png"))); // NOI18N
         dbRollbackButton.setToolTipText("Rollback");
         dbRollbackButton.setEnabled(false);
         dbRollbackButton.setFocusable(false);
@@ -135,7 +145,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        dbCommitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/commit.png"))); // NOI18N
+        dbCommitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/commit.png"))); // NOI18N
         dbCommitButton.setToolTipText("Commit");
         dbCommitButton.setEnabled(false);
         dbCommitButton.setFocusable(false);
@@ -147,7 +157,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        sqlRunButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/run.jpeg"))); // NOI18N
+        sqlRunButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/run.jpeg"))); // NOI18N
         sqlRunButton.setToolTipText("Выполнить (F5)");
         sqlRunButton.setEnabled(false);
         sqlRunButton.setFocusable(false);
@@ -159,7 +169,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        saveAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save all.png"))); // NOI18N
+        saveAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/save all.png"))); // NOI18N
         saveAllButton.setToolTipText("Сохранить все");
         saveAllButton.setEnabled(false);
         saveAllButton.setFocusable(false);
@@ -171,7 +181,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        saveFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save.png"))); // NOI18N
+        saveFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/save.png"))); // NOI18N
         saveFileButton.setToolTipText("Сохранить (Ctrl+S)");
         saveFileButton.setEnabled(false);
         saveFileButton.setFocusable(false);
@@ -183,7 +193,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        openFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/open.png"))); // NOI18N
+        openFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/open.png"))); // NOI18N
         openFileButton.setToolTipText("Открыть... (Ctrl+O)");
         openFileButton.setFocusable(false);
         openFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -203,11 +213,11 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout toolsPanelLayout = new javax.swing.GroupLayout(toolsPanel);
+        toolsPanel.setLayout(toolsPanelLayout);
+        toolsPanelLayout.setHorizontalGroup(
+            toolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(toolsPanelLayout.createSequentialGroup()
                 .addComponent(openFileButton)
                 .addGap(0, 0, 0)
                 .addComponent(saveFileButton)
@@ -223,31 +233,31 @@ public class FrontEndForm extends javax.swing.JFrame {
                 .addComponent(dbUsersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 91, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        toolsPanelLayout.setVerticalGroup(
+            toolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(openFileButton)
             .addComponent(saveFileButton)
             .addComponent(saveAllButton)
             .addComponent(sqlRunButton)
             .addComponent(dbCommitButton)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(toolsPanelLayout.createSequentialGroup()
                 .addGap(1, 1, 1)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(toolsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dbUsersComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dbRollbackButton)))
         );
 
-        jSplitPane3.setMinimumSize(new java.awt.Dimension(50, 50));
-        jSplitPane3.setPreferredSize(new java.awt.Dimension(100, 100));
+        mainSplitPane.setMinimumSize(new java.awt.Dimension(50, 50));
+        mainSplitPane.setPreferredSize(new java.awt.Dimension(100, 100));
 
-        jSplitPane4.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane4.setMinimumSize(new java.awt.Dimension(200, 100));
-        jSplitPane4.setPreferredSize(new java.awt.Dimension(200, 100));
+        workSplitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        workSplitPane.setMinimumSize(new java.awt.Dimension(200, 100));
+        workSplitPane.setPreferredSize(new java.awt.Dimension(200, 100));
 
         tabPane.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         tabPane.setDoubleBuffered(true);
         tabPane.setMinimumSize(new java.awt.Dimension(200, 100));
-        jSplitPane4.setTopComponent(tabPane);
+        workSplitPane.setTopComponent(tabPane);
 
         outputArea.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         outputArea.setMinimumSize(new java.awt.Dimension(200, 100));
@@ -294,9 +304,9 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         outputArea.addTab("Таблица", tableScrollPane);
 
-        jSplitPane4.setRightComponent(outputArea);
+        workSplitPane.setRightComponent(outputArea);
 
-        jSplitPane3.setRightComponent(jSplitPane4);
+        mainSplitPane.setRightComponent(workSplitPane);
 
         connectionsTabbedPane.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         connectionsTabbedPane.setMinimumSize(new java.awt.Dimension(100, 50));
@@ -308,7 +318,7 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         connectionsTabbedPane.addTab("Соединения", connectionScrollPane);
 
-        jSplitPane3.setLeftComponent(connectionsTabbedPane);
+        mainSplitPane.setLeftComponent(connectionsTabbedPane);
 
         fileMenu.setText("Файл");
 
@@ -501,17 +511,17 @@ public class FrontEndForm extends javax.swing.JFrame {
 
         MainMenu.add(sessionMenu);
 
-        jMenu1.setText("jMenu1");
+        dbPropertiesMenu.setText("Свойства БД");
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        getPropertiesMenuItem.setText("Получить свойства");
+        getPropertiesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                getPropertiesMenuItemActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        dbPropertiesMenu.add(getPropertiesMenuItem);
 
-        MainMenu.add(jMenu1);
+        MainMenu.add(dbPropertiesMenu);
 
         setJMenuBar(MainMenu);
 
@@ -519,15 +529,15 @@ public class FrontEndForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jSplitPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(toolsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainSplitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(toolsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
+                .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE))
         );
 
         pack();
@@ -538,22 +548,22 @@ public class FrontEndForm extends javax.swing.JFrame {
         FileJDialog dialog = new FileJDialog();
         dialog.setVisible(true);
         dialog.getOkButton().addChangeListener((e) -> {
-            String filePath = fileLocation(dialog);
-            file = new NewFile(filePath);
-            file.putFile(file, filePath);
-            file.putSave(file, false);
-            initFile(file);
-        });
-//        String filePath = fileLocation(dialog);
-//        file = new NewFile(filePath);
-//        file.putFile(file, filePath);
-//        file.putSave(file, false);
-//        initFile(file);
+                String filePath = fileLocation(dialog);
+                file = new NewFile(filePath);
+                file.putFile(file, filePath);
+                file.putSave(file, false);
+                initFile(file);
+            });
+        //        String filePath = fileLocation(dialog);
+        //        file = new NewFile(filePath);
+        //        file.putFile(file, filePath);
+        //        file.putSave(file, false);
+        //        initFile(file);
         runScriptMenuItem.setEnabled(true);
     }//GEN-LAST:event_newFileMenuItemActionPerformed
 
     private String fileLocation(FileJDialog dialog) {
-//        dialog.setVisible(true);
+        //        dialog.setVisible(true);
         String filePath = dialog.getFilePath().getText() + dialog.getFileName().getText();
         return filePath;
     }
@@ -566,7 +576,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         UndoManager undo = new UndoManager();
         undoMgr.putUndoManager(textArea, undo);
         textArea.getDocument().addUndoableEditListener(undo);
-        titles.put(f.getName(), f.getAbsolutePath());        
+        titles.put(f.getName(), f.getAbsolutePath());
         JTextArea jTextArea = area.find(f);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(jTextArea);
@@ -589,7 +599,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     public Connection getConnect() {
         return connect;
     }
-    
+
     private void sqlRunEnabled(boolean value) {
         sqlRunButton.setEnabled(value);
         dbUsersComboBox.setEnabled(value);
@@ -599,7 +609,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         closeSessionMenuItem.setEnabled(value);
         closeSessionsMenuItem.setEnabled(value);
     }
-    
+
     private void componentsEnabled(boolean value) {
         saveFileButton.setEnabled(value);
         saveAllButton.setEnabled(value);
@@ -629,7 +639,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_saveFileMenuItemActionPerformed
     
     private String find(Map<String, String> map, String title) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {                
+        for (Map.Entry<String, String> entry : map.entrySet()) {
             if (title.equals(entry.getKey())) {
                 return entry.getValue();
             }
@@ -638,7 +648,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     }
 
     private void closeFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileMenuItemActionPerformed
-        saveFileMenuItemActionPerformed(evt);        
+        saveFileMenuItemActionPerformed(evt);
         int index = tabPane.getSelectedIndex();
         String titleAt = tabPane.getTitleAt(index);
         String tabTitle = find(titles, titleAt);
@@ -654,44 +664,65 @@ public class FrontEndForm extends javax.swing.JFrame {
     private void connectMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectMenuItemActionPerformed
 //        ConnectionDialog dialog = new ConnectionDialog();
 //        dialog.setVisible(true);
-//        dialog.getConnectButton().addChangeListener((e) -> {
+        //        dialog.getConnectButton().addChangeListener((e) -> {
+        if (connsName == null) {
+            connsName = new ArrayList<>();
+        }
+//        String connectionName = dialog.getConnectionName().getText();
+        String connectionName = "hr";
+        if (connsName.contains(connectionName)) {
+            JOptionPane.showMessageDialog(this, "Соединение уже существует", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        } else {
             try {
                 oracle = new DBConnection();
-//                String url = dialog.getUrl().getText();
-//                String user = dialog.getUserName().getText();
-//                String password = String.valueOf(dialog.getPassword().getPassword());
-                    String connName = "hr";
-                    String url = "jdbc:oracle:thin:@localhost:1521:xe";
-                    String user = "hr";
-                    String password = "hr";
-//                String connName = "sys";
-//                String url = "jdbc:oracle:thin:@localhost:1521:xe";
-//                String user = "sys as sysdba";
-//                String password = "root";
+                //                String url = dialog.getUrl().getText();
+                //                String user = dialog.getUserName().getText();
+                //                String password = String.valueOf(dialog.getPassword().getPassword());
+//                String connName = "hr";
+                String url = "jdbc:oracle:thin:@localhost:1521:xe";
+                String user = "hr";
+                String password = "hr";
+                //                String connName = "sys";
+                //                String url = "jdbc:oracle:thin:@localhost:1521:xe";
+                //                String user = "sys as sysdba";
+                //                String password = "root";
                 Connection conn = DBConnection.getConnection(url, user, password);
+                if (conn != null) {
+                    connect = conn;
+                } else {
+                    throw new SQLException("Невозможно установить соединение");
+                }
                 String userName = conn.getMetaData().getUserName();
-                dbUsersComboBox.addItem(userName);
-        //            dbUsersComboBox.setSelectedItem(userName);
-                
-//                String connectionName = dialog.getConnectionName().getText();
-                    String connectionName = connName;
+                if (dbUsersComboBox.getSelectedItem() == null) {
+                    model = new DefaultComboBoxModel();
+                }
+                model.addElement(userName);
+//                ComboBoxModel boxModel = dbUsersComboBox.getModel();
+
+                dbUsersComboBox.setModel(model);
+//                dbUsersComboBox.setSelectedItem(userName);
+
+                //                String connectionName = dialog.getConnectionName().getText();
+//                String connectionName = connName;
                 DefaultMutableTreeNode root = new DefaultMutableTreeNode(connectionName);
                 Object connectionsRoot = connectionsTree.getModel().getRoot();
-                ((DefaultMutableTreeNode)connectionsRoot).add(root);
+                ((DefaultMutableTreeNode) connectionsRoot).add(root);
                 oracle.getDatabaseStructure(conn, root);
-                connectionsTree.setModel(new DefaultTreeModel((DefaultMutableTreeNode)connectionsRoot));
+                connectionsTree.setModel(new DefaultTreeModel((DefaultMutableTreeNode) connectionsRoot));
+                connsName.add(connectionName);
                 sqlRunEnabled(true);
             } catch (SQLException sqle) {
-//                throw new RuntimeException("Failed");
                 sqle.printStackTrace();
-//                console.append("Ошибка: " + sqle.toString());
+                JOptionPane.showMessageDialog(this, sqle, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                console.append("Ошибка: " + sqle.toString());
             }
-//        });
+        }
+        //        });
     }//GEN-LAST:event_connectMenuItemActionPerformed
 
     private void undoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMenuItemActionPerformed
         UndoManager undo = undoMgr.find((JTextArea) tabPane.getComponentAt(tabPane.getSelectedIndex()));
-        if(undo.canUndo()) {
+        if (undo.canUndo()) {
             undo.undo();
         }
     }//GEN-LAST:event_undoMenuItemActionPerformed
@@ -710,38 +741,39 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void runScriptMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runScriptMenuItemActionPerformed
-//        try {
-//            int index = tabPane.getSelectedIndex();
-//            String titleAt = tabPane.getTitleAt(index);
-//            String tabTitle = find(titles, titleAt);
-//            JTextArea textArea = area.find(file.find(tabTitle));
-//            try (Statement stmt = oracle.exec(connect, textArea)) {
-            try (Statement stmt = oracle.exec(connect, null)) {
-                final String ln = System.getProperty("line.separator");
-                console.append("=========================================================" + ln + ln);
-                oracle.getResultSet(stmt, table);
-                int columnCount = table.getModel().getColumnCount();
-                int rowCount = table.getModel().getRowCount();
-                for (int i = 0; i < columnCount; i++) {
-                    String value = String.format("%s\t", table.getColumnName(i));
-                    console.append(value);
-                }            
-                console.append(ln);
-                for (int i = 0; i < rowCount; i++) {
-                    for (int j = 0; j < columnCount; j++) {
-                        Object tableValue = table.getValueAt(i, j);
-                        if (tableValue != null) {
-                            String value = String.format("%s\t", tableValue);
-                            console.append(value);
-                        } else {
-                            console.append("NULL\t");
-                        }
+        //        try {
+        //            int index = tabPane.getSelectedIndex();
+        //            String titleAt = tabPane.getTitleAt(index);
+        //            String tabTitle = find(titles, titleAt);
+        //            JTextArea textArea = area.find(file.find(tabTitle));
+        //            try (Statement stmt = oracle.exec(connect, textArea)) {
+        try (Statement stmt = oracle.exec(connect, null)) {
+            oracle.getResultSet(stmt, table);
+            final String ln = System.getProperty("line.separator");
+            console.append("=========================================================" + ln + ln);
+            int columnCount = table.getModel().getColumnCount();
+            int rowCount = table.getModel().getRowCount();
+            for (int i = 0; i < columnCount; i++) {
+                String value = String.format("%s\t", table.getColumnName(i));
+                console.append(value);
+            }
+            console.append(ln);
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < columnCount; j++) {
+                    Object tableValue = table.getValueAt(i, j);
+                    if (tableValue != null) {
+                        String value = String.format("%s\t", tableValue);
+                        console.append(value);
+                    } else {
+                        console.append("NULL\t");
                     }
-                    console.append(ln);
                 }
-                console.append("=========================================================" + ln + ln);
+                console.append(ln);
+            }
+            console.append("=========================================================" + ln + ln);
         } catch (SQLException e) {
-            console.append("Ошибка: " + e.toString());
+            JOptionPane.showMessageDialog(this, e, "Ошибка", JOptionPane.ERROR_MESSAGE);
+            console.append("Ошибка: " + e.toString() + "\n");
             table.setModel(null);
         }
     }//GEN-LAST:event_runScriptMenuItemActionPerformed
@@ -750,7 +782,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         OpenFileJDialog dialog = new OpenFileJDialog(this, true);
         dialog.setVisible(true);
         String filePath = dialog.getFilePath().getText();
-//        File f = new File(filePath);
+        //        File f = new File(filePath);
         NewFile f = new NewFile(filePath);
         initFile(f);
         if (file == null) {
@@ -790,7 +822,12 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_getReportMenuItemActionPerformed
 
     private void getSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getSessionsMenuItemActionPerformed
-        new SessionJDialog(this, true).setVisible(true);
+        JTable sessionTable = new JTable();
+        TableModel info = new Session().getSessionInfo();
+        sessionTable.setModel(info);
+        InfoJDialog dialog = new InfoJDialog(this, true);
+        dialog.getInfoScrollPane().setViewportView(sessionTable);
+        dialog.setVisible(true);
     }//GEN-LAST:event_getSessionsMenuItemActionPerformed
 
     private void closeSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeSessionsMenuItemActionPerformed
@@ -835,9 +872,15 @@ public class FrontEndForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_closeSessionMenuItemActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        new DBPropertiesJDialog(this, true, connect).setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void getPropertiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getPropertiesMenuItemActionPerformed
+        JTable propertiesTable = new JTable();
+        TableModel propertiesModel = DBConnection.getDBProperties(connect);
+        propertiesTable.setModel(propertiesModel);
+        InfoJDialog dialog = new InfoJDialog(this, true);
+        dialog.getInfoScrollPane().add(propertiesTable);
+        dialog.getInfoScrollPane().setViewportView(propertiesTable);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_getPropertiesMenuItemActionPerformed
   
     /**
      * @param args the command line arguments
@@ -893,25 +936,23 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JButton dbCommitButton;
+    private javax.swing.JMenu dbPropertiesMenu;
     private javax.swing.JButton dbRollbackButton;
     private javax.swing.JComboBox dbUsersComboBox;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem getPropertiesMenuItem;
     private javax.swing.JMenuItem getReportMenuItem;
     private javax.swing.JMenuItem getSessionsMenuItem;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JSplitPane jSplitPane3;
-    private javax.swing.JSplitPane jSplitPane4;
     private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JSplitPane mainSplitPane;
     private javax.swing.JMenuItem newFileMenuItem;
     private javax.swing.JButton openFileButton;
     private javax.swing.JMenuItem openFileMenuItem;
@@ -931,6 +972,8 @@ public class FrontEndForm extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabPane;
     private javax.swing.JTable table;
     private javax.swing.JScrollPane tableScrollPane;
+    private javax.swing.JPanel toolsPanel;
     private javax.swing.JMenuItem undoMenuItem;
+    private javax.swing.JSplitPane workSplitPane;
     // End of variables declaration//GEN-END:variables
 }

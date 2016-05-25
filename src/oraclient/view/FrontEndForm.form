@@ -273,17 +273,17 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="dbPropertiesMenu">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jMenu1"/>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x432;&#x43e;&#x439;&#x441;&#x442;&#x432;&#x430; &#x411;&#x414;"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JMenuItem" name="getPropertiesMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jMenuItem1"/>
+                <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43b;&#x443;&#x447;&#x438;&#x442;&#x44c; &#x441;&#x432;&#x43e;&#x439;&#x441;&#x442;&#x432;&#x430;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getPropertiesMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -324,22 +324,22 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" max="32767" attributes="0"/>
-          <Component id="jSplitPane3" alignment="1" max="32767" attributes="0"/>
+          <Component id="toolsPanel" max="32767" attributes="0"/>
+          <Component id="mainSplitPane" alignment="1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="toolsPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jSplitPane3" pref="243" max="32767" attributes="0"/>
+              <Component id="mainSplitPane" pref="243" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="toolsPanel">
 
       <Layout>
         <DimensionLayout dim="0">
@@ -383,7 +383,7 @@
         <Component class="javax.swing.JButton" name="dbRollbackButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/rollback.png"/>
+              <Image iconType="3" name="/resources/images/rollback.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Rollback"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -398,7 +398,7 @@
         <Component class="javax.swing.JButton" name="dbCommitButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/commit.png"/>
+              <Image iconType="3" name="/resources/images/commit.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Commit"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -413,7 +413,7 @@
         <Component class="javax.swing.JButton" name="sqlRunButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/run.jpeg"/>
+              <Image iconType="3" name="/resources/images/run.jpeg"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x44b;&#x43f;&#x43e;&#x43b;&#x43d;&#x438;&#x442;&#x44c; (F5)"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -428,7 +428,7 @@
         <Component class="javax.swing.JButton" name="saveAllButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/save all.png"/>
+              <Image iconType="3" name="/resources/images/save all.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; &#x432;&#x441;&#x435;"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -443,7 +443,7 @@
         <Component class="javax.swing.JButton" name="saveFileButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/save.png"/>
+              <Image iconType="3" name="/resources/images/save.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x421;&#x43e;&#x445;&#x440;&#x430;&#x43d;&#x438;&#x442;&#x44c; (Ctrl+S)"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -458,7 +458,7 @@
         <Component class="javax.swing.JButton" name="openFileButton">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/images/open.png"/>
+              <Image iconType="3" name="/resources/images/open.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="&#x41e;&#x442;&#x43a;&#x440;&#x44b;&#x442;&#x44c;... (Ctrl+O)"/>
             <Property name="focusable" type="boolean" value="false"/>
@@ -471,9 +471,6 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="dbUsersComboBox">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
-            </Property>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 100]"/>
@@ -488,7 +485,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JSplitPane" name="jSplitPane3">
+    <Container class="javax.swing.JSplitPane" name="mainSplitPane">
       <Properties>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[50, 50]"/>
@@ -500,7 +497,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JSplitPane" name="jSplitPane4">
+        <Container class="javax.swing.JSplitPane" name="workSplitPane">
           <Properties>
             <Property name="orientation" type="int" value="0"/>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
