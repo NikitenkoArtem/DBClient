@@ -1,6 +1,15 @@
 package oraclient.sql.conns;
 
+import java.io.BufferedReader;
 import java.io.File;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+
+import java.io.InputStream;
+
+import java.io.InputStreamReader;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -10,13 +19,18 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import oraclient.io.LoadClass;
@@ -30,7 +44,8 @@ import org.apache.commons.dbcp2.PoolingDataSource;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 public class DBConnection {
-    private static Map<Connection, String> connections;
+//    private static Map<Connection, String> connections;
+    private static List<Connection> connections;
     private static Connection connection;
     private int connectionCount;
     private static BasicDataSource basicDataSource;
@@ -46,7 +61,8 @@ public class DBConnection {
     }
 
     private void init() {
-        connections = new HashMap<>();
+//        connections = new HashMap<>();
+        connections = new ArrayList<>();
         basicDataSource = new BasicDataSource();
     }
 
@@ -55,35 +71,51 @@ public class DBConnection {
     //    }
 
     public Connection find(String userName) {
-        for (Map.Entry<Connection, String> entry : connections.entrySet()) {
-            if (userName.equals(entry.getValue())) {
-                return entry.getKey();
+//        for (Map.Entry<Connection, String> entry : connections.entrySet()) {
+//            if (userName.equals(entry.getValue())) {
+//                return entry.getKey();
+//            }
+//        }
+        try {
+        } finally {
+            for (Iterator<Connection> it = connections.iterator(); it.hasNext();) {
+                try {
+                    if (userName.equals(it.next().getMetaData().getUserName())) {
+                        return it.next();
+                    }
+                } catch (SQLException e) {
+                }
             }
         }
         return null;
     }
 
     private void createConnectionPool() {
-        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
-        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
+//        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
+//        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
+//        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+//        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
     }
 
     public static Connection getConnection(String url, String user, String password) throws SQLException {
         //        basicDataSource.setUsername(username);
         //        basicDataSource.setPassword(password);
         //        basicDataSource.setUrl(url);
-        basicDataSource.getConnection();
+//        basicDataSource.getConnection();
         connection = DriverManager.getConnection(url, user, password);
-        connections.put(connection, connection.getMetaData().getUserName());
+        connections.add(connection);
+//        connections.put(connection, connection.getMetaData().getUserName());
         //        conn.setAutoCommit(false);
         return connection;
     }
 
-    public static Map<Connection, String> getConnections() {
+    public static List<Connection> getConnections() {
         return connections;
     }
+
+//    public static Map<Connection, String> getConnections() {
+//        return connections;
+//    }
 
     public Statement exec(Connection conn, JComponent text) throws SQLException {
         //        stmt = conn.createStatement();
@@ -166,73 +198,61 @@ public class DBConnection {
         }
     }
 
-    public static void getDBProperties(final Connection conn, JComponent table) {
+    public static TableModel getDBProperties(final Connection conn) {
+        DefaultTableModel model = null;
         try {
             DatabaseMetaData meta = conn.getMetaData();
-            
-            DefaultTableModel model = new DefaultTableModel(
+            Properties prop = new Properties();
+            try (BufferedReader buf = new BufferedReader(new InputStreamReader(
+                    DBConnection.class.getResourceAsStream("/resources/db.properties"), "UTF8"))) {
+                prop.load(buf);
+            } catch (IOException e) {
+            }
+            int jdbcMinorVersion = meta.getJDBCMinorVersion();
+            int jdbcMajorVersion = meta.getJDBCMajorVersion();
+            String jdbcVersion = String.format("%d.%d", jdbcMajorVersion, jdbcMinorVersion);
+            model = new DefaultTableModel(
                 new Object[][] {
-                    { "databaseMinorVersion", meta.getDatabaseMinorVersion() },
-                    { "databaseMajorVersion", meta.getDatabaseMajorVersion() },
-                    { "", meta.getDatabaseProductName() },
-                    { "", meta.getDatabaseProductVersion() },
-                    { "", meta.getDefaultTransactionIsolation() },
-                    { "", meta.getDriverMajorVersion() },
-                    { "", meta.getDriverMinorVersion() },
-                    { "", meta.getDriverName() },
-                    { "", meta.getDriverVersion() },
-                    { "", meta.getJDBCMajorVersion() },
-                    { "", meta.getJDBCMinorVersion() },
-                    { "", meta.getMaxBinaryLiteralLength() },
-                    { "", meta.getMaxCatalogNameLength() },
-                    { "", meta.getMaxCharLiteralLength() },
-                    { "", meta.getMaxColumnNameLength() },
-                    { "", meta.getMaxColumnsInGroupBy() },
-                    { "", meta.getMaxColumnsInIndex() },
-                    { "", meta.getMaxColumnsInOrderBy() },
-                    { "", meta.getMaxColumnsInSelect() },
-                    { "", meta.getMaxColumnsInTable() },
-                    { "", meta.getMaxColumnsInTable() },
-                    { "", meta.getMaxConnections() },
-                    { "", meta.getMaxCursorNameLength() },
-                    { "", meta.getMaxIndexLength() },
-                    { "", meta.getMaxLogicalLobSize() },
-                    { "", meta.getMaxProcedureNameLength() },
-                    { "", meta.getMaxRowSize() },
-                    { "", meta.getMaxSchemaNameLength() },
-                    { "", meta.getMaxStatementLength() },
-                    { "", meta.getMaxStatements() },
-                    { "", meta.getMaxTableNameLength() },
-                    { "", meta.getMaxTablesInSelect() },
-                    { "", meta.getMaxUserNameLength() },
-                    { "", meta.getNumericFunctions() },
-                    { "", meta.getProcedureTerm() },
-                    { "", meta.getResultSetHoldability() },
-                    { "", meta.getSQLKeywords() },
-                    { "", meta.getSQLStateType() },
-                    { "", meta.getSchemaTerm() },
-                    { "", meta.getSearchStringEscape() },
-                    { "", meta.getStringFunctions() },
-                    { "", meta.getSystemFunctions() },
-                    { "", meta.getTimeDateFunctions() },
-                    { "", meta.getURL() },
-                    { "", meta.supportsGetGeneratedKeys() },
+                    { prop.getProperty("DatabaseProductName"), meta.getDatabaseProductName() },
+                    { prop.getProperty("DatabaseProductVersion"), meta.getDatabaseProductVersion() },
+                    { prop.getProperty("DefaultTransactionIsolation"), meta.getDefaultTransactionIsolation() },
+                    { prop.getProperty("DriverName"), meta.getDriverName() },
+                    { prop.getProperty("DriverVersion"), meta.getDriverVersion() },
+                    { prop.getProperty("JDBCVersion"), jdbcVersion },
+                    { prop.getProperty("MaxBinaryLiteralLength"), meta.getMaxBinaryLiteralLength() },
+                    { prop.getProperty("MaxCharLiteralLength"), meta.getMaxCharLiteralLength() },
+                    { prop.getProperty("MaxColumnNameLength"), meta.getMaxColumnNameLength() },
+                    { prop.getProperty("MaxColumnsInIndex"), meta.getMaxColumnsInIndex() },
+                    { prop.getProperty("MaxColumnsInTable"), meta.getMaxColumnsInTable() },
+                    { prop.getProperty("MaxProcedureNameLength"), meta.getMaxProcedureNameLength() },
+                    { prop.getProperty("MaxTableNameLength"), meta.getMaxTableNameLength() },
+                    { prop.getProperty("MaxUserNameLength"), meta.getMaxUserNameLength() },
+                    { prop.getProperty("SQLKeywords"), meta.getSQLKeywords() },
+                    { prop.getProperty("NumericFunctions"), meta.getNumericFunctions() },
+                    { prop.getProperty("StringFunctions"), meta.getStringFunctions() },
+                    { prop.getProperty("TimeDateFunctions"), meta.getTimeDateFunctions() },
+                    { prop.getProperty("URL"), meta.getURL() }
                 },
-                new String[] { 
-                    "Свойство", "Значение"
-                }
-            );
-            ((JTable) table).setModel(model);
+                new String[] { "Свойство", "Значение" });
         } catch (SQLException e) {
         }
+        return model;
     }
 
     public void close() {
         try {
         } finally {
-            for (Map.Entry<Connection, String> entry : connections.entrySet()) {
+//            for (Map.Entry<Connection, String> entry : connections.entrySet()) {
+//                try {
+//                    entry.getKey().close();
+//                } catch (SQLException e) {
+//                }
+//            }
+            for (Iterator<Connection> it = connections.iterator(); it.hasNext();) {
                 try {
-                    entry.getKey().close();
+                    if (!it.next().isClosed()) {
+                        it.next().close();
+                    }
                 } catch (SQLException e) {
                 }
             }
