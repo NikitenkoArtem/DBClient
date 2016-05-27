@@ -232,6 +232,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="getReportMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43b;&#x443;&#x447;&#x438;&#x442;&#x44c; &#x43e;&#x442;&#x447;&#x435;&#x442;"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getReportMenuItemActionPerformed"/>
@@ -281,6 +282,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="getPropertiesMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43b;&#x443;&#x447;&#x438;&#x442;&#x44c; &#x441;&#x432;&#x43e;&#x439;&#x441;&#x442;&#x432;&#x430;"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getPropertiesMenuItemActionPerformed"/>
@@ -471,6 +473,10 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="dbUsersComboBox">
           <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 100]"/>

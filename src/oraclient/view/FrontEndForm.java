@@ -12,12 +12,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,6 +30,8 @@ import javax.swing.table.TableModel;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeModel;
 import javax.swing.undo.UndoManager;
 
 import oraclient.component.ClientArea;
@@ -48,8 +54,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private Connection connect;
     private NewFile file;
     private ClientUndoManager undoMgr;
-    private DefaultComboBoxModel model;
-    private List<String> connsName;
+    private List<String> connectionsName;
     //    private UndoManager undo;
     private Map<String, String> titles = new HashMap<>();
 
@@ -204,6 +209,7 @@ public class FrontEndForm extends javax.swing.JFrame {
             }
         });
 
+        dbUsersComboBox.setToolTipText("");
         dbUsersComboBox.setEnabled(false);
         dbUsersComboBox.setMaximumSize(new java.awt.Dimension(100, 100));
         dbUsersComboBox.setMinimumSize(new java.awt.Dimension(50, 50));
@@ -471,6 +477,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         reportMenu.setText("Отчет");
 
         getReportMenuItem.setText("Получить отчет");
+        getReportMenuItem.setEnabled(false);
         getReportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 getReportMenuItemActionPerformed(evt);
@@ -514,6 +521,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         dbPropertiesMenu.setText("Свойства БД");
 
         getPropertiesMenuItem.setText("Получить свойства");
+        getPropertiesMenuItem.setEnabled(false);
         getPropertiesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 getPropertiesMenuItemActionPerformed(evt);
@@ -581,7 +589,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(jTextArea);
         tabPane.addTab(f.getName(), scrollPane);
-        componentsEnabled(true);
+        fileEditingEnabled(true);
     }
 
     public JTextArea getConsole() {
@@ -600,6 +608,15 @@ public class FrontEndForm extends javax.swing.JFrame {
         return connect;
     }
 
+    private String find(Map<String, String> map, String title) {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (title.equals(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
     private void sqlRunEnabled(boolean value) {
         sqlRunButton.setEnabled(value);
         dbUsersComboBox.setEnabled(value);
@@ -608,9 +625,10 @@ public class FrontEndForm extends javax.swing.JFrame {
         getSessionsMenuItem.setEnabled(value);
         closeSessionMenuItem.setEnabled(value);
         closeSessionsMenuItem.setEnabled(value);
+        getPropertiesMenuItem.setEnabled(value);
     }
 
-    private void componentsEnabled(boolean value) {
+    private void fileEditingEnabled(boolean value) {
         saveFileButton.setEnabled(value);
         saveAllButton.setEnabled(value);
         closeFileMenuItem.setEnabled(value);
@@ -624,6 +642,7 @@ public class FrontEndForm extends javax.swing.JFrame {
         copyMenuItem.setEnabled(value);
         pasteMenuItem.setEnabled(value);
     }
+    
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         formWindowClosing(null);
     }//GEN-LAST:event_exitMenuItemActionPerformed
@@ -638,15 +657,6 @@ public class FrontEndForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveFileMenuItemActionPerformed
     
-    private String find(Map<String, String> map, String title) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (title.equals(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
     private void closeFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFileMenuItemActionPerformed
         saveFileMenuItemActionPerformed(evt);
         int index = tabPane.getSelectedIndex();
@@ -657,20 +667,21 @@ public class FrontEndForm extends javax.swing.JFrame {
         file.getSaved().remove(f);
         tabPane.remove(tabPane.getSelectedIndex());
         if (tabPane.getTabCount() == 0) {
-            componentsEnabled(false);
+            fileEditingEnabled(false);
         }
     }//GEN-LAST:event_closeFileMenuItemActionPerformed
 
     private void connectMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectMenuItemActionPerformed
-//        ConnectionDialog dialog = new ConnectionDialog();
-//        dialog.setVisible(true);
+        //        ConnectionDialog dialog = new ConnectionDialog();
+        //        dialog.setVisible(true);
         //        dialog.getConnectButton().addChangeListener((e) -> {
-        if (connsName == null) {
-            connsName = new ArrayList<>();
+        if (connectionsName == null) {
+            connectionsName = new ArrayList<>();
         }
-//        String connectionName = dialog.getConnectionName().getText();
+        //        String connectionName = dialog.getConnectionName().getText();
         String connectionName = "hr";
-        if (connsName.contains(connectionName)) {
+        String user = "hr";
+        if (connectionsName.contains(connectionName)) {
             JOptionPane.showMessageDialog(this, "Соединение уже существует", "Ошибка", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
@@ -678,9 +689,9 @@ public class FrontEndForm extends javax.swing.JFrame {
                 //                String url = dialog.getUrl().getText();
                 //                String user = dialog.getUserName().getText();
                 //                String password = String.valueOf(dialog.getPassword().getPassword());
-//                String connName = "hr";
+                //                String connName = "hr";
                 String url = "jdbc:oracle:thin:@localhost:1521:xe";
-                String user = "hr";
+                //                String user = "hr";
                 String password = "hr";
                 //                String connName = "sys";
                 //                String url = "jdbc:oracle:thin:@localhost:1521:xe";
@@ -694,22 +705,23 @@ public class FrontEndForm extends javax.swing.JFrame {
                 }
                 String userName = conn.getMetaData().getUserName();
                 if (dbUsersComboBox.getSelectedItem() == null) {
-                    model = new DefaultComboBoxModel();
+//                    model = new DefaultComboBoxModel();
                 }
+                DefaultComboBoxModel model = (DefaultComboBoxModel) dbUsersComboBox.getModel();
                 model.addElement(userName);
-//                ComboBoxModel boxModel = dbUsersComboBox.getModel();
-
                 dbUsersComboBox.setModel(model);
-//                dbUsersComboBox.setSelectedItem(userName);
+                //                dbUsersComboBox.setSelectedItem(userName);
 
                 //                String connectionName = dialog.getConnectionName().getText();
-//                String connectionName = connName;
-                DefaultMutableTreeNode root = new DefaultMutableTreeNode(connectionName);
-                Object connectionsRoot = connectionsTree.getModel().getRoot();
-                ((DefaultMutableTreeNode) connectionsRoot).add(root);
-                oracle.getDatabaseStructure(conn, root);
-                connectionsTree.setModel(new DefaultTreeModel((DefaultMutableTreeNode) connectionsRoot));
-                connsName.add(connectionName);
+                //                String connectionName = connName;
+                DefaultTreeModel treeModel = (DefaultTreeModel) connectionsTree.getModel();
+                DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeModel.getRoot();
+                DefaultMutableTreeNode dbStructure = oracle.getDatabaseStructure(conn);
+                dbStructure.setUserObject(connectionName);
+                root.add(dbStructure);
+                treeModel.reload(root);
+                //                connectionsTree.setModel(new DefaultTreeModel(connectionsRoot));
+                connectionsName.add(connectionName);
                 sqlRunEnabled(true);
             } catch (SQLException sqle) {
                 sqle.printStackTrace();
@@ -747,34 +759,38 @@ public class FrontEndForm extends javax.swing.JFrame {
         //            String tabTitle = find(titles, titleAt);
         //            JTextArea textArea = area.find(file.find(tabTitle));
         //            try (Statement stmt = oracle.exec(connect, textArea)) {
-        try (Statement stmt = oracle.exec(connect, null)) {
-            oracle.getResultSet(stmt, table);
-            final String ln = System.getProperty("line.separator");
-            console.append("=========================================================" + ln + ln);
-            int columnCount = table.getModel().getColumnCount();
-            int rowCount = table.getModel().getRowCount();
-            for (int i = 0; i < columnCount; i++) {
-                String value = String.format("%s\t", table.getColumnName(i));
-                console.append(value);
-            }
-            console.append(ln);
-            for (int i = 0; i < rowCount; i++) {
-                for (int j = 0; j < columnCount; j++) {
-                    Object tableValue = table.getValueAt(i, j);
-                    if (tableValue != null) {
-                        String value = String.format("%s\t", tableValue);
-                        console.append(value);
-                    } else {
-                        console.append("NULL\t");
-                    }
+        if (connect == null || dbUsersComboBox.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Соединение не выбрано", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try (Statement stmt = oracle.exec(connect, null)) {
+                oracle.getResultSet(stmt, table);
+                final String ln = System.getProperty("line.separator");
+                console.append("=========================================================" + ln);
+                int columnCount = table.getModel().getColumnCount();
+                int rowCount = table.getModel().getRowCount();
+                for (int i = 0; i < columnCount; i++) {
+                    String value = String.format("%s\t", table.getColumnName(i));
+                    console.append(value);
                 }
                 console.append(ln);
+                for (int i = 0; i < rowCount; i++) {
+                    for (int j = 0; j < columnCount; j++) {
+                        Object tableValue = table.getValueAt(i, j);
+                        if (tableValue != null) {
+                            String value = String.format("%s\t", tableValue);
+                            console.append(value);
+                        } else {
+                            console.append("NULL\t");
+                        }
+                    }
+                    console.append(ln);
+                }
+                console.append("=========================================================" + ln + ln);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                console.append("Ошибка: " + e.toString() + "\n");
+                table.setModel(null);
             }
-            console.append("=========================================================" + ln + ln);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, e, "Ошибка", JOptionPane.ERROR_MESSAGE);
-            console.append("Ошибка: " + e.toString() + "\n");
-            table.setModel(null);
         }
     }//GEN-LAST:event_runScriptMenuItemActionPerformed
 
@@ -794,7 +810,7 @@ public class FrontEndForm extends javax.swing.JFrame {
     private void closeAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeAllMenuItemActionPerformed
         saveAllMenuItemActionPerformed(evt);
         tabPane.removeAll();
-        componentsEnabled(false);
+        fileEditingEnabled(false);
         area.getTextAreas().clear();
         file.getFiles().clear();
         file.getSaved().clear();
@@ -833,6 +849,16 @@ public class FrontEndForm extends javax.swing.JFrame {
     private void closeSessionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeSessionsMenuItemActionPerformed
         if (oracle != null) {
             oracle.close();
+            if (dbUsersComboBox.isEnabled()) {
+                dbUsersComboBox.removeAllItems();
+            }
+            sqlRunEnabled(false);
+            connectionsName.clear();
+            connect = null;            
+            DefaultTreeModel model = (DefaultTreeModel) connectionsTree.getModel();
+            DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+            root.removeAllChildren();
+            model.reload(root);
         }
     }//GEN-LAST:event_closeSessionsMenuItemActionPerformed
 
@@ -861,16 +887,72 @@ public class FrontEndForm extends javax.swing.JFrame {
     }//GEN-LAST:event_dbRollbackButtonActionPerformed
 
     private void dbUsersComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dbUsersComboBoxActionPerformed
-        String userName = dbUsersComboBox.getSelectedItem().toString();
-        Connection conn = oracle.find(userName);
-        setConnect(conn);
+        if (oracle != null) {
+            if (dbUsersComboBox.isEnabled()) {
+                if (dbUsersComboBox.getSelectedIndex() != -1) {
+                    String userName = dbUsersComboBox.getSelectedItem().toString();
+                    connect = oracle.find(userName);
+                }
+            }
+        }
     }//GEN-LAST:event_dbUsersComboBoxActionPerformed
 
     private void closeSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeSessionMenuItemActionPerformed
         if (oracle != null) {
-            oracle.close(connect);
+            String nodeName = null;
+            try {
+                String username = connect.getMetaData().getUserName();
+                System.out.println(connectionsName);
+                nodeName = findConnectionName(username);
+                System.out.println(connectionsName);
+                oracle.close(connect);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, e, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                console.append("Ошибка: " + e.toString() + "\n");
+            }
+            short item = (short) dbUsersComboBox.getSelectedIndex();
+            DefaultComboBoxModel comboModel = (DefaultComboBoxModel) dbUsersComboBox.getModel();
+            comboModel.removeElementAt(item);
+            dbUsersComboBox.setModel(comboModel);
+            if (nodeName != null) {
+                DefaultTreeModel model = (DefaultTreeModel) connectionsTree.getModel();
+                DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+                MutableTreeNode found = findNode(root, nodeName);
+                if (found != null) {
+                    model.removeNodeFromParent(found);
+                }
+                model.reload(root);
+            }
+            if (connectionsName.isEmpty()) {
+                sqlRunEnabled(false);
+            } else {
+                dbUsersComboBox.setSelectedIndex(-1);
+            }
+
         }
     }//GEN-LAST:event_closeSessionMenuItemActionPerformed
+
+    private String findConnectionName(String username) {
+        for (Iterator<String> it = connectionsName.iterator(); it.hasNext();) {
+            String nodeName = it.next();
+            if (nodeName.equalsIgnoreCase(username)) {
+                it.remove();
+                return nodeName;
+            }
+        }
+        return null;
+    }
+
+    private MutableTreeNode findNode(DefaultMutableTreeNode root, String nodeName) {
+        Enumeration breadth = root.breadthFirstEnumeration();
+        while (breadth.hasMoreElements()) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) breadth.nextElement();
+            if (node.getUserObject().toString().equalsIgnoreCase(nodeName)) {
+                return node;
+            }
+        }
+        return null;
+    }
 
     private void getPropertiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getPropertiesMenuItemActionPerformed
         JTable propertiesTable = new JTable();
