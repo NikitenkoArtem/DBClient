@@ -242,54 +242,46 @@ public class DBConnection {
     public void close() {
         try {
         } finally {
-//            for (Map.Entry<Connection, String> entry : connections.entrySet()) {
-//                try {
-//                    entry.getKey().close();
-//                } catch (SQLException e) {
-//                }
-//            }
             for (Iterator<Connection> it = connections.iterator(); it.hasNext();) {
                 try {
-                    if (!it.next().isClosed()) {
-                        it.next().close();
-                    }
+                    it.next().close();
                 } catch (SQLException e) {
                 }
             }
+            connections.clear();
         }
     }
 
-    public void close(Connection conn) {
+    public void close(Connection conn) throws SQLException {
         try {
         } finally {
             if (conn != null) {
-                try {
-                    conn.close();
-                    connections.remove(conn);
-                } catch (SQLException e) {
-                }
+                conn.close();
+                connections.remove(conn);
             }
         }
     }
 
-    public void getDatabaseStructure(final Connection conn, final DefaultMutableTreeNode treeNode) throws SQLException {
+    public DefaultMutableTreeNode getDatabaseStructure(final Connection conn) throws SQLException {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode();
         DefaultMutableTreeNode tables = new DefaultMutableTreeNode("Таблицы");
         getDBEntities(conn, tables, "TABLE");
-        treeNode.add(tables);
+        root.add(tables);
         DefaultMutableTreeNode views = new DefaultMutableTreeNode("Представления");
         getDBEntities(conn, views, "VIEW");
-        treeNode.add(views);
+        root.add(views);
         DefaultMutableTreeNode procedures = new DefaultMutableTreeNode("Процедуры");
         getDBProcedures(conn, procedures);
-        treeNode.add(procedures);
+        root.add(procedures);
         DefaultMutableTreeNode functions = new DefaultMutableTreeNode("Функции");
         getDBFunctions(conn, functions);
-        treeNode.add(functions);
+        root.add(functions);
         DefaultMutableTreeNode triggers = new DefaultMutableTreeNode("Триггеры");
         getDBEntities(conn, triggers, "TRIGGER");
-        treeNode.add(triggers);
+        root.add(triggers);
         DefaultMutableTreeNode users = new DefaultMutableTreeNode("Пользователи");
         getDBUsers(conn, users);
-        treeNode.add(users);
+        root.add(users);
+        return root;
     }
 }
