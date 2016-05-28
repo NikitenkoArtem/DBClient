@@ -1,4 +1,4 @@
-package oraclient.sql.session;
+package dbclient.sql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 
 import javax.swing.table.TableModel;
 
-import oraclient.sql.conns.DBConnection;
 
 public class Session {
     public Session() {        

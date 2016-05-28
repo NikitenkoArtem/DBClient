@@ -1,5 +1,5 @@
 
-package oraclient.view;
+package dbclient.view;
 
 import javax.swing.JScrollPane;
 

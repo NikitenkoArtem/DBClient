@@ -1,4 +1,4 @@
-package oraclient.io;
+package dbclient.sql;
 
 import java.io.File;
 
@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import java.util.Locale;
+
+import dbclient.io.LoadClass;
 
 public class LoadDriver {
     public LoadDriver(String driverFilePath, String driverPackage) {

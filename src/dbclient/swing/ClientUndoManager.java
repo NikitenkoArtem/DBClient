@@ -1,4 +1,4 @@
-package oraclient.component;
+package dbclient.swing;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -14,7 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.undo.UndoManager;
 
 
-import oraclient.io.NewFile;
+import dbclient.io.NewFile;
 
 public class ClientUndoManager {
     private Map<JTextArea, UndoManager> undoMgrs;

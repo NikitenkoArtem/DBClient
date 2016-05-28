@@ -1,5 +1,5 @@
 
-package oraclient.view;
+package dbclient.view;
 
 
 import java.io.File;
@@ -12,11 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import oraclient.component.DBFileChooser;
+import dbclient.swing.DBFileChooser;
 
-import oraclient.io.LoadClass;
+import dbclient.io.LoadClass;
 
-import oraclient.report.Report;
+import dbclient.report.Report;
 
 /**
  *

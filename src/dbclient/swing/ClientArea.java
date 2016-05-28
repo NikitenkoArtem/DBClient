@@ -1,4 +1,4 @@
-package oraclient.component;
+package dbclient.swing;
 
 import java.io.File;
 

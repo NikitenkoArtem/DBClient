@@ -1,4 +1,4 @@
-package oraclient.io;
+package dbclient.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
-import oraclient.component.ClientArea;
+import dbclient.swing.ClientArea;
 
 public class NewFile extends File {
     private Map<File, String> files;
