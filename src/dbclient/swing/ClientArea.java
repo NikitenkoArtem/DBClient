@@ -2,14 +2,9 @@ package dbclient.swing;
 
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import java.util.Map;
 
-import javax.swing.JComponent;
 import javax.swing.JTextArea;
 
 
@@ -37,7 +32,7 @@ public class ClientArea {
 
     public JTextArea find(JTextArea key) {
         for (Map.Entry<JTextArea, File> entry : textAreas.entrySet()) {
-            if (key == entry.getKey()) {
+            if (key.equals(entry.getKey())) {
                 return entry.getKey();
             }
         }
@@ -47,7 +42,7 @@ public class ClientArea {
     public JTextArea find(File value) {
 //        if (textAreas.containsValue(value)) {
             for (Map.Entry<JTextArea, File> entry : textAreas.entrySet()) {
-                if (value == entry.getValue()) {
+                if (value.equals(entry.getValue())) {
                     return entry.getKey();
                 }
             }
