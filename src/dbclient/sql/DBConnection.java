@@ -1,14 +1,10 @@
 package dbclient.sql;
 
+import dbclient.io.LoadClass;
+
 import java.io.BufferedReader;
 import java.io.File;
-
-import java.io.FileInputStream;
-
 import java.io.IOException;
-
-import java.io.InputStream;
-
 import java.io.InputStreamReader;
 
 import java.sql.Connection;
@@ -29,13 +25,9 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
-
-import dbclient.io.LoadClass;
-
-import dbclient.swing.tree.DBMutableTreeNode;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbcp2.ConnectionFactory;
@@ -46,22 +38,19 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 
 public class DBConnection {
     private static List<Connection> connections;
-    private int connectionCount;
     private static BasicDataSource basicDataSource;
-
-    public DBConnection() {
-        if (connections == null) {
-            new LoadDriver("lib/ojdbc7.jar", "oracle.jdbc.OracleDriver");
-            LoadClass load = new LoadClass();
-            load.addClass(new File(load.jarFilePath("lib/commons-dbcp2-2.1.1.jar")));
-            load.addClass(new File(load.jarFilePath("lib/commons-pool2-2.4.2.jar")));
-            init();
-        }
-    }
-
-    private void init() {
+    private int connectionCount;
+    
+    static {
         connections = new ArrayList<>();
         basicDataSource = new BasicDataSource();
+        new LoadDriver("lib/ojdbc7.jar", "oracle.jdbc.OracleDriver");
+        LoadClass load = new LoadClass();
+        load.addClass(new File(load.jarFilePath("lib/commons-dbcp2-2.1.1.jar")));
+        load.addClass(new File(load.jarFilePath("lib/commons-pool2-2.4.2.jar")));
+    }
+
+    public DBConnection() {
     }
 
     public Connection findConnection(String userName) {
@@ -81,20 +70,20 @@ public class DBConnection {
     }
 
     private void createConnectionPool() {
-//        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
-//        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
-//        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-//        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
+        GenericObjectPool genericObjectPool = new GenericObjectPool(null);
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory("connectURI",null);
+        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
+        PoolingDataSource dataSource = new PoolingDataSource(genericObjectPool);
     }
 
     public static Connection getConnection(String url, String user, String password) throws SQLException {
-        //        basicDataSource.setUsername(username);
-        //        basicDataSource.setPassword(password);
-        //        basicDataSource.setUrl(url);
-//        basicDataSource.getConnection();
+//        basicDataSource.setUsername(user);
+//        basicDataSource.setPassword(password);
+//        basicDataSource.setUrl(url);
+//        Connection connection = basicDataSource.getConnection();
         Connection connection = DriverManager.getConnection(url, user, password);
+        connection.setAutoCommit(false);
         connections.add(connection);
-        //        conn.setAutoCommit(false);
         return connection;
     }
 
@@ -102,11 +91,11 @@ public class DBConnection {
         return connections;
     }
 
-    public Statement exec(Connection conn, JComponent text) throws SQLException {
+    public Statement exec(final Connection conn, String query) throws SQLException {
         //        stmt = conn.createStatement();
         Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        //        stmt.execute(((JTextArea) text).getText());
-        stmt.executeQuery("select * from departments");
+        stmt.execute(query);
+//        stmt.executeQuery("select * from departments");
 //                stmt.executeQuery("select * from dba_users");
         //        stmt.executeUpdate("drop table test");
         //        stmt.execute("create table test(id int, name varchar2(5), price int)");
